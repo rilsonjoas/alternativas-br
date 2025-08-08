@@ -1,6 +1,8 @@
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 const categories = [
   { id: "desenvolvimento", title: "Desenvolvimento", description: "IDEs, ferramentas de código e plataformas de desenvolvimento", icon: "💻", count: 25, color: "bg-primary/10 text-primary" },
@@ -26,6 +28,7 @@ const Categorias = () => {
         canonical="/categorias"
         jsonLd={jsonLd}
       />
+      <Header />
       <header className="border-b border-border/50 bg-background/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground">Categorias de alternativas brasileiras</h1>
@@ -62,6 +65,7 @@ const Categorias = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 };

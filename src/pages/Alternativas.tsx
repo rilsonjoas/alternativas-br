@@ -1,6 +1,8 @@
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 type Alt = {
   id: string;
@@ -115,6 +117,7 @@ const Alternativas = () => {
         canonical="/alternativas"
         jsonLd={jsonLd}
       />
+      <Header />
 
       <header className="border-b border-border/50 bg-background/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -155,6 +158,7 @@ const Alternativas = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 };
