@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -29,10 +30,9 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Explorar</h4>
             <ul className="space-y-2 text-sm text-background/80">
-              <li><a href="#categorias" className="hover:text-background transition-colors">Categorias</a></li>
-              <li><a href="#produtos" className="hover:text-background transition-colors">Produtos</a></li>
-              <li><a href="#ranking" className="hover:text-background transition-colors">Ranking</a></li>
-              <li><a href="#novidades" className="hover:text-background transition-colors">Novidades</a></li>
+              <li><Link to="/categorias" className="hover:text-background transition-colors">Categorias</Link></li>
+              <li><Link to="/alternativas" className="hover:text-background transition-colors">Alternativas</Link></li>
+              <li><Link to="/ranking" className="hover:text-background transition-colors">Ranking</Link></li>
             </ul>
           </div>
           
@@ -40,9 +40,9 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Comunidade</h4>
             <ul className="space-y-2 text-sm text-background/80">
-              <li><a href="#sobre" className="hover:text-background transition-colors">Sobre</a></li>
+              <li><Link to="/sobre" className="hover:text-background transition-colors">Sobre</Link></li>
               <li><a href="#contato" className="hover:text-background transition-colors">Contato</a></li>
-              <li><a href="#adicionar" className="hover:text-background transition-colors">Adicionar Produto</a></li>
+              <li><Link to="/adicionar" className="hover:text-background transition-colors">Adicionar Produto</Link></li>
               <li><a href="#newsletter" className="hover:text-background transition-colors">Newsletter</a></li>
             </ul>
           </div>

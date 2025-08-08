@@ -23,11 +23,14 @@ const Header = () => {
             <Link to="/alternativas" className="text-foreground hover:text-primary transition-colors">
               Alternativas
             </Link>
-            <a href="#sobre" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/ranking" className="text-foreground hover:text-primary transition-colors">
+              Ranking
+            </Link>
+            <Link to="/sobre" className="text-foreground hover:text-primary transition-colors">
               Sobre
-            </a>
-            <Button variant="outline" size="sm">
-              Adicionar Produto
+            </Link>
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/adicionar">Adicionar Produto</Link>
             </Button>
           </nav>
         </div>
