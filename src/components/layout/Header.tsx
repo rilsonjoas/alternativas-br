@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -16,9 +17,12 @@ const Header = () => {
           </div>
           
           <nav className="hidden md:flex items-center space-x-6">
-            <a href="#categorias" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/categorias" className="text-foreground hover:text-primary transition-colors">
               Categorias
-            </a>
+            </Link>
+            <Link to="/alternativas" className="text-foreground hover:text-primary transition-colors">
+              Alternativas
+            </Link>
             <a href="#sobre" className="text-foreground hover:text-primary transition-colors">
               Sobre
             </a>
