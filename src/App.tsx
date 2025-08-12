@@ -11,6 +11,7 @@ import Sobre from "./pages/Sobre";
 import Ranking from "./pages/Ranking";
 import AdicionarProduto from "./pages/AdicionarProduto";
 import Contato from "./pages/Contato";
+import SearchResults from "./pages/SearchResults";
 
 // Templates dinâmicos
 import CategoryTemplate from "./pages/CategoryTemplate";
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/adicionar" element={<AdicionarProduto />} />
           <Route path="/contato" element={<Contato />} />
           <Route path="/produto/:slug" element={<ProductTemplate />} />
+          <Route path="/buscar" element={<SearchResults />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

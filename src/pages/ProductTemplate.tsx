@@ -5,6 +5,9 @@ import Footer from "@/components/layout/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { 
@@ -20,22 +23,86 @@ import {
   Zap,
   Heart
 } from "lucide-react";
+import { useProductBySlug, useProductsByCategory } from "@/hooks/useFirebase";
 import { getProductBySlug, getRelatedProducts } from "@/data";
 
 const ProductTemplate = () => {
   const { slug } = useParams<{ slug: string }>();
   
+  // Always call hooks at the top level
+  const { data: firebaseProduct, isLoading, error } = useProductBySlug(slug || '');
+  
+  // We need to get the category slug for related products, but we need a fallback
+  const tempProduct = firebaseProduct || (slug ? getProductBySlug(slug) : null);
+  const categorySlug = tempProduct?.categorySlug || tempProduct?.category || '';
+  
+  const { data: firebaseRelatedProducts } = useProductsByCategory(categorySlug);
+  
   if (!slug) {
     return <Navigate to="/alternativas" replace />;
   }
   
-  const product = getProductBySlug(slug);
+  // Fallback to local data if Firebase fails
+  const localProduct = getProductBySlug(slug);
+  const product = firebaseProduct || localProduct;
+  
+  // Get related products (Firebase or local)
+  const localRelatedProducts = product ? getRelatedProducts(product.category) : [];
+  const relatedProducts = firebaseRelatedProducts?.length ? firebaseRelatedProducts : localRelatedProducts;
+  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content Skeleton */}
+            <div className="lg:col-span-2 space-y-6">
+              <div className="flex items-center gap-4">
+                <Skeleton className="w-16 h-16 rounded-xl" />
+                <div>
+                  <Skeleton className="w-48 h-8 mb-2" />
+                  <Skeleton className="w-32 h-5" />
+                </div>
+              </div>
+              
+              <Skeleton className="w-full h-24" />
+              
+              <div className="flex gap-2">
+                <Skeleton className="w-20 h-6" />
+                <Skeleton className="w-20 h-6" />
+                <Skeleton className="w-20 h-6" />
+              </div>
+              
+              <Skeleton className="w-full h-64" />
+            </div>
+            
+            {/* Sidebar Skeleton */}
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <Skeleton className="w-32 h-6" />
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Skeleton className="w-full h-8" />
+                  <Skeleton className="w-full h-8" />
+                  <Skeleton className="w-full h-4" />
+                  <Skeleton className="w-full h-4" />
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+        
+        <Footer />
+      </div>
+    );
+  }
   
   if (!product) {
     return <Navigate to="/alternativas" replace />;
   }
-
-  const relatedProducts = getRelatedProducts(product.category);
 
   const jsonLd = {
     "@context": "https://schema.org",
