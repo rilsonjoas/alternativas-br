@@ -41,9 +41,8 @@ const Footer = () => {
             <h4 className="font-semibold mb-4">Comunidade</h4>
             <ul className="space-y-2 text-sm text-background/80">
               <li><Link to="/sobre" className="hover:text-background transition-colors">Sobre</Link></li>
-              <li><a href="#contato" className="hover:text-background transition-colors">Contato</a></li>
+              <li><Link to="/contato" className="hover:text-background transition-colors">Contato</Link></li>
               <li><Link to="/adicionar" className="hover:text-background transition-colors">Adicionar Produto</Link></li>
-              <li><a href="#newsletter" className="hover:text-background transition-colors">Newsletter</a></li>
             </ul>
           </div>
         </div>

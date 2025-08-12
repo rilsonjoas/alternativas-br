@@ -10,6 +10,11 @@ import Alternativas from "./pages/Alternativas";
 import Sobre from "./pages/Sobre";
 import Ranking from "./pages/Ranking";
 import AdicionarProduto from "./pages/AdicionarProduto";
+import Contato from "./pages/Contato";
+
+// Templates dinâmicos
+import CategoryTemplate from "./pages/CategoryTemplate";
+import ProductTemplate from "./pages/ProductTemplate";
 
 const queryClient = new QueryClient();
 
@@ -22,10 +27,13 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/categorias" element={<Categorias />} />
+          <Route path="/categorias/:slug" element={<CategoryTemplate />} />
           <Route path="/alternativas" element={<Alternativas />} />
           <Route path="/sobre" element={<Sobre />} />
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/adicionar" element={<AdicionarProduto />} />
+          <Route path="/contato" element={<Contato />} />
+          <Route path="/produto/:slug" element={<ProductTemplate />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -29,6 +29,9 @@ const Header = () => {
             <Link to="/sobre" className="text-foreground hover:text-primary transition-colors">
               Sobre
             </Link>
+            <Link to="/contato" className="text-foreground hover:text-primary transition-colors">
+              Contato
+            </Link>
             <Button variant="outline" size="sm" asChild>
               <Link to="/adicionar">Adicionar Produto</Link>
             </Button>

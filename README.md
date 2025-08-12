@@ -25,13 +25,14 @@ Este projeto utiliza tecnologias modernas para garantir performance e escalabili
 - **UI Framework**: shadcn/ui + Tailwind CSS
 - **Routing**: React Router DOM
 - **State Management**: TanStack Query
-- **Package Manager**: Bun
+- **Database**: Firebase Firestore
+- **Package Manager**: NPM
 - **Deployment**: Vercel / Netlify
 
 ## 📋 Pré-requisitos
 
-- **Bun** (recomendado) - [Guia de instalação](https://bun.sh/docs/installation)
-- **Node.js** 18+ (alternativo)
+- **Node.js** 18+ - [Download](https://nodejs.org/)
+- **NPM** (incluído com Node.js)
 - **Git**
 
 ## ⚙️ Instalação e Execução
@@ -43,25 +44,25 @@ Este projeto utiliza tecnologias modernas para garantir performance e escalabili
 git clone https://github.com/rilsonjoas/alternativas-br.git
 cd alternativas-br
 
-# 2. Configure o ambiente Bun (Windows)
-./setup-bun.bat
-# ou para Linux/macOS
-./setup-bun.sh
+# 2. Instale as dependências
+npm install
 
-# 3. Instale as dependências
-bun install
+# 3. Configure as variáveis de ambiente
+cp .env.example .env.local
+# Edite .env.local com suas credenciais do Firebase
 
 # 4. Execute o servidor de desenvolvimento
-bun run dev
+npm run dev
 ```
 
 ### 📜 Scripts Disponíveis
 
 ```bash
-bun run dev        # Servidor de desenvolvimento (localhost:8080)
-bun run build      # Build de produção
-bun run preview    # Preview do build de produção
-bun run lint       # Verificação de código com ESLint
+npm run dev        # Servidor de desenvolvimento (localhost:8080)
+npm run build      # Build de produção
+npm run preview    # Preview do build de produção
+npm run lint       # Verificação de código com ESLint
+npm run migrate    # Migrar dados para Firebase
 ```
 
 ## 🗺️ Roadmap de Desenvolvimento
@@ -75,22 +76,37 @@ bun run lint       # Verificação de código com ESLint
 - [x] Componentes base (Header, Footer, Cards)
 
 ### 🗄️ Fase 2: Backend e Dados
+**Status: � Concluído**
+
+- [x] **Banco de Dados**
+  - [x] Firebase Firestore configurado
+  - [x] Modelagem de dados (produtos, categorias)
+  - [x] Migração de dados mock para Firebase
+
+- [x] **Integração Firebase**
+  - [x] Services layer para CRUD operations
+  - [x] React Query hooks para cache e estado
+  - [x] Sistema híbrido com fallback para dados locais
+
+### 🔄 Fase 2.1: Completar Integração Firebase
 **Status: 🟡 Em Desenvolvimento**
 
-- [ ] **Banco de Dados**
-  - [ ] Modelagem de dados (produtos, categorias, avaliações)
-  - [ ] Setup do banco de dados (Supabase/PostgreSQL)
-  - [ ] Migrations e seeds iniciais
+- [ ] **Componentes Restantes**
+  - [ ] Atualizar `Categories.tsx` para usar Firebase
+  - [ ] Atualizar páginas de categoria individual
+  - [ ] Atualizar páginas de produto individual
+  - [ ] Sistema de busca com Firebase
 
-- [ ] **API Backend**
-  - [ ] Endpoints para CRUD de produtos
-  - [ ] Sistema de categorias
-  - [ ] API de busca e filtros
+- [ ] **Otimizações**
+  - [ ] Loading states e error handling
+  - [ ] Cache optimization
+  - [ ] Performance monitoring
 
 ### 👤 Fase 3: Sistema de Usuários
 **Status: 🔴 Planejado**
 
 - [ ] **Autenticação**
+  - [ ] Firebase Authentication
   - [ ] Login/registro de usuários
   - [ ] Autenticação via GitHub/Google
   - [ ] Perfis de usuário
@@ -117,7 +133,7 @@ bun run lint       # Verificação de código com ESLint
 **Status: 🔴 Planejado**
 
 - [ ] **Sistema de Busca Avançado**
-  - [ ] Busca full-text
+  - [ ] Busca full-text no Firestore
   - [ ] Filtros avançados (preço, categoria, rating)
   - [ ] Sugestões e autocompletar
 
@@ -131,6 +147,7 @@ bun run lint       # Verificação de código com ESLint
 
 - [ ] **Analytics**
   - [ ] Google Analytics / Plausible
+  - [ ] Firebase Analytics
   - [ ] Métricas de uso interno
   - [ ] Dashboard de estatísticas
 
@@ -162,9 +179,51 @@ O projeto utiliza um design system customizado baseado em:
 - **Componentes**: shadcn/ui com customizações temáticas
 - **Responsividade**: Mobile-first design
 
-## 📁 Estrutura do Projeto
+## 🎯 Próximas Etapas - Fase 2.1
 
+### **Em Desenvolvimento Agora:**
+
+1. **Completar Integração Firebase** �
+   - ✅ Firebase Firestore configurado e funcionando
+   - ✅ Dados migrados (6 categorias, 6 produtos)
+   - ✅ Componente `FeaturedAlternatives.tsx` atualizado
+   - 🔄 Próximo: Atualizar `Categories.tsx` para usar Firebase
+   - 🔄 Próximo: Atualizar páginas de categoria e produto
+
+2. **Melhorar UX** ⚡
+   - 🔄 Loading states mais elegantes
+   - 🔄 Error handling robusto
+   - 🔄 Cache optimization com React Query
+
+3. **Sistema de Busca** 🔍
+   - 🔄 Implementar busca no Firebase
+   - 🔄 Filtros por categoria
+   - 🔄 Autocomplete de produtos
+
+### **Como Acompanhar o Progresso:**
+
+- 📊 **Firebase Console**: [Ver dados em tempo real](https://console.firebase.google.com/project/alternativas-br/firestore)
+- 🖥️ **Local**: `npm run dev` → `http://localhost:3000`
+- 📁 **Estrutura**: Ver `src/lib/services/` para lógica Firebase
+
+### **Para Desenvolvedores:**
+
+```bash
+# Configurar projeto
+npm install
+cp .env.example .env.local  # Configure suas credenciais Firebase
+npm run migrate            # Migrar dados para Firebase
+npm run dev               # Rodar localmente
+
+# Próximos PRs esperados:
+# 1. feat: update Categories component to use Firebase
+# 2. feat: add search functionality with Firebase
+# 3. feat: improve loading states and error handling
 ```
+
+## �📁 Estrutura do Projeto
+
+```text
 src/
 ├── components/          # Componentes reutilizáveis
 │   ├── ui/             # Componentes base do design system
@@ -173,6 +232,9 @@ src/
 ├── pages/              # Páginas da aplicação
 ├── hooks/              # Custom hooks
 ├── lib/                # Utilitários e helpers
+│   ├── services/       # 🔥 Firebase services (categoryService, productService)
+│   ├── firebase.ts     # 🔥 Firebase config e inicialização
+│   └── utils.ts        # Utilitários gerais
 └── assets/             # Imagens e recursos estáticos
 ```
 
@@ -198,7 +260,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 ## 🔗 Links Úteis
 
 - **Demo**: [alternativas-br.vercel.app](https://alternativas-br.vercel.app) (em breve)
-- **Documentação**: [Ver BUN_SETUP.md](BUN_SETUP.md)
+- **Documentação**: [Ver FIREBASE_SETUP.md](FIREBASE_SETUP.md)
 - **Issues**: [GitHub Issues](https://github.com/rilsonjoas/alternativas-br/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/rilsonjoas/alternativas-br/discussions)
 

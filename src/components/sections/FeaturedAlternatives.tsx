@@ -1,59 +1,31 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-
-const alternatives = [
-  {
-    id: "movidesk",
-    name: "Movidesk",
-    description: "Plataforma brasileira de help desk e atendimento ao cliente que rivaliza com Zendesk e Freshdesk.",
-    category: "Atendimento",
-    pricing: "Freemium",
-    replaces: ["Zendesk", "Freshdesk"],
-    logo: "🎯",
-    features: ["Chat em tempo real", "Automações", "Relatórios avançados"],
-    established: "2011",
-    users: "10.000+"
-  },
-  {
-    id: "rd-station",
-    name: "RD Station",
-    description: "Plataforma completa de marketing digital e automação, alternativa nacional ao HubSpot.",
-    category: "Marketing",
-    pricing: "R$ 69/mês",
-    replaces: ["HubSpot", "Mailchimp"],
-    logo: "🚀",
-    features: ["Email marketing", "Lead scoring", "CRM integrado"],
-    established: "2011",
-    users: "50.000+"
-  },
-  {
-    id: "pipefy",
-    name: "Pipefy",
-    description: "Ferramenta brasileira de gestão de processos e workflow, competindo com Asana e Monday.com.",
-    category: "Produtividade",
-    pricing: "Freemium",
-    replaces: ["Asana", "Monday.com"],
-    logo: "⚙️",
-    features: ["Automação de processos", "Templates", "Relatórios"],
-    established: "2015",
-    users: "100.000+"
-  },
-  {
-    id: "resultados-digitais",
-    name: "Resultados Digitais",
-    description: "Plataforma de marketing digital que oferece alternativa completa ao Pardot e Marketo.",
-    category: "Marketing",
-    pricing: "R$ 199/mês",
-    replaces: ["Pardot", "Marketo"],
-    logo: "📊",
-    features: ["Marketing automation", "Lead nurturing", "Analytics"],
-    established: "2011",
-    users: "25.000+"
-  }
-];
+import { useFeaturedProducts } from "@/hooks/useFirebase";
+import { products } from "@/data"; // Fallback para dados locais
 
 const FeaturedAlternatives = () => {
+  // Tentar usar dados do Firebase, com fallback para dados locais
+  const { data: firebaseProducts, isLoading, error } = useFeaturedProducts(4);
+  
+  // Se Firebase falhar, usar dados locais
+  const featuredProducts = firebaseProducts?.length ? firebaseProducts : products.slice(0, 4);
+
+  if (isLoading) {
+    return (
+      <section className="py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="animate-pulse">
+              <div className="h-8 bg-muted rounded w-64 mx-auto mb-4"></div>
+              <div className="h-4 bg-muted rounded w-96 mx-auto"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -67,54 +39,62 @@ const FeaturedAlternatives = () => {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Conheça algumas das melhores soluções brasileiras que estão transformando o mercado
           </p>
+          {error && (
+            <div className="mt-4 text-sm text-amber-600 bg-amber-50 dark:bg-amber-900/20 dark:text-amber-400 px-4 py-2 rounded-lg">
+              ⚠️ Exibindo dados locais (Firebase indisponível)
+            </div>
+          )}
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {alternatives.map((alt) => (
+          {featuredProducts.map((product) => (
             <Card 
-              key={alt.id} 
+              key={product.id} 
               className="group hover:shadow-elegant transition-all duration-300 border-border/50 bg-gradient-card"
             >
               <CardHeader>
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-gradient-accent rounded-xl flex items-center justify-center text-2xl">
-                      {alt.logo}
+                      {product.logo}
                     </div>
                     <div>
                       <CardTitle className="text-xl group-hover:text-primary transition-colors">
-                        {alt.name}
+                        {product.name}
                       </CardTitle>
                       <div className="flex items-center space-x-2 mt-1">
-                        <Badge variant="category">{alt.category}</Badge>
-                        <Badge variant="price">{alt.pricing}</Badge>
+                        <Badge variant="category">{product.category}</Badge>
+                        <Badge variant="price">{product.pricing[0]?.price || "Consultar"}</Badge>
+                        {product.isUnicorn && (
+                          <Badge variant="tech">🦄</Badge>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
                 
                 <p className="text-muted-foreground mb-4">
-                  {alt.description}
+                  {product.shortDescription}
                 </p>
                 
                 <div className="space-y-3">
                   <div>
-                    <p className="text-sm font-semibold text-foreground mb-1">Substitui:</p>
+                    <p className="text-sm font-semibold text-foreground mb-1">Principais recursos:</p>
                     <div className="flex flex-wrap gap-1">
-                      {alt.replaces.map((tool) => (
-                        <Badge key={tool} variant="outline" className="text-xs">
-                          {tool}
+                      {product.features.slice(0, 3).map((feature) => (
+                        <Badge key={feature} variant="secondary" className="text-xs">
+                          {feature}
                         </Badge>
                       ))}
                     </div>
                   </div>
                   
                   <div>
-                    <p className="text-sm font-semibold text-foreground mb-1">Principais recursos:</p>
+                    <p className="text-sm font-semibold text-foreground mb-1">Tags:</p>
                     <div className="flex flex-wrap gap-1">
-                      {alt.features.map((feature) => (
-                        <Badge key={feature} variant="secondary" className="text-xs">
-                          {feature}
+                      {product.tags.slice(0, 3).map((tag) => (
+                        <Badge key={tag} variant="outline" className="text-xs">
+                          {tag}
                         </Badge>
                       ))}
                     </div>
@@ -124,12 +104,14 @@ const FeaturedAlternatives = () => {
               
               <CardContent className="pt-0">
                 <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                  <span>Desde {alt.established}</span>
-                  <span>{alt.users} usuários</span>
+                  <span>Desde {product.foundedYear}</span>
+                  <span>{product.userCount} usuários</span>
                 </div>
                 
-                <Button variant="default" className="w-full">
-                  Ver Detalhes
+                <Button variant="default" className="w-full" asChild>
+                  <a href={`/produto/${product.slug}`}>
+                    Ver Detalhes
+                  </a>
                 </Button>
               </CardContent>
             </Card>
@@ -137,8 +119,10 @@ const FeaturedAlternatives = () => {
         </div>
         
         <div className="text-center mt-12">
-          <Button variant="accent" size="lg">
-            Ver Todas as Alternativas
+          <Button variant="accent" size="lg" asChild>
+            <a href="/alternativas">
+              Ver Todas as Alternativas
+            </a>
           </Button>
         </div>
       </div>
