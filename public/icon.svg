@@ -1,0 +1,13 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background verde do Brasil -->
+  <rect width="64" height="64" rx="12" fill="#009639"/>
+  
+  <!-- Losango amarelo -->
+  <path d="M32 12L48 32L32 52L16 32L32 12Z" fill="#FEDF00"/>
+  
+  <!-- Círculo azul -->
+  <circle cx="32" cy="32" r="8" fill="#002776"/>
+  
+  <!-- Letra BR para Brasil -->
+  <text x="32" y="36" font-family="Arial, sans-serif" font-size="6" font-weight="bold" text-anchor="middle" fill="#FEDF00">BR</text>
+</svg>

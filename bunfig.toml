@@ -1,0 +1,13 @@
+[install]
+# Use the registry for faster package resolution
+registry = "https://registry.npmjs.org/"
+
+# Use hard links to save disk space
+linkStrategy = "hardlink"
+
+# Auto-install peer dependencies
+auto = true
+
+[run]
+# Run scripts with Bun's runtime instead of Node.js
+bun = true
