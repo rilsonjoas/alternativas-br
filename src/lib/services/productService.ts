@@ -25,10 +25,15 @@ class ProductService {
       const q = query(this.collection, orderBy('name', 'asc'));
       const snapshot = await getDocs(q);
       
-      return snapshot.docs.map(doc => ({
+      const allProducts = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as Product[];
+      
+      // Filtrar apenas produtos brasileiros
+      return allProducts.filter(product => 
+        product.location && product.location.includes('BR')
+      );
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
       throw new Error('Falha ao carregar produtos');
@@ -64,10 +69,15 @@ class ProductService {
       );
       const snapshot = await getDocs(q);
       
-      return snapshot.docs.map(doc => ({
+      const products = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as Product[];
+      
+      // Filtrar apenas produtos brasileiros
+      return products.filter(product => 
+        product.location && product.location.includes('BR')
+      );
     } catch (error) {
       console.error('Erro ao buscar produtos por categoria:', error);
       return [];
@@ -153,11 +163,17 @@ class ProductService {
       })) as Product[];
       
       const term = searchTerm.toLowerCase();
-      return allProducts.filter(product => 
-        product.name.toLowerCase().includes(term) ||
-        product.description.toLowerCase().includes(term) ||
-        product.tags.some(tag => tag.toLowerCase().includes(term))
-      );
+      return allProducts.filter(product => {
+        // Filtrar apenas produtos brasileiros
+        if (!product.location || !product.location.includes('BR')) {
+          return false;
+        }
+        
+        // Busca por nome, descrição ou tags
+        return product.name.toLowerCase().includes(term) ||
+          product.description.toLowerCase().includes(term) ||
+          product.tags.some(tag => tag.toLowerCase().includes(term));
+      });
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
       return [];

@@ -1,4 +1,4 @@
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import SEO from '@/components/SEO';
 import Header from '@/components/layout/Header';
@@ -282,13 +282,13 @@ const SearchResults = () => {
                                     </span>
                                   </div>
                                   <Button size="sm" variant="outline" asChild>
-                                    <a 
-                                      href={`/produto/${product.slug}`}
+                                    <Link 
+                                      to={`/produto/${product.slug}`}
                                       className="flex items-center gap-2"
                                     >
                                       Ver detalhes
                                       <ExternalLink className="w-3 h-3" />
-                                    </a>
+                                    </Link>
                                   </Button>
                                 </div>
                               </CardContent>

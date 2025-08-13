@@ -1,8 +1,11 @@
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { ExternalLink, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 type Alt = {
   id: string;
@@ -132,25 +135,39 @@ const Alternativas = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {alternatives.map((alt) => (
                 <article key={alt.id} className="contents">
-                  <Card className="hover:shadow-card transition-all duration-300 border-border/50 bg-card">
-                    <CardHeader className="pb-4">
-                      <div className="flex items-center justify-between">
-                        <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl" aria-hidden>
-                          {alt.icon}
+                  <Card className="group hover:shadow-card transition-all duration-300 border-border/50 bg-card hover:bg-card/80 cursor-pointer">
+                    <Link to={`/produto/${alt.id}`} className="block h-full">
+                      <CardHeader className="pb-4">
+                        <div className="flex items-center justify-between">
+                          <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300" aria-hidden>
+                            {alt.icon}
+                          </div>
+                          <Badge variant="secondary">{alt.category}</Badge>
                         </div>
-                        <Badge variant="secondary">{alt.category}</Badge>
-                      </div>
-                      <CardTitle className="text-xl">{alt.name}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground text-sm mb-3">{alt.description}</p>
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        {alt.replaces.map((r) => (
-                          <Badge key={r} variant="outline">Substitui {r}</Badge>
-                        ))}
-                      </div>
-                      <p className="text-xs text-muted-foreground">Modelo: {alt.pricing}</p>
-                    </CardContent>
+                        <CardTitle className="text-xl group-hover:text-primary transition-colors duration-300">{alt.name}</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <p className="text-muted-foreground text-sm">{alt.description}</p>
+                        
+                        <div className="flex flex-wrap gap-2">
+                          {alt.replaces.map((r) => (
+                            <Badge key={r} variant="outline" className="text-xs">
+                              Substitui {r}
+                            </Badge>
+                          ))}
+                        </div>
+                        
+                        <div className="flex items-center justify-between pt-2">
+                          <p className="text-xs text-muted-foreground">
+                            <span className="font-medium">Modelo:</span> {alt.pricing}
+                          </p>
+                          <div className="flex items-center text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <span className="text-sm font-medium mr-1">Ver detalhes</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Link>
                   </Card>
                 </article>
               ))}

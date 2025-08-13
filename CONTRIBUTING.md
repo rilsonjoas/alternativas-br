@@ -45,16 +45,11 @@ git remote add upstream https://github.com/rilsonjoas/alternativas-br.git
 ### 2. Configure o Ambiente
 
 ```bash
-# Configure o Bun
-./setup-bun.sh  # Linux/macOS
-# ou
-setup-bun.bat   # Windows
-
 # Instale dependências
-bun install
+npm install
 
 # Execute o projeto
-bun run dev
+npm run dev
 ```
 
 ### 3. Crie uma Branch
@@ -73,11 +68,11 @@ git checkout -b docs/atualizacao-readme
 ```bash
 # Faça suas alterações
 # Execute os testes
-bun run lint
+npm run lint
 
 # Teste a aplicação
-bun run dev
-bun run build
+npm run dev
+npm run build
 ```
 
 ### 5. Commit e Push
@@ -153,13 +148,13 @@ src/
 
 ```bash
 # Verificar lint
-bun run lint
+npm run lint
 
 # Build de produção
-bun run build
+npm run build
 
 # Testar preview
-bun run preview
+npm run preview
 ```
 
 ### Testes Manuais

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { useFeaturedProducts } from "@/hooks/useFirebase";
 import { products } from "@/data"; // Fallback para dados locais
 
@@ -109,9 +110,9 @@ const FeaturedAlternatives = () => {
                 </div>
                 
                 <Button variant="default" className="w-full" asChild>
-                  <a href={`/produto/${product.slug}`}>
+                  <Link to={`/produto/${product.slug}`}>
                     Ver Detalhes
-                  </a>
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
@@ -120,9 +121,9 @@ const FeaturedAlternatives = () => {
         
         <div className="text-center mt-12">
           <Button variant="accent" size="lg" asChild>
-            <a href="/alternativas">
+            <Link to="/alternativas">
               Ver Todas as Alternativas
-            </a>
+            </Link>
           </Button>
         </div>
       </div>

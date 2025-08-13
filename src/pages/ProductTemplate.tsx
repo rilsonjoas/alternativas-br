@@ -1,7 +1,8 @@
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, Navigate, Link } from "react-router-dom";
 import SEO from "@/components/SEO";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ProductReviews from "@/components/reviews/ProductReviews";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -334,45 +335,10 @@ const ProductTemplate = () => {
           </TabsContent>
           
           <TabsContent value="avaliacoes" className="space-y-6">
-            <div className="grid gap-6">
-              {product.reviews.map((review) => (
-                <Card key={review.id} className="border-border/50 bg-gradient-card">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                          <span className="text-sm font-semibold">
-                            {review.author.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
-                        <div>
-                          <div className="font-semibold">{review.author}</div>
-                          <div className="text-sm text-muted-foreground">{review.role}</div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-4 h-4 ${
-                              i < review.rating
-                                ? "fill-yellow-400 text-yellow-400"
-                                : "text-muted-foreground"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">{review.comment}</p>
-                    <div className="mt-3 text-sm text-muted-foreground">
-                      {review.date}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <ProductReviews 
+              productId={product.id} 
+              productName={product.name}
+            />
           </TabsContent>
           
           <TabsContent value="alternativas" className="space-y-6">
@@ -403,9 +369,9 @@ const ProductTemplate = () => {
                           <span>{relatedProduct.rating}</span>
                         </div>
                         <Button size="sm" variant="outline" asChild>
-                          <a href={`/produto/${relatedProduct.slug}`}>
+                          <Link to={`/produto/${relatedProduct.slug}`}>
                             Ver detalhes
-                          </a>
+                          </Link>
                         </Button>
                       </div>
                     </CardContent>

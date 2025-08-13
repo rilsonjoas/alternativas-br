@@ -1,4 +1,4 @@
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, Navigate, Link } from "react-router-dom";
 import SEO from "@/components/SEO";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -231,13 +231,13 @@ const CategoryTemplate = () => {
                           </span>
                         </div>
                         <Button size="sm" variant="outline" asChild>
-                          <a 
-                            href={`/produto/${product.slug}`}
+                          <Link 
+                            to={`/produto/${product.slug}`}
                             className="flex items-center gap-2"
                           >
                             Ver detalhes
                             <ExternalLink className="w-3 h-3" />
-                          </a>
+                          </Link>
                         </Button>
                       </div>
                     </CardContent>

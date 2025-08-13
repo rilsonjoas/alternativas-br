@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Search, X, Filter, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useProductSearch, useCategories } from '@/hooks/useFirebase';
+import { products, categories } from '@/data';
 import { Product, Category } from '@/types';
 
 interface SearchSystemProps {
@@ -33,24 +33,50 @@ const SearchSystem = ({
   const [isOpen, setIsOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   
-  // Firebase queries
-  const { data: searchResults, isLoading: isSearchLoading } = useProductSearch(searchTerm);
-  const { data: categories } = useCategories();
+  // Use produtos locais em vez do Firebase
+  const searchResults = useMemo(() => {
+    if (searchTerm.length < 2) return [];
+    
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return products.filter(product => {
+      // Garantir que só produtos brasileiros apareçam
+      if (!product.location || !product.location.includes('BR')) {
+        return false;
+      }
+      
+      const searchableText = [
+        product.name,
+        product.description,
+        product.shortDescription || '',
+        product.category,
+        ...(product.features || []),
+        ...(product.tags || [])
+      ].join(' ').toLowerCase();
+      
+      return searchableText.includes(lowerSearchTerm);
+    });
+  }, [searchTerm]);
   
   // Filter categories based on search term
-  const filteredCategories = categories?.filter(category => 
-    category.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    category.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    category.description.toLowerCase().includes(searchTerm.toLowerCase())
-  ) || [];
+  const filteredCategories = useMemo(() => {
+    if (searchTerm.length < 2) return [];
+    
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return categories.filter(category => 
+      category.title?.toLowerCase().includes(lowerSearchTerm) ||
+      category.description.toLowerCase().includes(lowerSearchTerm)
+    );
+  }, [searchTerm]);
   
   // Filter products by category if selected
-  const filteredProducts = selectedCategory === 'all' 
-    ? searchResults || []
-    : searchResults?.filter(product => 
-        product.categorySlug === selectedCategory || 
-        product.category === selectedCategory
-      ) || [];
+  const filteredProducts = useMemo(() => {
+    return selectedCategory === 'all' 
+      ? searchResults
+      : searchResults.filter(product => 
+          product.categorySlug === selectedCategory || 
+          product.category === selectedCategory
+        );
+  }, [searchResults, selectedCategory]);
   
   // Handle click outside to close dropdown
   useEffect(() => {
@@ -124,8 +150,8 @@ const SearchSystem = ({
             <SelectContent>
               <SelectItem value="all">Todas as categorias</SelectItem>
               {categories?.map((category) => (
-                <SelectItem key={category.id} value={category.slug}>
-                  {category.name || category.title}
+                <SelectItem key={category.slug} value={category.slug}>
+                  {category.title}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -148,12 +174,7 @@ const SearchSystem = ({
       {showResults && (
         <Card className="absolute top-full left-0 right-0 mt-2 z-50 border-border/50 shadow-lg max-h-96 overflow-hidden">
           <CardContent className="p-0">
-            {isSearchLoading ? (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
-                <span className="ml-2 text-muted-foreground">Buscando...</span>
-              </div>
-            ) : hasResults ? (
+            {hasResults ? (
               <div className="max-h-96 overflow-y-auto">
                 {/* Categories Results */}
                 {filteredCategories.length > 0 && (
@@ -164,21 +185,21 @@ const SearchSystem = ({
                     <div className="space-y-2">
                       {filteredCategories.slice(0, 3).map((category) => (
                         <div
-                          key={category.id}
+                          key={category.slug}
                           className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
                           onClick={() => handleResultClick(category, 'category')}
                         >
                           <div className="text-2xl">{category.icon}</div>
                           <div className="flex-1">
                             <div className="font-medium text-sm">
-                              {category.name || category.title}
+                              {category.title}
                             </div>
                             <div className="text-xs text-muted-foreground">
                               {category.description}
                             </div>
                           </div>
                           <Badge variant="secondary" className="text-xs">
-                            {category.productCount || 0} produtos
+                            {products.filter(p => p.categorySlug === category.slug).length} produtos
                           </Badge>
                         </div>
                       ))}
@@ -204,8 +225,12 @@ const SearchSystem = ({
                           className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
                           onClick={() => handleResultClick(product, 'product')}
                         >
-                          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-sm">
-                            {product.logo}
+                          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-sm overflow-hidden">
+                            {product.logo && product.logo.startsWith('http') ? (
+                              <img src={product.logo} alt={product.name} className="w-full h-full object-cover rounded-lg" />
+                            ) : (
+                              product.logo || '🚀'
+                            )}
                           </div>
                           <div className="flex-1">
                             <div className="font-medium text-sm">{product.name}</div>

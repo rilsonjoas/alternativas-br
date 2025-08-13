@@ -3,12 +3,15 @@ import { Timestamp } from 'firebase/firestore';
 export interface Category {
   id: string;
   slug: string;
-  title: string;
+  name: string; // Mudança de title para name para consistência
+  title?: string; // Mantido para compatibilidade
   description: string;
   icon: string;
   color: string;
   productCount: number;
-  featured: boolean;
+  featured?: boolean;
+  isActive?: boolean; // Para controle de status admin
+  tags?: string[];
   metaTitle?: string;
   metaDescription?: string;
   createdAt?: Timestamp;
@@ -41,6 +44,7 @@ export interface Product {
   // Additional info
   isUnicorn?: boolean;
   isFeatured: boolean;
+  isActive?: boolean; // Para controle de status admin
   tags: string[];
   
   // SEO
@@ -52,6 +56,10 @@ export interface Product {
   
   // Alternatives
   alternatives?: string[]; // Product IDs
+  
+  // Admin info
+  views?: number;
+  averageRating?: number;
   
   // Firebase timestamps
   createdAt?: Timestamp;
