@@ -9,16 +9,9 @@ import NotFound from "./pages/NotFound";
 import Categorias from "./pages/Categorias";
 import Alternativas from "./pages/Alternativas";
 import Sobre from "./pages/Sobre";
-import Ranking from "./pages/Ranking";
 import AdicionarProduto from "./pages/AdicionarProduto";
 import Contato from "./pages/Contato";
 import SearchResults from "./pages/SearchResults";
-import ExploreProducts from "./pages/ExploreProducts";
-import LoginForm from "./components/auth/LoginForm";
-import RegisterForm from "./components/auth/RegisterForm";
-import ForgotPassword from "./pages/ForgotPassword";
-import UserProfile from "./pages/UserProfile";
-import UserSettings from "./pages/UserSettings";
 
 // Templates dinâmicos
 import CategoryTemplate from "./pages/CategoryTemplate";
@@ -49,18 +42,11 @@ const App = () => (
             <Route path="/categorias" element={<Categorias />} />
             <Route path="/categorias/:slug" element={<CategoryTemplate />} />
             <Route path="/alternativas" element={<Alternativas />} />
-            <Route path="/explorar" element={<ExploreProducts />} />
             <Route path="/sobre" element={<Sobre />} />
-            <Route path="/ranking" element={<Ranking />} />
             <Route path="/adicionar" element={<AdicionarProduto />} />
             <Route path="/contato" element={<Contato />} />
             <Route path="/produto/:slug" element={<ProductTemplate />} />
             <Route path="/buscar" element={<SearchResults />} />
-            <Route path="/login" element={<LoginForm />} />
-            <Route path="/registrar" element={<RegisterForm />} />
-            <Route path="/esqueci-senha" element={<ForgotPassword />} />
-            <Route path="/perfil" element={<UserProfile />} />
-            <Route path="/configuracoes" element={<UserSettings />} />
             
             {/* Rotas de Admin */}
             <Route path="/admin" element={<AdminDashboard />} />

@@ -196,7 +196,7 @@ export class AdvancedSearchService {
       if (!stored) return [];
 
       const history = JSON.parse(stored);
-      return history.map((item: any) => ({
+      return history.map((item: SearchHistory) => ({
         ...item,
         timestamp: new Date(item.timestamp)
       }));

@@ -4,7 +4,7 @@ interface SEOProps {
   title: string;
   description?: string;
   canonical?: string; // can be absolute or path (e.g., "/categorias")
-  jsonLd?: Record<string, any> | Record<string, any>[];
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const ensureTag = (selector: string, create: () => HTMLElement) => {

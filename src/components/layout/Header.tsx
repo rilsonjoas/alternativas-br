@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import SearchSystem from "@/components/SearchSystem";
 import { Product, Category } from "@/types";
-import { LogOut, User, Settings, Shield } from "lucide-react";
+import { LogOut, Shield } from "lucide-react";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -75,12 +75,6 @@ const Header = () => {
             <Link to="/alternativas" className="text-foreground hover:text-primary transition-colors">
               Alternativas
             </Link>
-            <Link to="/explorar" className="text-foreground hover:text-primary transition-colors font-medium">
-              Explorar
-            </Link>
-            <Link to="/ranking" className="text-foreground hover:text-primary transition-colors">
-              Ranking
-            </Link>
             <Link to="/sobre" className="text-foreground hover:text-primary transition-colors">
               Sobre
             </Link>
@@ -88,78 +82,51 @@ const Header = () => {
               Contato
             </Link>
             
-            {/* Auth Section */}
-            {!loading && (
-              <>
-                {user ? (
-                  <div className="flex items-center space-x-4">
-                    <Button variant="outline" size="sm" asChild>
-                      <Link to="/adicionar">Adicionar Produto</Link>
+            {/* Admin Auth Section - Hidden from public */}
+            {!loading && user && user.role === 'admin' && (
+              <div className="flex items-center space-x-4">
+                <Button variant="outline" size="sm" asChild>
+                  <Link to="/adicionar">Adicionar Produto</Link>
+                </Button>
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={user.photoURL || ""} alt={user.displayName || ""} />
+                        <AvatarFallback>{getUserInitials(user.displayName)}</AvatarFallback>
+                      </Avatar>
                     </Button>
-                    
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                          <Avatar className="h-8 w-8">
-                            <AvatarImage src={user.photoURL || ""} alt={user.displayName || ""} />
-                            <AvatarFallback>{getUserInitials(user.displayName)}</AvatarFallback>
-                          </Avatar>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-56" align="end" forceMount>
-                        <DropdownMenuLabel className="font-normal">
-                          <div className="flex flex-col space-y-1">
-                            <p className="text-sm font-medium leading-none">
-                              {user.displayName || "Usuário"}
-                            </p>
-                            <p className="text-xs leading-none text-muted-foreground">
-                              {user.email}
-                            </p>
-                          </div>
-                        </DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                          <Link to="/perfil" className="cursor-pointer">
-                            <User className="mr-2 h-4 w-4" />
-                            Perfil
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link to="/configuracoes" className="cursor-pointer">
-                            <Settings className="mr-2 h-4 w-4" />
-                            Configurações
-                          </Link>
-                        </DropdownMenuItem>
-                        {user.role === 'admin' && (
-                          <DropdownMenuItem asChild>
-                            <Link to="/admin" className="cursor-pointer">
-                              <Shield className="mr-2 h-4 w-4" />
-                              Administração
-                            </Link>
-                          </DropdownMenuItem>
-                        )}
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem 
-                          className="cursor-pointer text-destructive focus:text-destructive"
-                          onClick={handleLogout}
-                        >
-                          <LogOut className="mr-2 h-4 w-4" />
-                          Sair
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                ) : (
-                  <div className="flex items-center space-x-3">
-                    <Button variant="ghost" size="sm" asChild>
-                      <Link to="/login">Entrar</Link>
-                    </Button>
-                    <Button variant="default" size="sm" asChild>
-                      <Link to="/registrar">Criar conta</Link>
-                    </Button>
-                  </div>
-                )}
-              </>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                          {user.displayName || "Admin"}
+                        </p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                          {user.email}
+                        </p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin" className="cursor-pointer">
+                        <Shield className="mr-2 h-4 w-4" />
+                        Administração
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      className="cursor-pointer text-destructive focus:text-destructive"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sair
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             )}
           </nav>
           
@@ -169,13 +136,8 @@ const Header = () => {
               <Link to="/buscar">🔍</Link>
             </Button>
             
-            {!loading && !user && (
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/login">Entrar</Link>
-              </Button>
-            )}
-            
-            {!loading && user && (
+            {/* Admin mobile avatar - only for admins */}
+            {!loading && user && user.role === 'admin' && (
               <Avatar className="h-8 w-8">
                 <AvatarImage src={user.photoURL || ""} alt={user.displayName || ""} />
                 <AvatarFallback>{getUserInitials(user.displayName)}</AvatarFallback>

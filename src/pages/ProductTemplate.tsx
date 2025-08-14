@@ -2,7 +2,6 @@ import { useParams, Navigate, Link } from "react-router-dom";
 import SEO from "@/components/SEO";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import ProductReviews from "@/components/reviews/ProductReviews";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -130,7 +129,7 @@ const ProductTemplate = () => {
     })),
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: product.rating,
+      ratingValue: product.averageRating,
       bestRating: "5",
       worstRating: "1"
     },
@@ -171,7 +170,7 @@ const ProductTemplate = () => {
               <div className="flex flex-wrap gap-3 mb-6">
                 <div className="flex items-center gap-2 text-sm">
                   <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  <span className="font-semibold">{product.rating}</span>
+                  <span className="font-semibold">{product.averageRating}</span>
                   <span className="text-muted-foreground">({product.reviewCount} avaliações)</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -240,10 +239,9 @@ const ProductTemplate = () => {
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <Tabs defaultValue="sobre" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="sobre">Sobre</TabsTrigger>
             <TabsTrigger value="recursos">Recursos</TabsTrigger>
-            <TabsTrigger value="avaliacoes">Avaliações</TabsTrigger>
             <TabsTrigger value="alternativas">Similares</TabsTrigger>
           </TabsList>
           
@@ -333,15 +331,8 @@ const ProductTemplate = () => {
               </CardContent>
             </Card>
           </TabsContent>
-          
+
           <TabsContent value="avaliacoes" className="space-y-6">
-            <ProductReviews 
-              productId={product.id} 
-              productName={product.name}
-            />
-          </TabsContent>
-          
-          <TabsContent value="alternativas" className="space-y-6">
             {relatedProducts.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {relatedProducts.map((relatedProduct) => (
@@ -366,7 +357,7 @@ const ProductTemplate = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1 text-sm">
                           <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                          <span>{relatedProduct.rating}</span>
+                          <span>{relatedProduct.averageRating}</span>
                         </div>
                         <Button size="sm" variant="outline" asChild>
                           <Link to={`/produto/${relatedProduct.slug}`}>

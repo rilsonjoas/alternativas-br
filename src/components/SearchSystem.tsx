@@ -243,7 +243,7 @@ const SearchSystem = ({
                               {product.category}
                             </Badge>
                             <div className="text-xs text-muted-foreground mt-1">
-                              ⭐ {product.rating}
+                              ⭐ {product.averageRating}
                             </div>
                           </div>
                         </div>

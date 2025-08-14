@@ -1,12 +1,10 @@
 export interface AdvancedSearchFilters {
   query?: string;
   categories?: string[];
-  minRating?: number;
-  maxRating?: number;
   pricing?: 'free' | 'freemium' | 'paid' | 'enterprise';
   features?: string[];
   tags?: string[];
-  sortBy?: 'relevance' | 'rating' | 'name' | 'popularity' | 'newest' | 'reviews';
+  sortBy?: 'relevance' | 'name' | 'popularity' | 'newest';
   sortOrder?: 'asc' | 'desc';
 }
 
@@ -35,7 +33,7 @@ export interface ProductComparison {
 
 export interface ComparisonFeature {
   name: string;
-  type: 'boolean' | 'text' | 'number' | 'rating';
+  type: 'boolean' | 'text' | 'number';
   values: Record<string, string | number | boolean>; // productId -> value
 }
 

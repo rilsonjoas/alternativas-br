@@ -30,9 +30,7 @@ export interface Product {
   categorySlug: string;
   categoryId?: string; // Firebase reference
   
-  // Ratings and stats
-  rating: number;
-  reviewCount: number;
+  // Basic stats
   userCount: string;
   foundedYear: string;
   location: string;
@@ -51,15 +49,13 @@ export interface Product {
   metaTitle?: string;
   metaDescription?: string;
   
-  // Reviews
-  reviews?: Review[];
-  
   // Alternatives
   alternatives?: string[]; // Product IDs
   
   // Admin info
   views?: number;
   averageRating?: number;
+  reviewCount?: number;
   
   // Firebase timestamps
   createdAt?: Timestamp;
@@ -74,17 +70,6 @@ export interface PricingPlan {
   description: string;
   features: string[];
   highlighted?: boolean;
-}
-
-export interface Review {
-  id: string;
-  productId?: string;
-  author: string;
-  role: string;
-  rating: number;
-  comment: string;
-  date: string;
-  createdAt?: Timestamp;
 }
 
 export interface CategoryWithProducts extends Category {

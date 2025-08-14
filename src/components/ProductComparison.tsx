@@ -28,7 +28,6 @@ import {
   Zap
 } from 'lucide-react';
 import { Product } from '@/types';
-import { ExtendedProduct } from '@/types/tags';
 import { ProductTags } from './ProductTags';
 
 interface ProductComparisonProps {
@@ -74,7 +73,7 @@ const renderPricing = (product: Product) => {
   return (
     <div className="space-y-1">
       {pricingPlans.map((plan, index) => (
-        <div key={index} className="text-sm">
+        <div key={plan.id || index} className="text-sm">
           <span className="font-medium">{plan.name}</span>
           {plan.price && (
             <span className="block text-green-600">{plan.price}</span>
@@ -103,7 +102,7 @@ const renderFeatures = (features: string[]) => (
 
 const renderCompanyInfo = (product: Product) => (
   <div className="space-y-1 text-sm">
-    <div className="font-medium">{'Empresa não informada'}</div>
+    {product.name && <div className="font-medium">{product.name}</div>}
     <div className="flex items-center gap-1 text-gray-500">
       <Calendar className="w-3 h-3" />
       Fundada em {product.foundedYear || 'Não informado'}
@@ -161,7 +160,7 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({
       category: '',
       icon: null,
       key: 'rating',
-      renderValue: (product) => renderRating(product.averageRating || product.rating || 0, product.reviewCount || 0)
+      renderValue: (product) => renderRating(product.averageRating || 0, product.reviewCount || 0)
     },
     {
       category: '',
@@ -384,7 +383,7 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({
             <div>
               <span className="font-medium">Melhor avaliado:</span>{' '}
               {products.reduce((best, current) => 
-                (current.averageRating || current.rating || 0) > (best.averageRating || best.rating || 0) ? current : best
+                (current.averageRating || 0) > (best.averageRating || 0) ? current : best
               ).name}
             </div>
             <div>
