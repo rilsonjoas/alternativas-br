@@ -18,6 +18,27 @@ dist-ssr
 firebase-debug.log
 .firebaserc
 
+# Chave de serviço do Firebase Admin
+src/scripts/serviceAccountKey.json
+
+# Scripts de importação (opcional, se não quiser versionar)
+src/scripts/importProducts.js
+src/scripts/importProducts.ts
+
+# Build e dependências
+build/
+coverage/
+.next/
+.turbo/
+out/
+
+# Arquivos temporários
+*.tmp
+*.bak
+
+# Dados locais
+src/data/products.js
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

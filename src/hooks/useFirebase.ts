@@ -9,7 +9,11 @@ import { Category, Product } from '@/types';
 export const useCategories = () => {
   return useQuery({
     queryKey: ['categories'],
-    queryFn: () => categoryService.getAll(),
+    queryFn: async () => {
+      const result = await categoryService.getAll();
+      console.log('Retorno do categoryService.getAll():', result);
+      return result;
+    },
     staleTime: 5 * 60 * 1000, // 5 minutos
   });
 };

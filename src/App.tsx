@@ -12,21 +12,17 @@ import Sobre from "./pages/Sobre";
 import AdicionarProduto from "./pages/AdicionarProduto";
 import Contato from "./pages/Contato";
 import SearchResults from "./pages/SearchResults";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import ManageProducts from "./pages/ManageProducts";
+import ManageCategories from "./pages/ManageCategories";
+import ManageUsers from "./pages/ManageUsers";
+import ManageForeignProducts from "./pages/ManageForeignProducts";
 
 // Templates dinâmicos
 import CategoryTemplate from "./pages/CategoryTemplate";
 import ProductTemplate from "./pages/ProductTemplate";
-
-// Páginas de admin
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminCategories from "./pages/admin/AdminCategories";
-import AdminProducts from "./pages/admin/AdminProducts";
-import AdminProductForm from "./pages/admin/AdminProductForm";
-import AdminSetup from "./pages/admin/AdminSetup";
-import AdminReviews from "./pages/admin/AdminReviews";
-import AdminUsers from "./pages/admin/AdminUsers";
-import AdminAnalytics from "./pages/admin/AdminAnalytics";
-import AdminSettings from "./pages/admin/AdminSettings";
 
 const queryClient = new QueryClient();
 
@@ -47,19 +43,47 @@ const App = () => (
             <Route path="/contato" element={<Contato />} />
             <Route path="/produto/:slug" element={<ProductTemplate />} />
             <Route path="/buscar" element={<SearchResults />} />
-            
-            {/* Rotas de Admin */}
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/setup" element={<AdminSetup />} />
-            <Route path="/admin/categorias" element={<AdminCategories />} />
-            <Route path="/admin/produtos" element={<AdminProducts />} />
-            <Route path="/admin/produtos/novo" element={<AdminProductForm />} />
-            <Route path="/admin/produtos/:id/editar" element={<AdminProductForm />} />
-            <Route path="/admin/avaliacoes" element={<AdminReviews />} />
-            <Route path="/admin/usuarios" element={<AdminUsers />} />
-            <Route path="/admin/analytics" element={<AdminAnalytics />} />
-            <Route path="/admin/configuracoes" element={<AdminSettings />} />
-            
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={
+              <ProtectedRoute adminOnly>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/produtos" element={
+              <ProtectedRoute adminOnly>
+                <ManageProducts />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/foreign-products" element={
+              <ProtectedRoute adminOnly>
+                <ManageForeignProducts />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/categorias" element={
+              <ProtectedRoute adminOnly>
+                <ManageCategories />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/usuarios" element={
+              <ProtectedRoute adminOnly>
+                <ManageUsers />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/produtos" element={
+              <ProtectedRoute adminOnly>
+                <ManageProducts />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/categorias" element={
+              <ProtectedRoute adminOnly>
+                <ManageCategories />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/usuarios" element={
+              <ProtectedRoute adminOnly>
+                <ManageUsers />
+              </ProtectedRoute>
+            } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

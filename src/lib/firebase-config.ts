@@ -1,14 +1,16 @@
 // Configurações do Firebase
 // As variáveis são carregadas do arquivo .env.local
 
-export const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+const firebaseConfig = {
+  apiKey: "AIzaSyBiUNvJc-sBHkjYSpgqeOqtabDcC3wbb08",
+  authDomain: "alternativas-br.firebaseapp.com",
+  projectId: "alternativas-br",
+  storageBucket: "alternativas-br.firebasestorage.app",
+  messagingSenderId: "980293963848",
+  appId: "1:980293963848:web:e1e7e0722b4197565e487d",
+  measurementId: "G-7FTVYGNH79"
 };
+
 
 // Coleções do Firestore
 export const COLLECTIONS = {
@@ -17,3 +19,5 @@ export const COLLECTIONS = {
   PRICING_PLANS: 'pricing_plans',
   REVIEWS: 'reviews',
 } as const;
+
+export default firebaseConfig;

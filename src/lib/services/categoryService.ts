@@ -22,13 +22,19 @@ class CategoryService {
   // Buscar todas as categorias
   async getAll(): Promise<Category[]> {
     try {
-      const q = query(this.collection, orderBy('title', 'asc'));
+      const q = query(this.collection, orderBy('name', 'asc'));
       const snapshot = await getDocs(q);
-      
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Category[];
+      console.log('Snapshot de categorias:', snapshot);
+      console.log('Docs:', snapshot.docs);
+      const categorias = snapshot.docs.map(doc => {
+        const data = doc.data();
+        console.log('Categoria doc:', doc.id, data);
+        return {
+          id: doc.id,
+          ...data
+        };
+      }) as Category[];
+      return categorias;
     } catch (error) {
       console.error('Erro ao buscar categorias:', error);
       throw new Error('Falha ao carregar categorias');

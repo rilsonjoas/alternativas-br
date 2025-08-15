@@ -1,8 +1,30 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import heroImage from "@/assets/hero-image.jpg";
+import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
+import { collection, getCountFromServer } from "firebase/firestore";
+
 
 const Hero = () => {
+  const [produtosCount, setProdutosCount] = useState<number | null>(null);
+  const [categoriasCount, setCategoriasCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    async function fetchCounts() {
+      try {
+        const produtosSnap = await getCountFromServer(collection(db, "products"));
+        setProdutosCount(produtosSnap.data().count);
+        const categoriasSnap = await getCountFromServer(collection(db, "categories"));
+        setCategoriasCount(categoriasSnap.data().count);
+      } catch (err) {
+        setProdutosCount(null);
+        setCategoriasCount(null);
+      }
+    }
+    fetchCounts();
+  }, []);
+
   return (
     <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
       {/* Background with gradient overlay */}
@@ -39,8 +61,8 @@ const Hero = () => {
             </div>
             
             <div className="mt-8 flex flex-wrap gap-2 justify-center lg:justify-start">
-              <Badge variant="category">+200 produtos</Badge>
-              <Badge variant="category">15 categorias</Badge>
+              <Badge variant="category">{produtosCount !== null ? `${produtosCount} produtos` : "- produtos"}</Badge>
+              <Badge variant="category">{categoriasCount !== null ? `${categoriasCount} categorias` : "- categorias"}</Badge>
               <Badge variant="category">100% brasileiro</Badge>
             </div>
           </div>

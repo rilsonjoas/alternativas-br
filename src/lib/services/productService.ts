@@ -30,10 +30,8 @@ class ProductService {
         ...doc.data()
       })) as Product[];
       
-      // Filtrar apenas produtos brasileiros
-      return allProducts.filter(product => 
-        product.location && product.location.includes('BR')
-      );
+      // Retornar todos os produtos do Firestore
+      return allProducts;
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
       throw new Error('Falha ao carregar produtos');
