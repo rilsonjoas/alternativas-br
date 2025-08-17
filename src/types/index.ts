@@ -1,4 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
+import { ReactNode } from 'react';
 
 // Estrutura unificada de categoria
 export interface Category {
@@ -67,6 +68,7 @@ export interface SocialLinks {
 
 // Interface unificada de produto (nacional e estrangeiro)
 export interface Product {
+  foundedYear: ReactNode;
   id: string;
   slug: string;
   name: string;

@@ -1,9 +1,3 @@
-git clone https://github.com/rilsonjoas/alternativas-br.git
-npm run build      # Build de produção
-npm run preview    # Preview do build de produção
-npm run lint       # Verificação de código com ESLint
-npm run migrate    # Migrar dados para Firebase
-
 # Alternativas BR 🇧🇷
 
 > Descubra as melhores alternativas brasileiras de software e serviços tecnológicos

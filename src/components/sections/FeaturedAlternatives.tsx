@@ -95,7 +95,7 @@ const FeaturedAlternatives = () => {
                       </CardTitle>
                       <div className="flex items-center space-x-2 mt-1">
                         <Badge variant="category">{product.category}</Badge>
-                        <Badge variant="price">{product.pricing?.description || product.pricingModel || "Consultar"}</Badge>
+                        <Badge variant="price">{product.pricing?.description || "Consultar"}</Badge>
                         {product.isUnicorn && (
                           <Badge variant="tech">🦄</Badge>
                         )}

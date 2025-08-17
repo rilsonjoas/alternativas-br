@@ -6,6 +6,12 @@ import { Product } from '@/types';
  * Usa o serviço unificado internamente
  */
 class ProductService {
+  create(productData: Omit<Product, "id" | "createdAt" | "updatedAt">): Promise<unknown> {
+    throw new Error('Method not implemented.');
+  }
+  update(id: string, updates: Partial<Product>): Promise<unknown> {
+    throw new Error('Method not implemented.');
+  }
 
   // Buscar todos os produtos ativos
   async getAll(): Promise<Product[]> {

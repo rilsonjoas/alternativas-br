@@ -49,3 +49,6 @@ src/data/products.js
 *.njsproj
 *.sln
 *.sw?
+
+# Artigos e documentação
+CLAUDE.md
