@@ -1,4 +1,5 @@
 import { useParams, Navigate, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import SEO from "@/components/SEO";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -10,8 +11,19 @@ import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ExternalLink, Star, Users, Calendar } from "lucide-react";
 import { useCategoryPage } from "@/hooks/useFirebase";
-import { getCategoryWithProducts } from "@/data";
 import { Category } from "@/types";
+
+// Mapeamento de ícones
+import * as LucideIcons from "lucide-react";
+const iconMap: Record<string, React.ElementType> = {
+  MessageCircle: LucideIcons.MessageCircle,
+  Code: LucideIcons.Code,
+  Palette: LucideIcons.Palette,
+  BookOpen: LucideIcons.BookOpen,
+  TrendingUp: LucideIcons.TrendingUp,
+  Zap: LucideIcons.Zap,
+  // Adicione outros ícones conforme necessário
+};
 
 // Type for categories that can have either title or name
 type CategoryDisplay = Category | (Omit<Category, 'title'> & { name: string; title?: string });
@@ -32,14 +44,11 @@ const CategoryTemplate = () => {
   if (!slug) {
     return <Navigate to="/categorias" replace />;
   }
-  
-  // Fallback to local data if Firebase fails
-  const localCategoryData = getCategoryWithProducts(slug);
-  
-  // Use Firebase data if available, otherwise use local data
-  const categoryData = firebaseCategory && firebaseProducts 
+    
+  // Use Firebase data se disponível
+  const categoryData = firebaseCategory && firebaseProducts
     ? { ...firebaseCategory, products: firebaseProducts }
-    : localCategoryData;
+    : null;
   
   if (isLoading) {
     return (
@@ -107,7 +116,9 @@ const CategoryTemplate = () => {
     return <Navigate to="/categorias" replace />;
   }
 
-  const { products, ...category } = categoryData;
+  // Garantir tipagem correta
+  const products = categoryData.products || [];
+  const category = categoryData;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -148,7 +159,10 @@ const CategoryTemplate = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="flex items-center gap-4 mb-4">
             <div className={`w-16 h-16 rounded-xl ${category.color} flex items-center justify-center text-3xl`}>
-              {category.icon}
+              {(() => {
+                const IconComponent = iconMap[category.icon as string] || LucideIcons.Box;
+                return <IconComponent className="w-10 h-10" />;
+              })()}
             </div>
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-foreground">{categoryTitle}</h1>
@@ -201,10 +215,7 @@ const CategoryTemplate = () => {
                       </p>
                       
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                          <span>{product.rating}</span>
-                        </div>
+                    
                         <div className="flex items-center gap-1">
                           <Users className="w-4 h-4" />
                           <span>{product.userCount}</span>
@@ -250,7 +261,12 @@ const CategoryTemplate = () => {
           <section className="py-20 text-center">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
               <div className="max-w-md mx-auto">
-                <div className="text-6xl mb-4">{category.icon}</div>
+                <div className="text-6xl mb-4">
+                  {(() => {
+                    const IconComponent = iconMap[category.icon as string] || LucideIcons.Box;
+                    return <IconComponent className="w-16 h-16 mx-auto" />;
+                  })()}
+                </div>
                 <h2 className="text-2xl font-bold text-foreground mb-4">
                   Em breve!
                 </h2>

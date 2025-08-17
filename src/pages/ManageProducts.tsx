@@ -69,42 +69,34 @@ const [form, setForm] = useState<ProductForm>({});
   async function handleSaveEdit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
-    if (addMode) {
-      // Adicionar novo produto
-      const { addDoc } = await import("firebase/firestore");
-      const docRef = await addDoc(collection(db, "products"), {
-        ...form,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      });
-      setProducts([...products, { id: docRef.id, name: form.name ?? "", ...form }]);
-    } else if (editProduct) {
-      // Editar produto existente
-      await updateDoc(doc(db, "products", editProduct.id), {
-        name: form.name,
-        description: form.description,
-        category: form.category,
-        price: form.price,
-        slug: form.slug,
-        logo: form.logo,
-        pricingModel: form.pricingModel,
-        substitutes: form.substitutes,
-        cons: form.cons,
-        features: form.features,
-        pros: form.pros,
-        rating: form.rating,
-        screenshots: form.screenshots,
-        tags: form.tags,
-        website: form.website,
-        isFeatured: form.isFeatured,
-        downloads: form.downloads,
-        createdAt: form.createdAt,
-        updatedAt: new Date()
-      });
-      setProducts(products.map(p => p.id === editProduct.id ? { ...p, ...form } : p));
+    try {
+      // Remove campos undefined
+      const cleanForm = Object.fromEntries(Object.entries(form).filter(([_, v]) => v !== undefined));
+      if (addMode) {
+        // Adicionar novo produto
+        const { addDoc } = await import("firebase/firestore");
+        const docRef = await addDoc(collection(db, "products"), {
+          ...cleanForm,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        });
+        setProducts([...products, { id: docRef.id, name: String(cleanForm.name ?? ""), ...cleanForm }]);
+        alert("Produto cadastrado com sucesso!");
+      } else if (editProduct) {
+        // Editar produto existente
+        await updateDoc(doc(db, "products", editProduct.id), {
+          ...cleanForm,
+          updatedAt: new Date()
+        });
+        setProducts(products.map(p => p.id === editProduct.id ? { ...p, ...cleanForm } : p));
+        alert("Produto atualizado com sucesso!");
+      }
+      closeEdit();
+    } catch (error) {
+      alert("Erro ao salvar produto! " + (error?.message || ""));
+      closeEdit();
     }
     setSaving(false);
-    closeEdit();
   }
 
   function openConfirm(id: string) {

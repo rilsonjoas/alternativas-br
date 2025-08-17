@@ -13,7 +13,6 @@ import {
   Target,
   Clock
 } from 'lucide-react';
-import StarRating from '@/components/ui/star-rating';
 import { Product } from '@/types';
 import { advancedSearchService } from '@/lib/services/advancedSearchService';
 
@@ -183,13 +182,6 @@ const Recommendations: React.FC<RecommendationsProps> = ({
                     </p>
 
                     <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center space-x-3">
-                        <StarRating rating={product.rating || 0} size="sm" />
-                        <div className="flex items-center text-xs text-muted-foreground">
-                          <Users className="w-3 h-3 mr-1" />
-                          {product.reviewCount || 0}
-                        </div>
-                      </div>
                       
                       {recommendationType === 'trending' && (
                         <div className="flex items-center text-xs text-orange-600">

@@ -14,11 +14,11 @@ import Contato from "./pages/Contato";
 import SearchResults from "./pages/SearchResults";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Privacidade from "./pages/Privacidade";
+import Termos from "./pages/Termos";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import ManageProducts from "./pages/ManageProducts";
+import ManageUnifiedProducts from "./pages/ManageUnifiedProducts";
 import ManageCategories from "./pages/ManageCategories";
-import ManageUsers from "./pages/ManageUsers";
-import ManageForeignProducts from "./pages/ManageForeignProducts";
 
 // Templates dinâmicos
 import CategoryTemplate from "./pages/CategoryTemplate";
@@ -44,6 +44,8 @@ const App = () => (
             <Route path="/produto/:slug" element={<ProductTemplate />} />
             <Route path="/buscar" element={<SearchResults />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/privacidade" element={<Privacidade />} />
+            <Route path="/termos" element={<Termos />} />
             <Route path="/dashboard" element={
               <ProtectedRoute adminOnly>
                 <Dashboard />
@@ -51,37 +53,12 @@ const App = () => (
             } />
             <Route path="/dashboard/produtos" element={
               <ProtectedRoute adminOnly>
-                <ManageProducts />
-              </ProtectedRoute>
-            } />
-            <Route path="/dashboard/foreign-products" element={
-              <ProtectedRoute adminOnly>
-                <ManageForeignProducts />
+                <ManageUnifiedProducts />
               </ProtectedRoute>
             } />
             <Route path="/dashboard/categorias" element={
               <ProtectedRoute adminOnly>
                 <ManageCategories />
-              </ProtectedRoute>
-            } />
-            <Route path="/dashboard/usuarios" element={
-              <ProtectedRoute adminOnly>
-                <ManageUsers />
-              </ProtectedRoute>
-            } />
-            <Route path="/dashboard/produtos" element={
-              <ProtectedRoute adminOnly>
-                <ManageProducts />
-              </ProtectedRoute>
-            } />
-            <Route path="/dashboard/categorias" element={
-              <ProtectedRoute adminOnly>
-                <ManageCategories />
-              </ProtectedRoute>
-            } />
-            <Route path="/dashboard/usuarios" element={
-              <ProtectedRoute adminOnly>
-                <ManageUsers />
               </ProtectedRoute>
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

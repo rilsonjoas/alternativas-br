@@ -14,6 +14,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { PlusCircle, Upload, CheckCircle } from "lucide-react";
 import { FormEvent } from "react";
+import emailjs from 'emailjs-com';
 
 const AdicionarProduto = () => {
   const { toast } = useToast();
@@ -23,14 +24,26 @@ const AdicionarProduto = () => {
     const form = e.currentTarget;
     const data = new FormData(form);
     const payload = Object.fromEntries(data.entries());
-    console.log("Sugestão enviada:", payload);
 
-    toast({
-      title: "Obrigado pela sugestão!",
-      description: "Vamos revisar e incluir no catálogo em breve.",
+    emailjs.send(
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_EMAILJS_TEMPLATE_PRODUTO,
+      payload,
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+    ).then(() => {
+      toast({
+        title: "Sugestão enviada!",
+        description: "Recebemos sua sugestão e vamos revisar em breve.",
+        variant: "default"
+      });
+      form.reset();
+    }).catch(() => {
+      toast({
+        title: "Erro ao enviar sugestão",
+        description: "Tente novamente ou envie para aalternativabr@gmail.com.",
+        variant: "destructive"
+      });
     });
-
-    form.reset();
   };
 
   const jsonLd = {
@@ -65,12 +78,12 @@ const AdicionarProduto = () => {
             <form onSubmit={onSubmit} className="md:col-span-2 space-y-5">
               <div>
                 <label className="block text-sm font-medium mb-2">Nome do produto</label>
-                <Input name="nome" placeholder="Ex.: Pipefy" required />
+                <Input name="nome" id="nome" placeholder="Ex.: Pipefy" required />
               </div>
 
               <div>
                 <label className="block text-sm font-medium mb-2">Descrição</label>
-                <Textarea name="descricao" placeholder="O que esse produto faz?" required rows={5} />
+                <Textarea name="descricao" id="descricao" placeholder="O que esse produto faz?" required rows={5} />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -92,31 +105,31 @@ const AdicionarProduto = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Modelo de preço</label>
-                  <Input name="preco" placeholder="Ex.: Gratuito, Freemium, Pago" required />
+                <Input name="preco" id="preco" placeholder="Ex.: Gratuito, Freemium, Pago" required />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-sm font-medium mb-2">Site oficial</label>
-                  <Input name="site" type="url" placeholder="https://exemplo.com" required />
+                <Input name="site" id="site" type="url" placeholder="URL oficial (opcional)" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Substitui (separar por vírgulas)</label>
-                  <Input name="substitui" placeholder="Ex.: Trello, Jira" />
+                  <Input name="substitui" id="substitui" placeholder="Ex.: Trello, Jira" />
                 </div>
               </div>
-
+                <Input name="contato" id="contato" placeholder="Seu email para contato (opcional)" />
               <div>
                 <label className="block text-sm font-medium mb-2">Logo (opcional)</label>
                 <div className="flex items-center gap-3">
-                  <Input name="logo" type="file" accept="image/*" />
+                <Input name="logo" id="logo" type="file" accept="image/*" />
                   <Button type="button" variant="outline" onClick={() => alert("Upload real em breve")}> 
                     <Upload /> Pré-visualizar
                   </Button>
                 </div>
               </div>
-
+                <Textarea name="observacoes" id="observacoes" placeholder="Observações (opcional)" rows={3} />
               <div className="flex justify-end">
                 <Button type="submit" variant="accent">
                   <CheckCircle /> Enviar sugestão

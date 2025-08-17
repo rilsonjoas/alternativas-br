@@ -24,7 +24,6 @@ import {
   Heart
 } from "lucide-react";
 import { useProductBySlug, useProductsByCategory } from "@/hooks/useFirebase";
-import { getProductBySlug, getRelatedProducts } from "@/data";
 
 const ProductTemplate = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -33,7 +32,7 @@ const ProductTemplate = () => {
   const { data: firebaseProduct, isLoading, error } = useProductBySlug(slug || '');
   
   // We need to get the category slug for related products, but we need a fallback
-  const tempProduct = firebaseProduct || (slug ? getProductBySlug(slug) : null);
+  const tempProduct = firebaseProduct;
   const categorySlug = tempProduct?.categorySlug || tempProduct?.category || '';
   
   const { data: firebaseRelatedProducts } = useProductsByCategory(categorySlug);
@@ -42,13 +41,12 @@ const ProductTemplate = () => {
     return <Navigate to="/alternativas" replace />;
   }
   
-  // Fallback to local data if Firebase fails
-  const localProduct = getProductBySlug(slug);
-  const product = firebaseProduct || localProduct;
-  
-  // Get related products (Firebase or local)
-  const localRelatedProducts = product ? getRelatedProducts(product.category) : [];
-  const relatedProducts = firebaseRelatedProducts?.length ? firebaseRelatedProducts : localRelatedProducts;
+  const product = firebaseProduct;
+  // Garante que arrays não venham como undefined ou string
+  const pricingArray = Array.isArray(product?.pricing) ? product.pricing : [];
+  const tagsArray = Array.isArray(product?.tags) ? product.tags : [];
+  const featuresArray = Array.isArray(product?.features) ? product.features : [];
+  const relatedProducts = firebaseRelatedProducts || [];
   
   if (isLoading) {
     return (
@@ -120,7 +118,7 @@ const ProductTemplate = () => {
         addressLocality: product.location
       }
     },
-    offers: product.pricing.map(plan => ({
+    offers: pricingArray.map(plan => ({
       "@type": "Offer",
       name: plan.name,
       description: plan.description,
@@ -129,7 +127,7 @@ const ProductTemplate = () => {
     })),
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: product.averageRating,
+      // Removido: ratingValue
       bestRating: "5",
       worstRating: "1"
     },
@@ -168,27 +166,19 @@ const ProductTemplate = () => {
               </div>
               
               <div className="flex flex-wrap gap-3 mb-6">
-                <div className="flex items-center gap-2 text-sm">
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  <span className="font-semibold">{product.averageRating}</span>
-                  <span className="text-muted-foreground">({product.reviewCount} avaliações)</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Users className="w-4 h-4" />
-                  <span>{product.userCount}</span>
-                </div>
+          
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Calendar className="w-4 h-4" />
-                  <span>Fundada em {product.foundedYear}</span>
+                  <span>Fundada em {product.companyInfo?.foundedYear || product.foundedYear || '-'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <MapPin className="w-4 h-4" />
-                  <span>{product.location}</span>
+                  <span>{product.location?.city ? product.location.city + ', ' : ''}{product.location?.country || '-'}</span>
                 </div>
               </div>
               
               <div className="flex flex-wrap gap-2 mb-6">
-                {product.tags.map((tag) => (
+                {tagsArray.map((tag) => (
                   <Badge key={tag} variant="outline">
                     {tag}
                   </Badge>
@@ -205,17 +195,24 @@ const ProductTemplate = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {product.pricing.map((plan, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
-                      <div>
-                        <div className="font-semibold">{plan.name}</div>
-                        <div className="text-sm text-muted-foreground">{plan.description}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-bold text-lg">{plan.price}</div>
-                      </div>
+                  <div className="text-muted-foreground text-sm">
+                    {product.pricing?.description || product.pricing?.startingPrice || '-'}
+                  </div>
+                  {pricingArray.length > 0 && (
+                    <div className="space-y-2 mt-2">
+                      {pricingArray.map((plan, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                          <div>
+                            <div className="font-semibold">{plan.name}</div>
+                            <div className="text-sm text-muted-foreground">{plan.description}</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold text-lg">{plan.price}</div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  )}
                 </CardContent>
               </Card>
               
@@ -266,20 +263,23 @@ const ProductTemplate = () => {
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Empresa:</span>
-                        <span>Empresa Brasileira</span>
+                        <span>{product.companyInfo?.name || product.name || '-'}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Fundação:</span>
-                        <span>{product.foundedYear}</span>
+                        <span>{product.companyInfo?.foundedYear || product.foundedYear || '-'}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Sede:</span>
-                        <span>{product.location}</span>
+                        <span>{product.companyInfo?.headquarters || `${product.location?.city ? product.location.city + ', ' : ''}${product.location?.country || '-'}`}</span>
                       </div>
+                    
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Categoria:</span>
-                        <span>{product.category}</span>
+                        <span className="text-muted-foreground">Site:</span>
+                        <span>{product.companyInfo?.website ? (<a href={product.companyInfo.website} target="_blank" rel="noopener noreferrer" className="text-primary underline">{product.companyInfo.website}</a>) : '-'}</span>
                       </div>
+                    
+              
                     </div>
                   </div>
                   
@@ -321,7 +321,7 @@ const ProductTemplate = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-4">
-                  {product.features.map((feature, index) => (
+                  {featuresArray.map((feature, index) => (
                     <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
                       <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                       <span className="text-sm">{feature}</span>
@@ -357,7 +357,7 @@ const ProductTemplate = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1 text-sm">
                           <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                          <span>{relatedProduct.averageRating}</span>
+                          {/* Removido: relatedProduct.averageRating */}
                         </div>
                         <Button size="sm" variant="outline" asChild>
                           <Link to={`/produto/${relatedProduct.slug}`}>

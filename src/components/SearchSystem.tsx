@@ -12,8 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { products, categories } from '@/data';
 import { Product, Category } from '@/types';
+import { db } from '@/lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 interface SearchSystemProps {
   onResultClick?: (result: Product | Category, type: 'product' | 'category') => void;
@@ -33,17 +34,28 @@ const SearchSystem = ({
   const [isOpen, setIsOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   
-  // Use produtos locais em vez do Firebase
+  // Buscar produtos e categorias do Firebase
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      const productsSnap = await getDocs(collection(db, 'products'));
+      setProducts(productsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product)));
+      const categoriesSnap = await getDocs(collection(db, 'categories'));
+      setCategories(categoriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category)));
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
+
   const searchResults = useMemo(() => {
     if (searchTerm.length < 2) return [];
-    
     const lowerSearchTerm = searchTerm.toLowerCase();
     return products.filter(product => {
-      // Garantir que só produtos brasileiros apareçam
-      if (!product.location || !product.location.includes('BR')) {
-        return false;
-      }
-      
+      if (!product.location || !product.location.includes('BR')) return false;
       const searchableText = [
         product.name,
         product.description,
@@ -52,21 +64,19 @@ const SearchSystem = ({
         ...(product.features || []),
         ...(product.tags || [])
       ].join(' ').toLowerCase();
-      
       return searchableText.includes(lowerSearchTerm);
     });
-  }, [searchTerm]);
+  }, [searchTerm, products]);
   
   // Filter categories based on search term
   const filteredCategories = useMemo(() => {
     if (searchTerm.length < 2) return [];
-    
     const lowerSearchTerm = searchTerm.toLowerCase();
     return categories.filter(category => 
       category.title?.toLowerCase().includes(lowerSearchTerm) ||
       category.description.toLowerCase().includes(lowerSearchTerm)
     );
-  }, [searchTerm]);
+  }, [searchTerm, categories]);
   
   // Filter products by category if selected
   const filteredProducts = useMemo(() => {
@@ -243,7 +253,7 @@ const SearchSystem = ({
                               {product.category}
                             </Badge>
                             <div className="text-xs text-muted-foreground mt-1">
-                              ⭐ {product.averageRating}
+                              {/* Removido: averageRating */}
                             </div>
                           </div>
                         </div>

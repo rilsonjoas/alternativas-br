@@ -54,7 +54,7 @@ const Header = () => {
               <span className="text-primary-foreground font-bold text-sm">BR</span>
             </div>
             <div>
-              <span className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">Alternativas</span>
+              <span className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">AlternativaBR</span>
               <p className="text-xs text-muted-foreground -mt-1">Tecnologia Brasileira</p>
             </div>
           </Link>
@@ -105,15 +105,15 @@ const Header = () => {
                           {user.displayName || "Admin"}
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
-                          {user.email}
+                          aalternativabr@gmail.com
                         </p>
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link to="/admin" className="cursor-pointer">
+                      <Link to="/dashboard" className="cursor-pointer">
                         <Shield className="mr-2 h-4 w-4" />
-                        Administração
+                        Dashboard
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />

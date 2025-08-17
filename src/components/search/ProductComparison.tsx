@@ -17,7 +17,6 @@ import {
   Shield,
   Zap
 } from 'lucide-react';
-import StarRating from '@/components/ui/star-rating';
 import { Product } from '@/types';
 
 interface ProductComparisonProps {
@@ -38,8 +37,7 @@ const ProductComparison: React.FC<ProductComparisonProps> = ({
   }
 
   const comparisonFeatures = [
-    { key: 'rating', label: 'Avaliação', icon: '⭐' },
-    { key: 'reviewCount', label: 'Número de Avaliações', icon: '👥' },
+    // Removido: rating, reviewCount
     { key: 'category', label: 'Categoria', icon: '📁' },
     { key: 'pricing', label: 'Modelo de Preço', icon: '💰' },
     { key: 'foundedYear', label: 'Ano de Fundação', icon: '📅' },
@@ -51,21 +49,7 @@ const ProductComparison: React.FC<ProductComparisonProps> = ({
     const value = product[featureKey as keyof Product];
 
     switch (featureKey) {
-      case 'rating':
-        return (
-          <div className="flex items-center space-x-2">
-            <StarRating rating={value as number || 0} size="sm" />
-            <span className="text-sm font-medium">{(value as number || 0).toFixed(1)}</span>
-          </div>
-        );
-      
-      case 'reviewCount':
-        return (
-          <div className="flex items-center space-x-1">
-            <Users className="w-4 h-4 text-muted-foreground" />
-            <span>{(value as number) || 0} avaliações</span>
-          </div>
-        );
+      // Removido: rating, reviewCount
 
       case 'pricing': {
         const pricingLabels = {
@@ -120,21 +104,13 @@ const ProductComparison: React.FC<ProductComparisonProps> = ({
   };
 
   const getBestValue = (featureKey: string) => {
-    if (featureKey === 'rating') {
-      return Math.max(...products.map(p => p.rating || 0));
-    }
-    if (featureKey === 'reviewCount') {
-      return Math.max(...products.map(p => p.reviewCount || 0));
-    }
+    // Não há mais destaque de melhor valor
     return null;
   };
 
   const isBestValue = (product: Product, featureKey: string) => {
-    const bestValue = getBestValue(featureKey);
-    if (bestValue === null) return false;
-    
-    const productValue = product[featureKey as keyof Product] as number;
-    return productValue === bestValue && bestValue > 0;
+    // Não há mais destaque de melhor valor
+    return false;
   };
 
   return (
@@ -243,100 +219,9 @@ const ProductComparison: React.FC<ProductComparisonProps> = ({
             </table>
           </div>
 
-          {/* Resumo da comparação */}
-          <div className="p-4 bg-white/50 border-t border-green-100">
-            <h4 className="font-medium text-green-800 mb-3 flex items-center">
-              📊 Resumo da Comparação
-            </h4>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {products.map((product) => {
-                const score = (product.rating || 0) * 20; // Score de 0-100
-                const pros = [];
-                const cons = [];
+          {/* Resumo removido: não há mais score, pros ou cons */}
 
-                if ((product.rating || 0) >= 4.5) pros.push('Muito bem avaliado');
-                if ((product.reviewCount || 0) > 100) pros.push('Muitas avaliações');
-                if (product.pricing?.[0]?.price === 'Grátis' || product.pricing?.[0]?.price === 'Free') pros.push('Gratuito');
-                if (product.tags?.includes('Open Source')) pros.push('Open Source');
-
-                if ((product.rating || 0) < 3) cons.push('Avaliação baixa');
-                if ((product.reviewCount || 0) < 10) cons.push('Poucas avaliações');
-
-                return (
-                  <Card key={product.id} className="border border-green-200">
-                    <CardContent className="p-3">
-                      <div className="flex items-center justify-between mb-2">
-                        <h5 className="font-medium text-sm truncate">{product.name}</h5>
-                        <Badge 
-                          variant={score >= 80 ? "default" : score >= 60 ? "secondary" : "outline"}
-                          className="text-xs"
-                        >
-                          {score.toFixed(0)}%
-                        </Badge>
-                      </div>
-                      
-                      {pros.length > 0 && (
-                        <div className="mb-2">
-                          <div className="text-xs text-green-700 font-medium mb-1">Pontos fortes:</div>
-                          {pros.slice(0, 2).map((pro, index) => (
-                            <div key={index} className="flex items-center text-xs text-green-600">
-                              <Check className="w-3 h-3 mr-1" />
-                              {pro}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {cons.length > 0 && (
-                        <div>
-                          <div className="text-xs text-orange-700 font-medium mb-1">Atenção:</div>
-                          {cons.slice(0, 1).map((con, index) => (
-                            <div key={index} className="flex items-center text-xs text-orange-600">
-                              <Minus className="w-3 h-3 mr-1" />
-                              {con}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Dicas da comparação */}
-          <div className="p-4 bg-gradient-to-r from-blue-50 to-green-50 border-t border-green-100">
-            <h4 className="font-medium text-green-800 mb-2 flex items-center">
-              💡 Dicas para Escolher
-            </h4>
-            <div className="grid md:grid-cols-2 gap-3 text-sm">
-              <div>
-                <h5 className="font-medium text-green-700 mb-1">🎯 Para Iniciantes:</h5>
-                <p className="text-muted-foreground">
-                  Priorize produtos com boa avaliação, muitas reviews e modelo freemium.
-                </p>
-              </div>
-              <div>
-                <h5 className="font-medium text-blue-700 mb-1">🚀 Para Empresas:</h5>
-                <p className="text-muted-foreground">
-                  Considere produtos com planos enterprise e muitos usuários ativos.
-                </p>
-              </div>
-              <div>
-                <h5 className="font-medium text-purple-700 mb-1">🔧 Para Desenvolvedores:</h5>
-                <p className="text-muted-foreground">
-                  Busque produtos com API, integrações e tags como "Open Source".
-                </p>
-              </div>
-              <div>
-                <h5 className="font-medium text-orange-700 mb-1">💰 Para Orçamento:</h5>
-                <p className="text-muted-foreground">
-                  Compare preços e funcionalidades gratuitas antes de decidir.
-                </p>
-              </div>
-            </div>
-          </div>
+          {/* Dicas removidas: não mencionar avaliações/reviews */}
         </CardContent>
       </Card>
     </div>

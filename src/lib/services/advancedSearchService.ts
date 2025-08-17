@@ -22,10 +22,6 @@ export class AdvancedSearchService {
         constraints.push(where('category', 'in', filters.categories));
       }
 
-      if (filters.minRating) {
-        constraints.push(where('rating', '>=', filters.minRating));
-      }
-
       if (filters.pricing) {
         constraints.push(where('pricing', '==', filters.pricing));
       }
@@ -98,25 +94,22 @@ export class AdvancedSearchService {
     try {
       const productsRef = collection(db, 'products');
       let q = query(
-        productsRef, 
-        orderBy('rating', 'desc'), 
+        productsRef,
         limit(options?.maxResults || 10)
       );
 
       if (options?.category) {
         q = query(
-          productsRef, 
+          productsRef,
           where('category', '==', options.category),
-          orderBy('rating', 'desc'), 
           limit(options?.maxResults || 10)
         );
       }
 
       if (options?.excludeProductId) {
         q = query(
-          productsRef, 
-          where('id', '!=', options.excludeProductId), 
-          orderBy('rating', 'desc'), 
+          productsRef,
+          where('id', '!=', options.excludeProductId),
           limit(options?.maxResults || 10)
         );
       }
@@ -136,11 +129,8 @@ export class AdvancedSearchService {
     try {
       const q = query(
         collection(db, 'products'),
-        where('rating', '>=', 4),
-        orderBy('rating', 'desc'),
         limit(maxResults)
       );
-      
       const snapshot = await getDocs(q);
       return snapshot.docs.map(doc => ({
         id: doc.id,
@@ -198,9 +188,7 @@ export class AdvancedSearchService {
 
   private getSortField(sortBy: string): string | null {
     const sortMap: Record<string, string> = {
-      'rating': 'rating',
       'name': 'name',
-      'popularity': 'rating',
       'newest': 'createdAt',
       'reviews': 'reviewCount'
     };
@@ -243,7 +231,6 @@ export class AdvancedSearchService {
           title: product.name,
           subtitle: product.description,
           type: 'product' as const,
-          popularity: product.rating || 0,
           productId: product.id
         }));
     } catch (error) {

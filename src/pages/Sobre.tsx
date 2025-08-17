@@ -9,10 +9,10 @@ const Sobre = () => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    name: "Sobre - Alternativas BR",
+    name: "Sobre - AlternativaBR",
     mainEntity: {
       "@type": "Organization",
-      name: "Alternativas BR",
+      name: "AlternativaBR",
       description:
         "Plataforma que apresenta alternativas brasileiras a softwares internacionais.",
     },
@@ -21,8 +21,8 @@ const Sobre = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Sobre | Alternativas BR"
-        description="Conheça a missão do Alternativas BR e como conectamos você a softwares brasileiros de qualidade."
+        title="Sobre | AlternativaBR"
+        description="Conheça a missão do AlternativaBR e como conectamos você a softwares brasileiros de qualidade."
         canonical="/sobre"
         jsonLd={jsonLd}
       />
@@ -30,7 +30,7 @@ const Sobre = () => {
 
       <header className="border-b border-border/50 bg-background/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground">Sobre o Alternativas BR</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">Sobre o AlternativaBR</h1>
           <p className="text-muted-foreground mt-2 max-w-2xl">
             Um guia curado com carinho para descobrir ferramentas nacionais que substituem soluções internacionais.
           </p>

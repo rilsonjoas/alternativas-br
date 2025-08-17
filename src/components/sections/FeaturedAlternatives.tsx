@@ -3,14 +3,21 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useFeaturedProducts } from "@/hooks/useFirebase";
-import { products } from "@/data"; // Fallback para dados locais
 
 const FeaturedAlternatives = () => {
   // Tentar usar dados do Firebase, com fallback para dados locais
   const { data: firebaseProducts, isLoading, error } = useFeaturedProducts(4);
   
+  // Debug: log dos dados recebidos
+  console.log('🔍 FeaturedAlternatives Debug:', {
+    firebaseProducts,
+    isLoading,
+    error,
+    productsLength: firebaseProducts?.length
+  });
+  
   // Se Firebase falhar, usar dados locais
-  const featuredProducts = firebaseProducts?.length ? firebaseProducts : products.slice(0, 4);
+  const featuredProducts = firebaseProducts || [];
 
   if (isLoading) {
     return (
@@ -20,6 +27,29 @@ const FeaturedAlternatives = () => {
             <div className="animate-pulse">
               <div className="h-8 bg-muted rounded w-64 mx-auto mb-4"></div>
               <div className="h-4 bg-muted rounded w-96 mx-auto"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!featuredProducts || featuredProducts.length === 0) {
+    return (
+      <section className="py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <Badge variant="tech" className="mb-4">
+              ⭐ Destaques
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Alternativas em Destaque
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
+              Conheça algumas das melhores soluções brasileiras que estão transformando o mercado
+            </p>
+            <div className="text-amber-600 bg-amber-50 dark:bg-amber-900/20 dark:text-amber-400 px-4 py-2 rounded-lg">
+              🔍 Nenhum produto em destaque encontrado. {error && `Erro: ${error.message}`}
             </div>
           </div>
         </div>
@@ -65,7 +95,7 @@ const FeaturedAlternatives = () => {
                       </CardTitle>
                       <div className="flex items-center space-x-2 mt-1">
                         <Badge variant="category">{product.category}</Badge>
-                        <Badge variant="price">{product.pricing[0]?.price || "Consultar"}</Badge>
+                        <Badge variant="price">{product.pricing?.description || product.pricingModel || "Consultar"}</Badge>
                         {product.isUnicorn && (
                           <Badge variant="tech">🦄</Badge>
                         )}
@@ -75,44 +105,45 @@ const FeaturedAlternatives = () => {
                 </div>
                 
                 <p className="text-muted-foreground mb-4">
-                  {product.shortDescription}
+                  {product.shortDescription || product.description}
                 </p>
                 
                 <div className="space-y-3">
-                  <div>
-                    <p className="text-sm font-semibold text-foreground mb-1">Principais recursos:</p>
-                    <div className="flex flex-wrap gap-1">
-                      {product.features.slice(0, 3).map((feature) => (
-                        <Badge key={feature} variant="secondary" className="text-xs">
-                          {feature}
-                        </Badge>
-                      ))}
+                  {Array.isArray(product.features) && product.features.length > 0 && (
+                    <div>
+                      <p className="text-sm font-semibold text-foreground mb-1">Principais recursos:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {product.features.slice(0, 3).map((feature) => (
+                          <Badge key={feature} variant="secondary" className="text-xs">
+                            {feature}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div>
-                    <p className="text-sm font-semibold text-foreground mb-1">Tags:</p>
-                    <div className="flex flex-wrap gap-1">
-                      {product.tags.slice(0, 3).map((tag) => (
-                        <Badge key={tag} variant="outline" className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
+                  )}
+                  {Array.isArray(product.tags) && product.tags.length > 0 && (
+                    <div>
+                      <p className="text-sm font-semibold text-foreground mb-1">Tags:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {product.tags.slice(0, 3).map((tag) => (
+                          <Badge key={tag} variant="outline" className="text-xs">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </CardHeader>
               
               <CardContent className="pt-0">
                 <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                  <span>Desde {product.foundedYear}</span>
-                  <span>{product.userCount} usuários</span>
+                  {product.companyInfo?.foundedYear && <span>Desde {product.companyInfo.foundedYear}</span>}
+                  {product.userCount && <span>{product.userCount} usuários</span>}
                 </div>
                 
-                <Button variant="default" className="w-full" asChild>
-                  <Link to={`/produto/${product.slug}`}>
-                    Ver Detalhes
-                  </Link>
+                <Button size="sm" variant="outline" asChild>
+                  <Link to={`/produto/${product.slug}`}>Ver detalhes</Link>
                 </Button>
               </CardContent>
             </Card>

@@ -13,7 +13,7 @@ const Footer = () => {
                 <span className="text-primary-foreground font-bold text-sm">BR</span>
               </div>
               <div>
-                <h3 className="text-xl font-bold">Alternativas BR</h3>
+                <h3 className="text-xl font-bold">AlternativaBR</h3>
                 <p className="text-sm text-background/70">Tecnologia Brasileira</p>
               </div>
             </div>
@@ -49,7 +49,7 @@ const Footer = () => {
         
         <div className="border-t border-background/20 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-background/60">
-            © 2025 Alternativas BR. Todos os direitos reservados.
+            © 2025 AlternativaBR. Todos os direitos reservados.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#privacidade" className="text-sm text-background/60 hover:text-background transition-colors">

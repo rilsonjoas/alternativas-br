@@ -4,47 +4,36 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useCategories } from "@/hooks/useFirebase";
-import { categories as fallbackCategories } from "@/data";
 import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
-import { collection, getDocs } from "firebase/firestore";
-import { Category } from "@/types";
+import { Category, Product } from "@/types";
+import { unifiedProductService } from "@/lib/services/unifiedProductService";
+
+// Mapeamento de ícones
+import * as LucideIcons from "lucide-react";
+const iconMap: Record<string, React.ElementType> = {
+  MessageCircle: LucideIcons.MessageCircle,
+  Code: LucideIcons.Code,
+  Palette: LucideIcons.Palette,
+  BookOpen: LucideIcons.BookOpen,
+  TrendingUp: LucideIcons.TrendingUp,
+  Zap: LucideIcons.Zap,
+  // Adicione outros ícones conforme necessário
+};
 
 // Type for categories that can come from Firebase or local data
 type CategoryDisplay = Category | (Category & { name?: string });
 
-// ========================================================================
-// 1. DEFINA UM TIPO PARA SEUS PRODUTOS
-//    Este tipo deve refletir a estrutura de um documento na sua coleção "products".
-// ========================================================================
-interface Product {
-  id: string;
-  categoria?: string; // Corresponde ao slug da categoria
-  categorySlug?: string; // Outro campo possível para o slug
-  categoryId?: string; // Corresponde ao ID da categoria
-  // ... adicione outras propriedades do produto se necessário
-}
-
-const Categories = () => {
+const CategoriesSection = () => {
   const { data: firebaseCategories, isLoading, error } = useCategories();
 
-  // ========================================================================
-  // 2. USE O TIPO `Product` PARA O ESTADO
-  // ========================================================================
   const [produtos, setProdutos] = useState<Product[]>([]);
 
   useEffect(() => {
     async function fetchProdutos() {
       try {
-        const produtosSnap = await getDocs(collection(db, "products"));
-        // ========================================================================
-        // 3. FAÇA A CONVERSÃO PARA O TIPO CORRETO (`as Product`)
-        // ========================================================================
-        setProdutos(
-          produtosSnap.docs.map(
-            (doc) => ({ id: doc.id, ...doc.data() } as Product)
-          )
-        );
+        // Usar o serviço unificado para buscar produtos brasileiros
+        const allProducts = await unifiedProductService.getBrazilianProducts();
+        setProdutos(allProducts);
       } catch (err) {
         setProdutos([]);
       }
@@ -55,7 +44,7 @@ const Categories = () => {
   // Use Firebase data if available, otherwise fallback to local data
   const categories: CategoryDisplay[] = firebaseCategories?.length
     ? firebaseCategories
-    : fallbackCategories;
+    : [];
 
   if (isLoading) {
     return (
@@ -95,9 +84,9 @@ const Categories = () => {
 
   if (error) {
     function getProductsByCategory(slug: string) {
-      // AGORA ESTÁ CORRETO: `produto` é do tipo `Product` e tem as propriedades necessárias.
+      // Usando a nova estrutura unificada
       return produtos.filter(
-        (produto) => produto.categoria === slug || produto.categorySlug === slug
+        (produto) => produto.categorySlug === slug
       );
     }
     return (
@@ -121,42 +110,7 @@ const Categories = () => {
             </AlertDescription>
           </Alert>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {fallbackCategories.map((category) => {
-              const categoryProducts = getProductsByCategory(category.slug);
-
-              return (
-                <Card
-                  key={category.id}
-                  className="group hover:shadow-card transition-all duration-300 cursor-pointer border-border/50 bg-gradient-card"
-                  onClick={() =>
-                    (window.location.href = `/categorias/${category.slug}`)
-                  }
-                >
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center justify-between">
-                      <div
-                        className={`w-12 h-12 rounded-xl ${category.color} flex items-center justify-center text-2xl`}
-                      >
-                        {category.icon}
-                      </div>
-                      <Badge variant="category">
-                        {categoryProducts.length} produtos
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-xl group-hover:text-primary transition-colors">
-                      {category.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground text-sm">
-                      {category.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+        
         </div>
       </section>
     );
@@ -177,13 +131,9 @@ const Categories = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((category) => {
-            // AGORA ESTÁ CORRETO: `produto` é do tipo `Product` e tem as propriedades necessárias.
             const productCount = produtos.length
               ? produtos.filter((produto) => {
-                  return (
-                    produto.categoria === category.slug ||
-                    produto.categoryId === category.id
-                  );
+                  return produto.categorySlug === category.slug;
                 }).length
               : category.productCount !== undefined
               ? category.productCount
@@ -202,7 +152,10 @@ const Categories = () => {
                     <div
                       className={`w-12 h-12 rounded-xl ${category.color} flex items-center justify-center text-2xl`}
                     >
-                      {category.icon}
+                      {(() => {
+                        const IconComponent = iconMap[category.icon as string] || LucideIcons.Box;
+                        return <IconComponent className="w-8 h-8" />;
+                      })()}
                     </div>
                     <Badge variant="category">{productCount} produtos</Badge>
                   </div>
@@ -215,6 +168,20 @@ const Categories = () => {
                   <p className="text-muted-foreground text-sm">
                     {category.description}
                   </p>
+                  {/* Navegação para produtos da categoria */}
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {produtos.filter(
+                      (produto) => produto.categorySlug === category.slug
+                    ).slice(0, 3).map((produto) => (
+                      <a
+                        key={produto.id}
+                        href={`/produtos/${produto.slug}`}
+                        className="underline text-xs text-primary hover:text-primary-dark"
+                      >
+                        {produto.name}
+                      </a>
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
             );
@@ -225,4 +192,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default CategoriesSection;

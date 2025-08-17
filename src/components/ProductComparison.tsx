@@ -54,16 +54,6 @@ const formatCurrency = (value: number | undefined, currency = 'BRL') => {
   }).format(value);
 };
 
-const renderRating = (rating: number, reviewCount: number) => (
-  <div className="flex items-center gap-2">
-    <div className="flex items-center gap-1">
-      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-      <span className="font-medium">{rating.toFixed(1)}</span>
-    </div>
-    <span className="text-sm text-gray-500">({reviewCount})</span>
-  </div>
-);
-
 const renderPricing = (product: Product) => {
   const pricingPlans = product.pricing;
   if (!pricingPlans || pricingPlans.length === 0) {
@@ -151,7 +141,7 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({
   const comparisonRows: ComparisonRow[] = [
     {
       category: 'Informações Básicas',
-      icon: <Info className="w-4 h-4" />,
+      icon: <Info className="w-4 h-4" />, 
       key: 'basic',
       renderValue: () => null, // Header only
       important: true
@@ -160,7 +150,7 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({
       category: '',
       icon: null,
       key: 'rating',
-      renderValue: (product) => renderRating(product.averageRating || 0, product.reviewCount || 0)
+      renderValue: () => null, // Corrigido: renderValue obrigatório
     },
     {
       category: '',
@@ -380,17 +370,12 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({
         <div className="mt-6 p-4 bg-blue-50 rounded-lg">
           <h4 className="font-medium text-blue-900 mb-2">💡 Resumo da Comparação</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div>
-              <span className="font-medium">Melhor avaliado:</span>{' '}
-              {products.reduce((best, current) => 
-                (current.averageRating || 0) > (best.averageRating || 0) ? current : best
-              ).name}
-            </div>
+          
             <div>
               <span className="font-medium">Mais recursos:</span>{' '}
               {products.reduce((best, current) => 
                 (current.features || []).length > (best.features || []).length ? current : best
-              ).name}
+              )?.name}
             </div>
             <div>
               <span className="font-medium">Mais popular:</span>{' '}
@@ -398,12 +383,7 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({
                 (current.views || 0) > (best.views || 0) ? current : best
               ).name}
             </div>
-            <div>
-              <span className="font-medium">Mais avaliações:</span>{' '}
-              {products.reduce((best, current) => 
-                (current.reviewCount || 0) > (best.reviewCount || 0) ? current : best
-              ).name}
-            </div>
+            
           </div>
         </div>
       </CardContent>

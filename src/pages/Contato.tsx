@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import emailjs from 'emailjs-com';
 import { Label } from "@/components/ui/label";
 import { 
   Mail, 
@@ -17,7 +18,10 @@ import {
   Heart
 } from "lucide-react";
 
+import { useToast } from "@/components/ui/use-toast";
+
 const Contato = () => {
+  const { toast } = useToast();
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
@@ -26,7 +30,7 @@ const Contato = () => {
     mainEntity: {
       "@type": "Organization",
       name: "Alternativas BR",
-      email: "contato@alternativas-br.com.br",
+      email: "aalternativabr@gmail.com",
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "customer service",
@@ -70,11 +74,36 @@ const Contato = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <form className="space-y-6">
+                    <form className="space-y-6" onSubmit={e => {
+                      e.preventDefault();
+                      const form = e.currentTarget;
+                      const data = new FormData(form);
+                      const payload = Object.fromEntries(data.entries());
+                      emailjs.send(
+                        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+                        import.meta.env.VITE_EMAILJS_TEMPLATE_CONTATO,
+                        payload,
+                        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+                      ).then(() => {
+                        toast({
+                          title: "Mensagem enviada!",
+                          description: "Recebemos seu contato e responderemos em breve.",
+                          variant: "default"
+                        });
+                        form.reset();
+                      }).catch(() => {
+                        toast({
+                          title: "Erro ao enviar mensagem",
+                          description: "Tente novamente ou envie para aalternativabr@gmail.com.",
+                          variant: "destructive"
+                        });
+                      });
+                    }}>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="nome">Nome</Label>
                           <Input 
+                            name="nome"
                             id="nome" 
                             placeholder="Seu nome completo" 
                             required 
@@ -83,6 +112,7 @@ const Contato = () => {
                         <div className="space-y-2">
                           <Label htmlFor="email">Email</Label>
                           <Input 
+                            name="email"
                             id="email" 
                             type="email" 
                             placeholder="seu@email.com" 
@@ -94,6 +124,7 @@ const Contato = () => {
                       <div className="space-y-2">
                         <Label htmlFor="empresa">Empresa (opcional)</Label>
                         <Input 
+                          name="empresa"
                           id="empresa" 
                           placeholder="Nome da sua empresa" 
                         />
@@ -102,6 +133,7 @@ const Contato = () => {
                       <div className="space-y-2">
                         <Label htmlFor="assunto">Assunto</Label>
                         <Input 
+                          name="assunto"
                           id="assunto" 
                           placeholder="Sobre o que você quer falar?" 
                           required 
@@ -111,6 +143,7 @@ const Contato = () => {
                       <div className="space-y-2">
                         <Label htmlFor="mensagem">Mensagem</Label>
                         <Textarea 
+                          name="mensagem"
                           id="mensagem"
                           placeholder="Conte-nos mais detalhes..."
                           rows={6}
@@ -189,10 +222,10 @@ const Contato = () => {
                       <div>
                         <p className="font-medium">Email</p>
                         <a 
-                          href="mailto:contato@alternativas-br.com.br" 
+                          href="mailto:aalternativabr@gmail.com" 
                           className="text-sm text-muted-foreground hover:text-primary transition-colors"
                         >
-                          contato@alternativas-br.com.br
+                          aalternativabr@gmail.com
                         </a>
                       </div>
                     </div>
@@ -204,12 +237,12 @@ const Contato = () => {
                       <div>
                         <p className="font-medium">Twitter</p>
                         <a 
-                          href="https://twitter.com/alternativasbr" 
+                          href="https://twitter.com/alternativa_br" 
                           className="text-sm text-muted-foreground hover:text-primary transition-colors"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          @alternativasbr
+                          @alternativa_br
                         </a>
                       </div>
                     </div>

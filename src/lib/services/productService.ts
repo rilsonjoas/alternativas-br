@@ -1,37 +1,16 @@
-import { 
-  collection, 
-  doc, 
-  getDocs, 
-  getDoc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc,
-  query,
-  where,
-  orderBy,
-  limit,
-  Timestamp
-} from 'firebase/firestore';
-import db from '../firebase';
-import { COLLECTIONS } from '../firebase-config';
+import { unifiedProductService } from './unifiedProductService';
 import { Product } from '@/types';
 
+/**
+ * Serviço de produtos para o frontend público
+ * Usa o serviço unificado internamente
+ */
 class ProductService {
-  private collection = collection(db, COLLECTIONS.PRODUCTS);
 
-  // Buscar todos os produtos
+  // Buscar todos os produtos ativos
   async getAll(): Promise<Product[]> {
     try {
-      const q = query(this.collection, orderBy('name', 'asc'));
-      const snapshot = await getDocs(q);
-      
-      const allProducts = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Product[];
-      
-      // Retornar todos os produtos do Firestore
-      return allProducts;
+      return await unifiedProductService.getAllProducts();
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
       throw new Error('Falha ao carregar produtos');
@@ -41,62 +20,34 @@ class ProductService {
   // Buscar produto por slug
   async getBySlug(slug: string): Promise<Product | null> {
     try {
-      const q = query(this.collection, where('slug', '==', slug), limit(1));
-      const snapshot = await getDocs(q);
+      const product = await unifiedProductService.getProductBySlug(slug);
       
-      if (snapshot.empty) return null;
+      // Incrementar visualizações se produto encontrado
+      if (product) {
+        await unifiedProductService.incrementViews(product.id);
+      }
       
-      const doc = snapshot.docs[0];
-      return {
-        id: doc.id,
-        ...doc.data()
-      } as Product;
+      return product;
     } catch (error) {
       console.error('Erro ao buscar produto:', error);
       return null;
     }
   }
 
-  // Buscar produtos por categoria
-  async getByCategory(categorySlug: string): Promise<Product[]> {
+  // Buscar produtos por categoria (padrão: apenas brasileiros)
+  async getByCategory(categorySlug: string, onlyBrazilian: boolean = true): Promise<Product[]> {
     try {
-      const q = query(
-        this.collection, 
-        where('categorySlug', '==', categorySlug),
-        orderBy('name', 'asc')
-      );
-      const snapshot = await getDocs(q);
-      
-      const products = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Product[];
-      
-      // Filtrar apenas produtos brasileiros
-      return products.filter(product => 
-        product.location && product.location.includes('BR')
-      );
+      return await unifiedProductService.getProductsByCategory(categorySlug, onlyBrazilian);
     } catch (error) {
       console.error('Erro ao buscar produtos por categoria:', error);
       return [];
     }
   }
 
-  // Buscar produtos em destaque
-  async getFeatured(limitCount: number = 4): Promise<Product[]> {
+  // Buscar produtos em destaque (padrão: apenas brasileiros)
+  async getFeatured(limitCount: number = 4, onlyBrazilian: boolean = true): Promise<Product[]> {
     try {
-      const q = query(
-        this.collection, 
-        where('isFeatured', '==', true),
-        orderBy('rating', 'desc'),
-        limit(limitCount)
-      );
-      const snapshot = await getDocs(q);
-      
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Product[];
+      return await unifiedProductService.getFeaturedProducts(limitCount, onlyBrazilian);
     } catch (error) {
       console.error('Erro ao buscar produtos em destaque:', error);
       return [];
@@ -106,17 +57,7 @@ class ProductService {
   // Buscar produtos unicórnio
   async getUnicorns(): Promise<Product[]> {
     try {
-      const q = query(
-        this.collection, 
-        where('isUnicorn', '==', true),
-        orderBy('name', 'asc')
-      );
-      const snapshot = await getDocs(q);
-      
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Product[];
+      return await unifiedProductService.getUnicornProducts();
     } catch (error) {
       console.error('Erro ao buscar unicórnios:', error);
       return [];
@@ -126,51 +67,18 @@ class ProductService {
   // Buscar produtos relacionados
   async getRelated(categorySlug: string, excludeId: string, limitCount: number = 3): Promise<Product[]> {
     try {
-      const q = query(
-        this.collection, 
-        where('categorySlug', '==', categorySlug),
-        orderBy('rating', 'desc'),
-        limit(limitCount + 1) // +1 para excluir o produto atual
-      );
-      const snapshot = await getDocs(q);
-      
-      const products = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Product[];
-      
-      // Filtrar o produto atual e limitar
-      return products
-        .filter(product => product.id !== excludeId)
-        .slice(0, limitCount);
+      return await unifiedProductService.getRelatedProducts(categorySlug, excludeId, limitCount);
     } catch (error) {
       console.error('Erro ao buscar produtos relacionados:', error);
       return [];
     }
   }
 
-  // Buscar por texto
-  async search(searchTerm: string): Promise<Product[]> {
+  // Buscar por texto (padrão: apenas brasileiros)
+  async search(searchTerm: string, onlyBrazilian: boolean = true): Promise<Product[]> {
     try {
-      // Firestore não tem full-text search nativo
-      // Esta é uma implementação básica
-      const snapshot = await getDocs(this.collection);
-      const allProducts = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Product[];
-      
-      const term = searchTerm.toLowerCase();
-      return allProducts.filter(product => {
-        // Filtrar apenas produtos brasileiros
-        if (!product.location || !product.location.includes('BR')) {
-          return false;
-        }
-        
-        // Busca por nome, descrição ou tags
-        return product.name.toLowerCase().includes(term) ||
-          product.description.toLowerCase().includes(term) ||
-          product.tags.some(tag => tag.toLowerCase().includes(term));
+      return await unifiedProductService.searchProducts(searchTerm, {
+        onlyBrazilian
       });
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
@@ -178,46 +86,31 @@ class ProductService {
     }
   }
 
-  // Criar novo produto
-  async create(productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  // Buscar produtos brasileiros
+  async getBrazilian(): Promise<Product[]> {
     try {
-      const now = Timestamp.now();
-      const docRef = await addDoc(this.collection, {
-        ...productData,
-        createdAt: now,
-        updatedAt: now
-      });
-      
-      return docRef.id;
+      return await unifiedProductService.getBrazilianProducts();
     } catch (error) {
-      console.error('Erro ao criar produto:', error);
-      throw new Error('Falha ao criar produto');
+      console.error('Erro ao buscar produtos brasileiros:', error);
+      return [];
     }
   }
 
-  // Atualizar produto
-  async update(id: string, updates: Partial<Product>): Promise<void> {
+  // Buscar produtos estrangeiros
+  async getForeign(): Promise<Product[]> {
     try {
-      const docRef = doc(this.collection, id);
-      await updateDoc(docRef, {
-        ...updates,
-        updatedAt: Timestamp.now()
-      });
+      return await unifiedProductService.getForeignProducts();
     } catch (error) {
-      console.error('Erro ao atualizar produto:', error);
-      throw new Error('Falha ao atualizar produto');
+      console.error('Erro ao buscar produtos estrangeiros:', error);
+      return [];
     }
   }
 
-  // Deletar produto
-  async delete(id: string): Promise<void> {
-    try {
-      const docRef = doc(this.collection, id);
-      await deleteDoc(docRef);
-    } catch (error) {
-      console.error('Erro ao deletar produto:', error);
-      throw new Error('Falha ao deletar produto');
-    }
+  // Métodos administrativos - delegados para o unifiedProductService
+  // (Estes métodos são principalmente para uso interno/admin)
+  
+  async getById(id: string): Promise<Product | null> {
+    return await unifiedProductService.getProductById(id);
   }
 }
 

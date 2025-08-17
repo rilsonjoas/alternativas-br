@@ -187,7 +187,7 @@ npm run preview
 
 - **GitHub Issues**: Para dúvidas técnicas
 - **GitHub Discussions**: Para discussões gerais
-- **Email**: [criar email de contato]
+- **Email**: aalternativabr@gmail.com
 
 ### Primeiras Contribuições
 

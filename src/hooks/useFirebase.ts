@@ -69,10 +69,10 @@ export const useProductsByCategory = (categorySlug: string) => {
 };
 
 // Hook para buscar produtos em destaque
-export const useFeaturedProducts = (limit: number = 4) => {
+export const useFeaturedProducts = (limit: number = 4, onlyBrazilian: boolean = true) => {
   return useQuery({
-    queryKey: ['products', 'featured', limit],
-    queryFn: () => productService.getFeatured(limit),
+    queryKey: ['products', 'featured', limit, onlyBrazilian],
+    queryFn: () => productService.getFeatured(limit, onlyBrazilian),
     staleTime: 10 * 60 * 1000,
   });
 };

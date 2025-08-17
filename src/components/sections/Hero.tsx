@@ -29,7 +29,7 @@ const Hero = () => {
     <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
       {/* Background with gradient overlay */}
       <div className="absolute inset-0 bg-gradient-hero opacity-5"></div>
-      
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
@@ -37,42 +37,50 @@ const Hero = () => {
             <Badge variant="tech" className="mb-6">
               🇧🇷 Tecnologia Nacional
             </Badge>
-            
+
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
               Descubra as melhores{" "}
               <span className="bg-gradient-accent bg-clip-text text-transparent">
                 alternativas brasileiras
               </span>
             </h1>
-            
+
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl">
-              Uma plataforma curada para descobrir softwares e serviços nacionais que 
-              rivalizam com as melhores ferramentas internacionais. Fortaleça o ecossistema 
-              tech brasileiro.
+              Uma plataforma curada para descobrir softwares e serviços
+              nacionais que rivalizam com as melhores ferramentas
+              internacionais. Fortaleça o ecossistema tech brasileiro.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button variant="hero" size="lg">
-                Explorar Alternativas
+                <a href="/alternativas">Explorar Alternativas</a>
               </Button>
               <Button variant="outline" size="lg">
-                Adicionar Produto
+                <a href="/adicionar">Adicionar Produto</a>
               </Button>
             </div>
-            
+
             <div className="mt-8 flex flex-wrap gap-2 justify-center lg:justify-start">
-              <Badge variant="category">{produtosCount !== null ? `${produtosCount} produtos` : "- produtos"}</Badge>
-              <Badge variant="category">{categoriasCount !== null ? `${categoriasCount} categorias` : "- categorias"}</Badge>
+              <Badge variant="category">
+                {produtosCount !== null
+                  ? `${produtosCount} produtos`
+                  : "- produtos"}
+              </Badge>
+              <Badge variant="category">
+                {categoriasCount !== null
+                  ? `${categoriasCount} categorias`
+                  : "- categorias"}
+              </Badge>
               <Badge variant="category">100% brasileiro</Badge>
             </div>
           </div>
-          
+
           {/* Image */}
           <div className="relative">
             <div className="relative rounded-2xl overflow-hidden shadow-elegant">
-              <img 
-                src={heroImage} 
-                alt="Tecnologia brasileira moderna" 
+              <img
+                src={heroImage}
+                alt="Tecnologia brasileira moderna"
                 className="w-full h-auto object-cover"
               />
             </div>
