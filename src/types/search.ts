@@ -1,6 +1,5 @@
 export interface AdvancedSearchFilters {
   query?: string;
-  categories?: string[];
   pricing?: 'free' | 'freemium' | 'paid' | 'enterprise';
   features?: string[];
   tags?: string[];
@@ -10,10 +9,9 @@ export interface AdvancedSearchFilters {
 
 export interface SearchSuggestion {
   id: string;
-  type: 'product' | 'category' | 'tag' | 'feature';
+  type: 'product' | 'tag' | 'feature';
   title: string;
   subtitle?: string;
-  category?: string;
   icon?: string;
   popularity?: number;
 }
@@ -40,6 +38,6 @@ export interface ComparisonFeature {
 export interface Recommendation {
   productId: string;
   score: number;
-  reason: 'similar_category' | 'user_preference' | 'rating' | 'popular' | 'trending';
+  reason: 'user_preference' | 'rating' | 'popular' | 'trending' | 'similar_tags';
   explanation: string;
 }

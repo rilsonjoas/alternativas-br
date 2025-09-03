@@ -1,29 +1,9 @@
 import { Timestamp } from 'firebase/firestore';
 import { ReactNode } from 'react';
 
-// Estrutura unificada de categoria
-export interface Category {
-  id: string;
-  slug: string;
-  name: string;
-  title?: string; // Mantido para compatibilidade
-  description: string;
-  icon: string;
-  color: string;
-  productCount: number;
-  featured?: boolean;
-  isActive?: boolean;
-  tags?: string[];
-  metaTitle?: string;
-  metaDescription?: string;
-  createdAt?: Timestamp;
-  updatedAt?: Timestamp;
-}
-
 // Localização estruturada
 export interface ProductLocation {
   country: string;
-  countryCode: string; // BR, US, etc.
   state?: string;
   city?: string;
   flag?: string; // Emoji ou URL da bandeira
@@ -31,7 +11,6 @@ export interface ProductLocation {
 
 // Informações da empresa
 export interface CompanyInfo {
-  name: string;
   foundedYear?: number;
   headquarters?: string;
   size?: 'startup' | 'small' | 'medium' | 'large' | 'enterprise';
@@ -73,14 +52,8 @@ export interface Product {
   slug: string;
   name: string;
   description: string;
-  shortDescription?: string;
   logo: string;
   website: string;
-  
-  // Categoria
-  category: string;
-  categorySlug: string;
-  categoryId: string;
   
   // Localização (determina se é nacional ou estrangeiro)
   location: ProductLocation;
@@ -97,7 +70,6 @@ export interface Product {
   screenshots?: string[];
   
   // Status
-  isActive: boolean;
   isFeatured: boolean;
   isUnicorn?: boolean;
   
@@ -125,25 +97,17 @@ export interface Product {
 export interface ProductFormData {
   name: string;
   description: string;
-  shortDescription?: string;
   website: string;
   logo: string;
-  category: string;
-  categoryId: string;
   location: ProductLocation;
   companyInfo: CompanyInfo;
   pricing: PricingInfo;
   features: string[];
   tags: string[];
   screenshots?: string[];
-  isActive: boolean;
   isFeatured: boolean;
   metaTitle?: string;
   metaDescription?: string;
   alternativeTo?: string[];
   socialLinks?: SocialLinks;
-}
-
-export interface CategoryWithProducts extends Category {
-  products: Product[];
 }

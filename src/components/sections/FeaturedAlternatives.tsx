@@ -67,7 +67,7 @@ const FeaturedAlternatives = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             Alternativas em Destaque
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
             Conheça algumas das melhores soluções brasileiras que estão transformando o mercado
           </p>
           {error && (
@@ -78,76 +78,51 @@ const FeaturedAlternatives = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {featuredProducts.map((product) => (
-            <Card 
-              key={product.id} 
-              className="group hover:shadow-elegant transition-all duration-300 border-border/50 bg-gradient-card"
-            >
-              <CardHeader>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-gradient-accent rounded-xl flex items-center justify-center text-2xl">
-                      {product.logo}
-                    </div>
-                    <div>
-                      <CardTitle className="text-xl group-hover:text-primary transition-colors">
-                        {product.name}
-                      </CardTitle>
-                      <div className="flex items-center space-x-2 mt-1">
-                        <Badge variant="category">{product.category}</Badge>
-                        <Badge variant="price">{product.pricing?.description || "Consultar"}</Badge>
-                        {product.isUnicorn && (
-                          <Badge variant="tech">🦄</Badge>
-                        )}
-                      </div>
+            {featuredProducts.map((product) => (
+              <Card
+                key={product.id}
+                className="flex flex-col justify-between h-full shadow-md border border-gray-100 bg-white rounded-2xl transition hover:shadow-xl hover:border-primary/40 cursor-pointer"
+                onClick={() => window.location.href = `/produto/${product.slug}`}
+                tabIndex={0}
+                role="button"
+                aria-label={`Ver detalhes de ${product.name}`}
+              >
+                <CardHeader className="flex flex-row items-center gap-4 pb-2">
+                  <div className="w-14 h-14 flex items-center justify-center rounded-full bg-gray-50 border border-gray-200 shadow-sm">
+                    {product.logo ? (
+                      <img src={product.logo} alt={product.name} className="w-12 h-12 object-contain rounded-full" />
+                    ) : (
+                      <span className="text-3xl font-bold text-gray-400">{product.name[0]}</span>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <CardTitle className="text-xl font-bold text-gray-900 mb-2 leading-tight">{product.name}</CardTitle>
+                    <div className="flex flex-wrap gap-2">
+                      {product.tags?.map((tag) => (
+                        <Badge key={tag} className="bg-gray-100 text-gray-700 border border-gray-200 px-3 py-1 text-xs font-semibold rounded-full shadow-sm">{tag}</Badge>
+                      ))}
                     </div>
                   </div>
-                </div>
-                
-                <p className="text-muted-foreground mb-4">
-                  {product.shortDescription || product.description}
-                </p>
-                
-                <div className="space-y-3">
-                  {Array.isArray(product.features) && product.features.length > 0 && (
-                    <div>
-                      <p className="text-sm font-semibold text-foreground mb-1">Principais recursos:</p>
-                      <div className="flex flex-wrap gap-1">
-                        {product.features.slice(0, 3).map((feature) => (
-                          <Badge key={feature} variant="secondary" className="text-xs">
-                            {feature}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {Array.isArray(product.tags) && product.tags.length > 0 && (
-                    <div>
-                      <p className="text-sm font-semibold text-foreground mb-1">Tags:</p>
-                      <div className="flex flex-wrap gap-1">
-                        {product.tags.slice(0, 3).map((tag) => (
-                          <Badge key={tag} variant="outline" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </CardHeader>
-              
-              <CardContent className="pt-0">
-                <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                  {product.companyInfo?.foundedYear && <span>Desde {product.companyInfo.foundedYear}</span>}
-                  {product.userCount && <span>{product.userCount} usuários</span>}
-                </div>
-                
-                <Button size="sm" variant="outline" asChild>
-                  <Link to={`/produto/${product.slug}`}>Ver detalhes</Link>
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+                </CardHeader>
+                <CardContent className="flex flex-col gap-3 pb-5">
+                  <p className="text-sm text-gray-700 mb-1 min-h-[40px]">{product.description}</p>
+                  <div className="flex flex-wrap gap-2 mb-1">
+                    {product.features?.map((feature) => (
+                      <Badge key={feature} className="bg-primary/10 text-primary border border-primary/20 px-3 py-1 text-xs font-semibold rounded-full shadow-sm">{feature}</Badge>
+                    ))}
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="mt-3 w-full bg-primary/5 text-primary border-primary hover:bg-primary/20 hover:text-primary-dark transition rounded-xl font-bold text-sm py-2 shadow"
+                    asChild
+                  >
+                    <a href={product.website} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}>
+                      Visitar site
+                    </a>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
         </div>
         
         <div className="text-center mt-12">

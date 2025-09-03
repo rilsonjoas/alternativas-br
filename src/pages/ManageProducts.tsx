@@ -130,6 +130,7 @@ const [form, setForm] = useState<ProductForm>({});
           <table className="w-full border rounded-xl overflow-hidden">
             <thead className="bg-muted">
               <tr>
+                <th className="p-3 text-left">Logo</th>
                 <th className="p-3 text-left">Nome</th>
                 <th className="p-3 text-left">Descrição</th>
                 <th className="p-3 text-left">Categoria</th>
@@ -139,6 +140,31 @@ const [form, setForm] = useState<ProductForm>({});
             <tbody>
               {products.map(product => (
                 <tr key={product.id} className="border-b">
+                  <td className="p-3">
+                    <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
+                      {product.logo ? (
+                        product.logo.startsWith("http") ? (
+                          <img
+                            src={product.logo}
+                            alt={product.name}
+                            className="w-full h-full object-contain"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = "/placeholder.svg";
+                            }}
+                          />
+                        ) : (
+                          <span className="text-sm">{product.logo}</span>
+                        )
+                      ) : (
+                        <img
+                          src="/placeholder.svg"
+                          alt="Logo placeholder"
+                          className="w-full h-full object-contain opacity-50"
+                        />
+                      )}
+                    </div>
+                  </td>
                   <td className="p-3">{product.name}</td>
                   <td className="p-3">{product.description || "-"}</td>
                   <td className="p-3">{product.category || "-"}</td>

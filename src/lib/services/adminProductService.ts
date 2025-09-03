@@ -75,15 +75,6 @@ class AdminProductService {
     return unifiedProductService.generateSlug(name);
   }
 
-  // Ativar/desativar produto
-  async toggleProductStatus(id: string, isActive: boolean): Promise<void> {
-    try {
-      return await unifiedProductService.toggleProductStatus(id, isActive);
-    } catch (error) {
-      console.error('Erro ao alterar status do produto:', error);
-      throw error;
-    }
-  }
 
   // Destacar/remover destaque do produto
   async toggleProductFeatured(id: string, isFeatured: boolean): Promise<void> {

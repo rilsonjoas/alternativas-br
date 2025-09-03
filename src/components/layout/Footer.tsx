@@ -30,9 +30,9 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Explorar</h4>
             <ul className="space-y-2 text-sm text-background/80">
-              <li><Link to="/categorias" className="hover:text-background transition-colors">Categorias</Link></li>
               <li><Link to="/alternativas" className="hover:text-background transition-colors">Alternativas</Link></li>
-              <li><Link to="/ranking" className="hover:text-background transition-colors">Ranking</Link></li>
+              <li><Link to="/sobre" className="hover:text-background transition-colors">Sobre o Projeto</Link></li>
+              <li><Link to="/adicionar" className="hover:text-background transition-colors">Contribuir</Link></li>
             </ul>
           </div>
           
@@ -52,12 +52,12 @@ const Footer = () => {
             © 2025 AlternativaBR. Todos os direitos reservados.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#privacidade" className="text-sm text-background/60 hover:text-background transition-colors">
+            <Link to="/privacidade" className="text-sm text-background/60 hover:text-background transition-colors">
               Privacidade
-            </a>
-            <a href="#termos" className="text-sm text-background/60 hover:text-background transition-colors">
+            </Link>
+            <Link to="/termos" className="text-sm text-background/60 hover:text-background transition-colors">
               Termos
-            </a>
+            </Link>
           </div>
         </div>
       </div>

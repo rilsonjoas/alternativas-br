@@ -55,80 +55,51 @@ const Alternativas = () => {
       <main>
         <section className="py-10">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-4">
               {products.map((product) => (
-                <article key={product.id} className="contents">
-                  <Card className="group hover:shadow-card transition-all duration-300 border-border/50 bg-card hover:bg-card/80 cursor-pointer">
-                    <Link
-                      to={`/produto/${product.slug}`}
-                      className="block h-full"
+                <Card
+                  key={product.id}
+                  className="flex flex-col justify-between h-full shadow-md border border-gray-100 bg-white rounded-2xl transition hover:shadow-xl hover:border-primary/40 cursor-pointer"
+                  onClick={() => window.location.href = `/produto/${product.slug}`}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Ver detalhes de ${product.name}`}
+                >
+                  <CardHeader className="flex flex-row items-center gap-4 pb-2">
+                    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-gray-50 border border-gray-200 shadow-sm">
+                      {product.logo ? (
+                        <img src={product.logo} alt={product.name} className="w-12 h-12 object-contain rounded-full" />
+                      ) : (
+                        <span className="text-3xl font-bold text-gray-400">{product.name[0]}</span>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <CardTitle className="text-xl font-bold text-gray-900 mb-2 leading-tight">{product.name}</CardTitle>
+                      <div className="flex flex-wrap gap-2">
+                        {product.tags?.map((tag: string) => (
+                          <Badge key={tag} className="bg-gray-100 text-gray-700 border border-gray-200 px-3 py-1 text-xs font-semibold rounded-full shadow-sm">{tag}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-3 pb-5">
+                    <p className="text-sm text-gray-700 mb-1 min-h-[40px]">{product.description}</p>
+                    <div className="flex flex-wrap gap-2 mb-1">
+                      {product.features?.map((feature: string) => (
+                        <Badge key={feature} className="bg-primary/10 text-primary border border-primary/20 px-3 py-1 text-xs font-semibold rounded-full shadow-sm">{feature}</Badge>
+                      ))}
+                    </div>
+                    <Button
+                      variant="outline"
+                      className="mt-3 w-full bg-primary/5 text-primary border-primary hover:bg-primary/20 hover:text-primary-dark transition rounded-xl font-bold text-sm py-2 shadow"
+                      asChild
                     >
-                      <CardHeader className="pb-4">
-                        <div className="flex items-center justify-between">
-                          <div
-                            className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300 overflow-hidden"
-                            aria-hidden
-                          >
-                            {product.logo ? (
-                              product.logo.startsWith("http") ? (
-                                <img
-                                  src={product.logo}
-                                  alt={product.name}
-                                  className="w-full h-full object-contain"
-                                />
-                              ) : (
-                                <span
-                                  dangerouslySetInnerHTML={{
-                                    __html: product.logo,
-                                  }}
-                                  className="w-full h-full flex items-center justify-center"
-                                />
-                              )
-                            ) : (
-                              <img
-                                src="/placeholder.svg"
-                                alt="Logo placeholder"
-                                className="w-8 h-8 text-muted-foreground" 
-                              />
-                            )}
-                          </div>
-                          <Badge variant="secondary">{product.category}</Badge>
-                        </div>
-                        <CardTitle className="text-xl group-hover:text-primary transition-colors duration-300">
-                          {product.name}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <p className="text-muted-foreground text-sm">
-                          {product.description}
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {product.tags?.map((tag: string) => (
-                            <Badge
-                              key={tag}
-                              variant="outline"
-                              className="text-xs"
-                            >
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                        <div className="flex items-center justify-between pt-2">
-                          <p className="text-xs text-muted-foreground">
-                            <span className="font-medium">Modelo:</span>{" "}
-                            {product.pricing?.[0]?.price || "Consultar"}
-                          </p>
-                          <div className="flex items-center text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span className="text-sm font-medium mr-1">
-                              Ver detalhes
-                            </span>
-                            <ArrowRight className="w-4 h-4" />
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Link>
-                  </Card>
-                </article>
+                      <a href={product.website} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}>
+                        Visitar site
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </div>
