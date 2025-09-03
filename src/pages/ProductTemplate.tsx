@@ -345,17 +345,17 @@ const ProductTemplate = () => {
             </Card>
           </TabsContent>
           
-          <TabsContent value="recursos" className="space-y-6">
-            <Card className="border-border/50 bg-gradient-card">
-              <CardHeader>
-                <CardTitle>Principais Recursos</CardTitle>
+          <TabsContent value="recursos" className="space-y-8">
+            <Card className="border-gray-200 bg-white shadow-lg rounded-2xl overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-gray-100">
+                <CardTitle className="text-2xl">Principais Recursos</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-4">
+              <CardContent className="p-8">
+                <div className="grid md:grid-cols-2 gap-6">
                   {featuresArray.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                      <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">{feature}</span>
+                    <div key={index} className="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200">
+                      <CheckCircle className="w-6 h-6 text-green-600 mt-1 flex-shrink-0" />
+                      <span className="text-base font-medium text-gray-800">{feature}</span>
                     </div>
                   ))}
                 </div>
