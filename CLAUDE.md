@@ -118,19 +118,46 @@ interface Product {
   slug: string
   name: string
   description: string
+  shortDescription?: string
   logo: string
   website: string
+  
+  // Categoria
   category: string
   categorySlug: string
-  userCount: string
-  foundedYear: string
-  location: string // Must contain 'BR' for Brazilian products
+  categoryId: string
+  
+  // Localização (determina se é nacional ou estrangeiro)
+  location: ProductLocation
+  
+  // Informações da empresa
+  companyInfo: CompanyInfo
+  
+  // Preços
+  pricing: PricingInfo
+  
+  // Características
   features: string[]
-  pricing: PricingPlan[]
-  isUnicorn?: boolean
-  isFeatured: boolean
   tags: string[]
-  alternatives?: string[]
+  screenshots?: string[]
+  
+  // Status
+  isActive: boolean
+  isFeatured: boolean
+  isUnicorn?: boolean
+  
+  // Relacionamentos
+  alternatives?: string[] // Product IDs
+  alternativeTo?: string[] // Para produtos estrangeiros
+  
+  // Métricas
+  views?: number
+  userCount?: string
+  
+  // Social
+  socialLinks?: SocialLinks
+  
+  // Auditoria
   createdAt?: Timestamp
   updatedAt?: Timestamp
 }
@@ -174,7 +201,7 @@ Access is restricted to authenticated admin users only.
 
 ## Important Notes
 
-- All Brazilian products must have `location` field containing 'BR'
+- All Brazilian products must have `location.countryCode` field set to 'BR'
 - Slugs are used for SEO-friendly URLs
 - The platform focuses on Brazilian alternatives to international software
 - Firebase Firestore doesn't support full-text search natively - search is implemented client-side

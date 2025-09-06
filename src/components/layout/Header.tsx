@@ -10,20 +10,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import SearchSystem from "@/components/SearchSystem";
-import { Product, Category } from "@/types";
+// import SearchSystem from "@/components/SearchSystem";
+import { Product } from "@/types";
 import { LogOut, Shield } from "lucide-react";
 
 const Header = () => {
   const navigate = useNavigate();
   const { user, logout, loading } = useAuth();
   
-  const handleSearchResultClick = (result: Product | Category, type: 'product' | 'category') => {
-    if (type === 'product') {
-      navigate(`/produto/${result.slug}`);
-    } else {
-      navigate(`/categorias/${result.slug}`);
-    }
+  const handleSearchResultClick = (result: Product, type: 'product') => {
+    navigate(`/produto/${result.slug}`);
   };
 
   const handleLogout = async () => {
@@ -61,17 +57,10 @@ const Header = () => {
           
           {/* Search System - Hidden on mobile, shown on tablet+ */}
           <div className="hidden md:block flex-1 max-w-md mx-8">
-            <SearchSystem
-              onResultClick={handleSearchResultClick}
-              placeholder="Buscar alternativas..."
-              showFilters={false}
-            />
+            {/* SearchSystem temporariamente removido */}
           </div>
           
           <nav className="hidden lg:flex items-center space-x-6">
-            <Link to="/categorias" className="text-foreground hover:text-primary transition-colors">
-              Categorias
-            </Link>
             <Link to="/alternativas" className="text-foreground hover:text-primary transition-colors">
               Alternativas
             </Link>
@@ -148,11 +137,7 @@ const Header = () => {
         
         {/* Mobile Search - Full width on mobile */}
         <div className="md:hidden pb-4">
-          <SearchSystem
-            onResultClick={handleSearchResultClick}
-            placeholder="Buscar alternativas..."
-            showFilters={false}
-          />
+          {/* SearchSystem temporariamente removido */}
         </div>
       </div>
     </header>

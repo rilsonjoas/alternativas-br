@@ -14,6 +14,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Product, ProductFormData } from '@/types';
+import { getCountryCode } from '@/lib/utils/countryUtils';
 
 /**
  * Serviço unificado para gerenciar produtos nacionais e estrangeiros
@@ -152,8 +153,7 @@ class UnifiedProductService {
       const allProducts = await this.getAllProducts();
       
       return allProducts.filter(product => 
-        product.location?.countryCode === 'BR' && 
-        product.isActive !== false // Default true se undefined
+        getCountryCode(product.location?.country || '') === 'BR'
       );
     } catch (error) {
       console.error('Erro ao buscar produtos brasileiros:', error);
@@ -168,8 +168,7 @@ class UnifiedProductService {
       const allProducts = await this.getAllProducts();
       
       return allProducts.filter(product => 
-        product.location?.countryCode !== 'BR' && 
-        product.isActive !== false // Default true se undefined
+        getCountryCode(product.location?.country || '') !== 'BR'
       );
     } catch (error) {
       console.error('Erro ao buscar produtos estrangeiros:', error);
@@ -185,10 +184,9 @@ class UnifiedProductService {
       
       return allProducts.filter(product => {
         const matchesCategory = product.categorySlug === categorySlug;
-        const isActive = product.isActive !== false; // Default true se undefined
-        const isBrazilian = product.location?.countryCode === 'BR';
+        const isBrazilian = getCountryCode(product.location?.country || '') === 'BR';
         
-        return matchesCategory && isActive && (onlyBrazilian ? isBrazilian : true);
+        return matchesCategory && (onlyBrazilian ? isBrazilian : true);
       }).sort((a, b) => a.name.localeCompare(b.name));
     } catch (error) {
       console.error('Erro ao buscar produtos por categoria:', error);
@@ -210,17 +208,15 @@ class UnifiedProductService {
       
       const featuredProducts = allProducts.filter(product => {
         const isFeatured = product.isFeatured === true;
-        const isActive = product.isActive !== false; // Default true se undefined
-        const isBrazilian = product.location?.countryCode === 'BR';
+        const isBrazilian = getCountryCode(product.location?.country || '') === 'BR';
         
         console.log(`Produto ${product.name}:`, {
           isFeatured,
-          isActive,
           isBrazilian,
-          passes: isFeatured && isActive && (onlyBrazilian ? isBrazilian : true)
+          passes: isFeatured && (onlyBrazilian ? isBrazilian : true)
         });
         
-        return isFeatured && isActive && (onlyBrazilian ? isBrazilian : true);
+        return isFeatured && (onlyBrazilian ? isBrazilian : true);
       });
       
       console.log('🎯 Produtos em destaque encontrados:', featuredProducts.length);
@@ -239,8 +235,7 @@ class UnifiedProductService {
       const allProducts = await this.getAllProducts();
       
       return allProducts.filter(product => 
-        product.isUnicorn === true && 
-        product.isActive !== false // Default true se undefined
+        product.isUnicorn === true
       ).sort((a, b) => a.name.localeCompare(b.name));
     } catch (error) {
       console.error('Erro ao buscar unicórnios:', error);
@@ -256,7 +251,6 @@ class UnifiedProductService {
       
       const relatedProducts = allProducts.filter(product => 
         product.categorySlug === categorySlug &&
-        product.isActive !== false && // Default true se undefined
         product.id !== excludeId
       );
       
@@ -276,9 +270,6 @@ class UnifiedProductService {
       // Buscar todos e filtrar client-side para evitar problemas de índices compostos
       let products = await this.getAllProducts();
       
-      // Filtrar apenas produtos ativos
-      products = products.filter(product => product.isActive !== false);
-      
       // Filtrar por categoria se especificado
       if (filters?.categoryId) {
         products = products.filter(product => 
@@ -289,7 +280,7 @@ class UnifiedProductService {
       // Filtrar por país se especificado
       if (filters?.onlyBrazilian) {
         products = products.filter(product => 
-          product.location?.countryCode === 'BR'
+          getCountryCode(product.location?.country || '') === 'BR'
         );
       }
       
@@ -323,19 +314,6 @@ class UnifiedProductService {
       .replace(/-+/g, '-'); // Remove hífens duplos
   }
 
-  // Ativar/desativar produto
-  async toggleProductStatus(id: string, isActive: boolean): Promise<void> {
-    try {
-      const productRef = doc(this.collection, id);
-      await updateDoc(productRef, {
-        isActive,
-        updatedAt: Timestamp.now()
-      });
-    } catch (error) {
-      console.error('Erro ao alterar status do produto:', error);
-      throw error;
-    }
-  }
 
   // Destacar/remover destaque do produto
   async toggleProductFeatured(id: string, isFeatured: boolean): Promise<void> {
@@ -388,15 +366,14 @@ class UnifiedProductService {
           console.log(`Produto ${index + 1}:`, {
             name: product.name,
             location: product.location,
-            countryCode: product.location?.countryCode,
-            isActive: product.isActive,
+            countryCode: getCountryCode(product.location?.country || ''),
             isFeatured: product.isFeatured
           });
         }
       });
       
-      const brazilianProducts = products.filter(p => p.location?.countryCode === 'BR');
-      const foreignProducts = products.filter(p => p.location?.countryCode !== 'BR');
+      const brazilianProducts = products.filter(p => getCountryCode(p.location?.country || '') === 'BR');
+      const foreignProducts = products.filter(p => getCountryCode(p.location?.country || '') !== 'BR');
       
       console.log('🇧🇷 Produtos brasileiros encontrados:', brazilianProducts.length);
       console.log('🌍 Produtos estrangeiros encontrados:', foreignProducts.length);
@@ -405,7 +382,7 @@ class UnifiedProductService {
         total: products.length,
         brazilian: brazilianProducts.length,
         foreign: foreignProducts.length,
-        active: products.filter(p => p.isActive !== false).length, // Default true
+        active: products.length, // Todos os produtos são ativos
         featured: products.filter(p => p.isFeatured === true).length,
         byCategory: {} as { [key: string]: number }
       };

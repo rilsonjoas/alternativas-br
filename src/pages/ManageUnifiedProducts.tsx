@@ -1,7 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { Product, ProductFormData, Category, ProductLocation, CompanyInfo, PricingInfo } from "@/types";
+import { Product } from "@/types";
 import { adminProductService } from "@/lib/services/adminProductService";
-import { useCategories } from "@/hooks/useFirebase";
+import { getCountryCode, getCountryFlag, availableCountries } from "@/lib/utils/countryUtils";
+
+// Tipo específico para formulário que aceita strings para números
+interface FormCompanyInfo {
+  foundedYear?: string | number;
+  headquarters: string;
+  size: 'startup' | 'small' | 'medium' | 'large' | 'enterprise';
+}
+
+interface FormProductData {
+  name: string;
+  description: string;
+  website: string;
+  logo: string;
+  location: {
+    country: string;
+    state: string;
+    city: string;
+    flag: string;
+  };
+  companyInfo: FormCompanyInfo;
+  pricing: {
+    type: 'free' | 'freemium' | 'paid' | 'enterprise';
+    currency: string;
+    description: string;
+  };
+  features: string[];
+  tags: string[];
+  screenshots: string[];
+  isFeatured: boolean;
+  metaTitle: string;
+  metaDescription: string;
+  alternativeTo: string[];
+  socialLinks: Record<string, string>;
+}
 
 const ManageUnifiedProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -9,26 +43,20 @@ const ManageUnifiedProducts: React.FC = () => {
   const [editProduct, setEditProduct] = useState<Product | null>(null);
   const [addMode, setAddMode] = useState(false);
   const [filter, setFilter] = useState<'all' | 'brazilian' | 'foreign'>('all');
-  const { data: categories } = useCategories();
   const [showConfirm, setShowConfirm] = useState<string | null>(null);
-  const [form, setForm] = useState<ProductFormData>({
+  const [form, setForm] = useState<FormProductData>({
     name: '',
     description: '',
-    shortDescription: '',
     website: '',
     logo: '',
-    category: '',
-    categoryId: '',
     location: {
       country: '',
-      countryCode: '',
       state: '',
       city: '',
       flag: ''
     },
     companyInfo: {
-      name: '',
-      foundedYear: undefined,
+      foundedYear: '',
       headquarters: '',
       size: 'startup'
     },
@@ -40,7 +68,6 @@ const ManageUnifiedProducts: React.FC = () => {
     features: [],
     tags: [],
     screenshots: [],
-    isActive: true,
     isFeatured: false,
     metaTitle: '',
     metaDescription: '',
@@ -65,8 +92,8 @@ const ManageUnifiedProducts: React.FC = () => {
   }
 
   const filteredProducts = products.filter(product => {
-    if (filter === 'brazilian') return product.location?.countryCode === 'BR';
-    if (filter === 'foreign') return product.location?.countryCode !== 'BR';
+    if (filter === 'brazilian') return getCountryCode(product.location?.country || '') === 'BR';
+    if (filter === 'foreign') return getCountryCode(product.location?.country || '') !== 'BR';
     return true;
   });
 
@@ -75,23 +102,18 @@ const ManageUnifiedProducts: React.FC = () => {
     setForm({
       name: product.name,
       description: product.description,
-      shortDescription: product.shortDescription || '',
       website: product.website,
       logo: product.logo,
-      category: product.category,
-      categoryId: product.categoryId,
-      location: product.location || {
-        country: '',
-        countryCode: '',
-        state: '',
-        city: '',
-        flag: ''
+      location: {
+        country: product.location?.country || '',
+        state: product.location?.state || '',
+        city: product.location?.city || '',
+        flag: product.location?.flag || ''
       },
-      companyInfo: product.companyInfo || {
-        name: '',
-        foundedYear: undefined,
-        headquarters: '',
-        size: 'startup'
+      companyInfo: {
+        foundedYear: product.companyInfo?.foundedYear ? String(product.companyInfo.foundedYear) : '',
+        headquarters: product.companyInfo?.headquarters || '',
+        size: product.companyInfo?.size || 'startup'
       },
       pricing: product.pricing || {
         type: 'free',
@@ -101,12 +123,11 @@ const ManageUnifiedProducts: React.FC = () => {
       features: product.features || [],
       tags: product.tags || [],
       screenshots: product.screenshots || [],
-      isActive: product.isActive,
       isFeatured: product.isFeatured,
       metaTitle: product.metaTitle || '',
       metaDescription: product.metaDescription || '',
       alternativeTo: product.alternativeTo || [],
-      socialLinks: product.socialLinks || {}
+      socialLinks: (product.socialLinks as Record<string, string>) || {}
     });
     setAddMode(false);
   }
@@ -116,21 +137,16 @@ const ManageUnifiedProducts: React.FC = () => {
     setForm({
       name: '',
       description: '',
-      shortDescription: '',
       website: '',
       logo: '',
-      category: '',
-      categoryId: '',
       location: {
         country: '',
-        countryCode: '',
         state: '',
         city: '',
         flag: ''
       },
       companyInfo: {
-        name: '',
-        foundedYear: undefined,
+        foundedYear: '',
         headquarters: '',
         size: 'startup'
       },
@@ -142,7 +158,6 @@ const ManageUnifiedProducts: React.FC = () => {
       features: [],
       tags: [],
       screenshots: [],
-      isActive: true,
       isFeatured: false,
       metaTitle: '',
       metaDescription: '',
@@ -162,11 +177,14 @@ const ManageUnifiedProducts: React.FC = () => {
     setSaving(true);
     
     try {
+      // Preparar dados do formulário removendo undefined e convertendo tipos
+      const cleanForm = prepareFormData(form) as Record<string, unknown>;
+      
       if (addMode) {
-        await adminProductService.createProduct(form);
+        await adminProductService.createProduct(cleanForm as Partial<Product>);
         alert("Produto criado com sucesso!");
       } else if (editProduct) {
-        await adminProductService.updateProduct(editProduct.id, form);
+        await adminProductService.updateProduct(editProduct.id, cleanForm as Partial<Product>);
         alert("Produto atualizado com sucesso!");
       }
       
@@ -174,10 +192,66 @@ const ManageUnifiedProducts: React.FC = () => {
       await fetchProducts();
     } catch (error) {
       console.error('Erro ao salvar produto:', error);
-      alert("Erro ao salvar produto!");
+      alert("Erro ao salvar produto: " + ((error as Error)?.message || error));
     }
     
     setSaving(false);
+  }
+
+  // Função para remover campos undefined e converter tipos
+  function prepareFormData(formData: FormProductData): unknown {
+    const prepared: FormProductData & { location: FormProductData['location'] & { countryCode: string; flag: string }, isActive: boolean } = {
+      ...formData,
+      location: {
+        ...formData.location,
+        countryCode: getCountryCode(formData.location.country),
+        flag: getCountryFlag(formData.location.country)
+      },
+      isActive: true
+    };
+
+    // Converter foundedYear para number se for string
+    if (prepared.companyInfo.foundedYear) {
+      const year = typeof prepared.companyInfo.foundedYear === 'string'
+        ? parseInt(prepared.companyInfo.foundedYear, 10)
+        : prepared.companyInfo.foundedYear;
+
+      if (!isNaN(year) && year > 0) {
+        prepared.companyInfo.foundedYear = year;
+      } else {
+        delete prepared.companyInfo.foundedYear;
+      }
+    } else {
+      delete prepared.companyInfo.foundedYear;
+    }
+
+    return removeUndefinedFields(prepared);
+  }
+
+  // Função para remover campos undefined recursivamente
+  function removeUndefinedFields(obj: unknown): unknown {
+    if (obj === null || obj === undefined) {
+      return null;
+    }
+    
+    if (Array.isArray(obj)) {
+      return obj.map(removeUndefinedFields).filter(item => item !== undefined);
+    }
+    
+    if (typeof obj === 'object') {
+      const result: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
+        if (value !== undefined) {
+          const cleanValue = removeUndefinedFields(value);
+          if (cleanValue !== undefined) {
+            result[key] = cleanValue;
+          }
+        }
+      }
+      return result;
+    }
+    
+    return obj;
   }
 
   function openConfirm(id: string) {
@@ -200,17 +274,6 @@ const ManageUnifiedProducts: React.FC = () => {
     }
   }
 
-  async function toggleStatus(id: string, isActive: boolean) {
-    try {
-      await adminProductService.toggleProductStatus(id, isActive);
-      setProducts(products.map(p => 
-        p.id === id ? { ...p, isActive } : p
-      ));
-    } catch (error) {
-      console.error('Erro ao alterar status:', error);
-      alert("Erro ao alterar status!");
-    }
-  }
 
   async function toggleFeatured(id: string, isFeatured: boolean) {
     try {
@@ -260,7 +323,7 @@ const ManageUnifiedProducts: React.FC = () => {
                 : 'bg-muted text-foreground hover:bg-muted/80'
             }`}
           >
-            🇧🇷 Brasileiros ({products.filter(p => p.location?.countryCode === 'BR').length})
+            🇧🇷 Brasileiros ({products.filter(p => getCountryCode(p.location?.country || '') === 'BR').length})
           </button>
           <button
             onClick={() => setFilter('foreign')}
@@ -270,7 +333,7 @@ const ManageUnifiedProducts: React.FC = () => {
                 : 'bg-muted text-foreground hover:bg-muted/80'
             }`}
           >
-            🌍 Estrangeiros ({products.filter(p => p.location?.countryCode !== 'BR').length})
+            🌍 Estrangeiros ({products.filter(p => getCountryCode(p.location?.country || '') !== 'BR').length})
           </button>
         </div>
 
@@ -285,9 +348,8 @@ const ManageUnifiedProducts: React.FC = () => {
                 <tr>
                   <th className="p-3 text-left">Logo</th>
                   <th className="p-3 text-left">Nome</th>
-                  <th className="p-3 text-left">Categoria</th>
+                  <th className="p-3 text-left">Tags</th>
                   <th className="p-3 text-left">Origem</th>
-                  <th className="p-3 text-left">Status</th>
                   <th className="p-3 text-left">Destaque</th>
                   <th className="p-3 text-left">Ações</th>
                 </tr>
@@ -312,28 +374,29 @@ const ManageUnifiedProducts: React.FC = () => {
                       <div>
                         <div className="font-medium">{product.name}</div>
                         <div className="text-sm text-muted-foreground">
-                          {product.companyInfo?.name || product.name}
+                          {product.companyInfo?.foundedYear && `Fundada em ${product.companyInfo.foundedYear}`}
                         </div>
                       </div>
                     </td>
-                    <td className="p-3">{product.category || "-"}</td>
                     <td className="p-3">
-                      <div className="flex items-center gap-2">
-                        <span>{product.location?.flag || (product.location?.countryCode === 'BR' ? '🇧🇷' : '🌍')}</span>
-                        <span className="text-sm">{product.location?.country || 'N/A'}</span>
+                      <div className="flex flex-wrap gap-1">
+                        {product.tags?.slice(0, 3).map((tag, i) => (
+                          <span key={i} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+                            {tag}
+                          </span>
+                        ))}
+                        {product.tags && product.tags.length > 3 && (
+                          <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">
+                            +{product.tags.length - 3}
+                          </span>
+                        )}
                       </div>
                     </td>
                     <td className="p-3">
-                      <button
-                        onClick={() => toggleStatus(product.id, !product.isActive)}
-                        className={`px-2 py-1 rounded text-xs font-medium ${
-                          product.isActive 
-                            ? 'bg-green-100 text-green-800 hover:bg-green-200' 
-                            : 'bg-red-100 text-red-800 hover:bg-red-200'
-                        }`}
-                      >
-                        {product.isActive ? 'Ativo' : 'Inativo'}
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <span>{product.location?.flag || getCountryFlag(product.location?.country || '')}</span>
+                        <span className="text-sm">{product.location?.country || 'N/A'}</span>
+                      </div>
                     </td>
                     <td className="p-3">
                       <button
@@ -407,117 +470,48 @@ const ManageUnifiedProducts: React.FC = () => {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-1">Descrição Curta</label>
-                  <input 
-                    type="text" 
-                    value={form.shortDescription} 
-                    onChange={e => setForm(f => ({ ...f, shortDescription: e.target.value }))} 
-                    className="w-full p-2 border border-border rounded-xl bg-muted/50 text-foreground" 
-                  />
-                </div>
-
-                {/* Categoria */}
-                <div>
-                  <label className="block text-sm font-medium mb-1">Categoria *</label>
-                  <select 
-                    value={form.categoryId} 
-                    onChange={e => {
-                      const category = categories?.find(cat => cat.id === e.target.value);
-                      setForm(f => ({ 
-                        ...f, 
-                        categoryId: e.target.value,
-                        category: category?.slug || ''
-                      }));
-                    }} 
-                    className="w-full p-2 border border-border rounded-xl bg-muted/50 text-foreground"
-                    required
-                  >
-                    <option value="">Selecione a categoria</option>
-                    {categories?.map((cat: Category) => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.name || cat.title || cat.slug}
-                      </option>
-                    ))}
-                  </select>
-                </div>
 
                 {/* Localização */}
                 <div className="border p-4 rounded-xl bg-muted/20">
                   <h4 className="font-medium mb-3">Localização</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">País *</label>
-                      <input 
-                        type="text" 
-                        value={form.location.country} 
-                        onChange={e => setForm(f => ({ 
-                          ...f, 
-                          location: { ...f.location, country: e.target.value }
-                        }))} 
-                        className="w-full p-2 border border-border rounded-xl bg-background text-foreground" 
-                        required 
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Código do País *</label>
-                      <select
-                        value={form.location.countryCode} 
-                        onChange={e => setForm(f => ({ 
-                          ...f, 
-                          location: { ...f.location, countryCode: e.target.value }
-                        }))} 
-                        className="w-full p-2 border border-border rounded-xl bg-background text-foreground"
-                        required
-                      >
-                        <option value="">Selecione</option>
-                        <option value="BR">🇧🇷 Brasil</option>
-                        <option value="US">🇺🇸 Estados Unidos</option>
-                        <option value="GB">🇬🇧 Reino Unido</option>
-                        <option value="CA">🇨🇦 Canadá</option>
-                        <option value="DE">🇩🇪 Alemanha</option>
-                        <option value="FR">🇫🇷 França</option>
-                        <option value="AU">🇦🇺 Austrália</option>
-                        <option value="NL">🇳🇱 Holanda</option>
-                        <option value="ES">🇪🇸 Espanha</option>
-                        <option value="IT">🇮🇹 Itália</option>
-                      </select>
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">País *</label>
+                    <select
+                      value={form.location.country} 
+                      onChange={e => setForm(f => ({ 
+                        ...f, 
+                        location: { ...f.location, country: e.target.value }
+                      }))} 
+                      className="w-full p-2 border border-border rounded-xl bg-background text-foreground"
+                      required
+                    >
+                      <option value="">Selecione o país</option>
+                      {availableCountries.map(country => (
+                        <option key={country} value={country}>
+                          {getCountryFlag(country)} {country}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 
                 {/* Informações da empresa */}
                 <div className="border p-4 rounded-xl bg-muted/20">
                   <h4 className="font-medium mb-3">Informações da Empresa</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Nome da Empresa</label>
-                      <input 
-                        type="text" 
-                        value={form.companyInfo.name} 
-                        onChange={e => setForm(f => ({ 
-                          ...f, 
-                          companyInfo: { ...f.companyInfo, name: e.target.value }
-                        }))} 
-                        className="w-full p-2 border border-border rounded-xl bg-background text-foreground" 
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Ano de Fundação</label>
-                      <input 
-                        type="number" 
-                        value={form.companyInfo.foundedYear || ''} 
-                        onChange={e => setForm(f => ({ 
-                          ...f, 
-                          companyInfo: { ...f.companyInfo, foundedYear: e.target.value ? Number(e.target.value) : undefined }
-                        }))} 
-                        className="w-full p-2 border border-border rounded-xl bg-background text-foreground" 
-                        min="1800"
-                        max={new Date().getFullYear()}
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Ano de Fundação</label>
+                    <input 
+                      type="number" 
+                      value={form.companyInfo.foundedYear || ''} 
+                      onChange={e => setForm(f => ({ 
+                        ...f, 
+                        companyInfo: { ...f.companyInfo, foundedYear: e.target.value }
+                      }))} 
+                      className="w-full p-2 border border-border rounded-xl bg-background text-foreground" 
+                      min="1800"
+                      max={new Date().getFullYear()}
+                      placeholder="Ex: 2020"
+                    />
                   </div>
                 </div>
 
@@ -564,15 +558,6 @@ const ManageUnifiedProducts: React.FC = () => {
 
                 {/* Status */}
                 <div className="flex gap-4">
-                  <label className="flex items-center gap-2">
-                    <input 
-                      type="checkbox" 
-                      checked={form.isActive} 
-                      onChange={e => setForm(f => ({ ...f, isActive: e.target.checked }))} 
-                    />
-                    Produto Ativo
-                  </label>
-                  
                   <label className="flex items-center gap-2">
                     <input 
                       type="checkbox" 

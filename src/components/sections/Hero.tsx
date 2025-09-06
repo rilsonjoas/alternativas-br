@@ -8,18 +8,14 @@ import { collection, getCountFromServer } from "firebase/firestore";
 
 const Hero = () => {
   const [produtosCount, setProdutosCount] = useState<number | null>(null);
-  const [categoriasCount, setCategoriasCount] = useState<number | null>(null);
 
   useEffect(() => {
     async function fetchCounts() {
       try {
         const produtosSnap = await getCountFromServer(collection(db, "products"));
         setProdutosCount(produtosSnap.data().count);
-        const categoriasSnap = await getCountFromServer(collection(db, "categories"));
-        setCategoriasCount(categoriasSnap.data().count);
       } catch (err) {
         setProdutosCount(null);
-        setCategoriasCount(null);
       }
     }
     fetchCounts();
@@ -65,11 +61,6 @@ const Hero = () => {
                 {produtosCount !== null
                   ? `${produtosCount} produtos`
                   : "- produtos"}
-              </Badge>
-              <Badge variant="category">
-                {categoriasCount !== null
-                  ? `${categoriasCount} categorias`
-                  : "- categorias"}
               </Badge>
               <Badge variant="category">100% brasileiro</Badge>
             </div>
