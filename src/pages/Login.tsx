@@ -24,10 +24,14 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     setErro("");
     try {
+      console.log("Tentando login com Google...");
       await loginWithGoogle();
+      console.log("Login com Google bem-sucedido");
       window.location.href = "/dashboard";
     } catch (err) {
-      setErro("Falha ao autenticar com Google.");
+      console.error("Erro no login com Google:", err);
+      const errorMessage = err instanceof Error ? err.message : "Falha ao autenticar com Google.";
+      setErro(errorMessage);
     }
   };
 

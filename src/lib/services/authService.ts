@@ -20,6 +20,11 @@ class AuthService {
     // Configurar Google Provider
     this.googleProvider.addScope('email');
     this.googleProvider.addScope('profile');
+    
+    // Configurações adicionais para produção
+    this.googleProvider.setCustomParameters({
+      prompt: 'select_account'
+    });
   }
 
   // Converter Firebase User para nosso User
