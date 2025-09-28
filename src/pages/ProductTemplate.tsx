@@ -303,9 +303,9 @@ const ProductTemplate = () => {
                         <div className="flex justify-between items-center py-2">
                           <span className="text-gray-600 font-medium">Site:</span>
                           <span className="font-semibold text-gray-900">
-                            {product.companyInfo?.website ? (
-                              <a href={product.companyInfo.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                {product.companyInfo.website}
+                            {product.website ? (
+                              <a href={product.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                {product.website}
                               </a>
                             ) : '-'}
                           </span>
@@ -361,6 +361,71 @@ const ProductTemplate = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+          
+          <TabsContent value="alternativas" className="space-y-8">
+            {product.alternativeTo && product.alternativeTo.length > 0 ? (
+              <Card className="border-gray-200 bg-white shadow-lg rounded-2xl overflow-hidden">
+                <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-gray-100">
+                  <CardTitle className="text-2xl flex items-center gap-3">
+                    <Globe className="w-6 h-6 text-primary" />
+                    Alternativa Brasileira a
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-8">
+                  <p className="text-gray-600 text-lg mb-6 leading-relaxed">
+                    Este produto brasileiro oferece funcionalidades similares aos seguintes serviços internacionais:
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    {product.alternativeTo.map((alternative, index) => (
+                      <Badge 
+                        key={index} 
+                        variant="secondary" 
+                        className="text-base py-2 px-4 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800 rounded-full font-semibold"
+                      >
+                        {alternative}
+                      </Badge>
+                    ))}
+                  </div>
+                  <div className="mt-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200">
+                    <div className="flex items-start gap-4">
+                      <Shield className="w-6 h-6 text-green-600 mt-1 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-bold text-green-800 text-lg mb-2">Por que escolher uma alternativa brasileira?</h4>
+                        <ul className="text-green-700 space-y-2">
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="w-4 h-4 text-green-600" />
+                            <span>Suporte em português brasileiro</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="w-4 h-4 text-green-600" />
+                            <span>Adequação à legislação nacional</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="w-4 h-4 text-green-600" />
+                            <span>Proximidade cultural e temporal</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="w-4 h-4 text-green-600" />
+                            <span>Fortalecimento do ecossistema brasileiro</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="border-border/50 bg-gradient-card">
+                <CardContent className="text-center py-8">
+                  <Heart className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Informações sobre alternativas em breve</h3>
+                  <p className="text-muted-foreground">
+                    Estamos atualizando as informações sobre quais produtos internacionais este serviço substitui.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           <TabsContent value="avaliacoes" className="space-y-6">

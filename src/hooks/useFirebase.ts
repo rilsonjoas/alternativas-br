@@ -108,7 +108,7 @@ export const useProductSearch = (searchQuery: string) => {
 // Hook para buscar produto por slug
 export const useProductBySlug = (slug: string) => {
   return useQuery({
-    queryKey: ['product', slug],
+    queryKey: ['product', slug, 'v2'], // Added version to force cache refresh
     queryFn: async (): Promise<Product | null> => {
       const querySnapshot = await getDocs(collection(db, 'products'));
       const product = querySnapshot.docs.find(doc => {

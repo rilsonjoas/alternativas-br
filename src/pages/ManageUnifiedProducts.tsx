@@ -349,6 +349,7 @@ const ManageUnifiedProducts: React.FC = () => {
                   <th className="p-3 text-left">Logo</th>
                   <th className="p-3 text-left">Nome</th>
                   <th className="p-3 text-left">Tags</th>
+                  <th className="p-3 text-left">Alternativa a</th>
                   <th className="p-3 text-left">Origem</th>
                   <th className="p-3 text-left">Destaque</th>
                   <th className="p-3 text-left">Ações</th>
@@ -389,6 +390,23 @@ const ManageUnifiedProducts: React.FC = () => {
                           <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">
                             +{product.tags.length - 3}
                           </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="p-3">
+                      <div className="flex flex-wrap gap-1">
+                        {product.alternativeTo?.slice(0, 2).map((alt, i) => (
+                          <span key={i} className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
+                            {alt}
+                          </span>
+                        ))}
+                        {product.alternativeTo && product.alternativeTo.length > 2 && (
+                          <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">
+                            +{product.alternativeTo.length - 2}
+                          </span>
+                        )}
+                        {(!product.alternativeTo || product.alternativeTo.length === 0) && (
+                          <span className="text-xs text-muted-foreground">-</span>
                         )}
                       </div>
                     </td>
@@ -543,7 +561,7 @@ const ManageUnifiedProducts: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1">Features (separadas por vírgula)</label>
+                    <label className="block text-sm font-medium mb-1">Features (separadas por vírgula) *</label>
                     <input 
                       type="text" 
                       value={form.features.join(', ')} 
@@ -552,6 +570,77 @@ const ManageUnifiedProducts: React.FC = () => {
                         features: e.target.value.split(',').map(t => t.trim()).filter(Boolean)
                       }))} 
                       className="w-full p-2 border border-border rounded-xl bg-muted/50 text-foreground" 
+                    />
+                  </div>
+                </div>
+
+                {/* Alternativa a */}
+                <div>
+                  <label className="block text-sm font-medium mb-1">Alternativa a (produtos internacionais, separados por vírgula) *</label>
+                  <input 
+                    type="text" 
+                    value={form.alternativeTo.join(', ')} 
+                    onChange={e => setForm(f => ({ 
+                      ...f, 
+                      alternativeTo: e.target.value.split(',').map(t => t.trim()).filter(Boolean)
+                    }))} 
+                    placeholder="Ex: HubSpot, Salesforce, Mailchimp"
+                    className="w-full p-2 border border-border rounded-xl bg-muted/50 text-foreground" 
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Liste os produtos/serviços internacionais que este produto brasileiro substitui ou concorre diretamente.
+                  </p>
+                </div>
+
+                {/* Informações de Preço */}
+                <div>
+                  <h4 className="font-medium mb-3">Informações de Preço</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Tipo de Preço *</label>
+                      <select
+                        value={form.pricing.type}
+                        onChange={e => setForm(f => ({
+                          ...f,
+                          pricing: { ...f.pricing, type: e.target.value as 'free' | 'freemium' | 'paid' | 'enterprise' }
+                        }))}
+                        className="w-full p-2 border border-border rounded-xl bg-muted/50 text-foreground"
+                      >
+                        <option value="free">Gratuito</option>
+                        <option value="freemium">Freemium</option>
+                        <option value="paid">Pago</option>
+                        <option value="enterprise">Enterprise</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Moeda</label>
+                      <select
+                        value={form.pricing.currency}
+                        onChange={e => setForm(f => ({
+                          ...f,
+                          pricing: { ...f.pricing, currency: e.target.value }
+                        }))}
+                        className="w-full p-2 border border-border rounded-xl bg-muted/50 text-foreground"
+                      >
+                        <option value="BRL">BRL (Real)</option>
+                        <option value="USD">USD (Dólar)</option>
+                        <option value="EUR">EUR (Euro)</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium mb-1">Descrição dos Preços *</label>
+                    <textarea
+                      value={form.pricing.description}
+                      onChange={e => setForm(f => ({
+                        ...f,
+                        pricing: { ...f.pricing, description: e.target.value }
+                      }))}
+                      placeholder="Ex: Plano gratuito com limitações, assinatura mensal a partir de R$ 50"
+                      className="w-full p-2 border border-border rounded-xl bg-muted/50 text-foreground"
+                      rows={3}
                     />
                   </div>
                 </div>

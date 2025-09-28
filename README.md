@@ -1,9 +1,5 @@
 # Alternativas BR 🇧🇷
 
-> Descubra as melhores alternativas brasileiras de software e serviços tecnológicos
-
-Uma plataforma curada para encontrar softwares e serviços nacionais que rivalizam com grandes soluções globais.
-
 ## 🌟 Principais Funcionalidades
 
 - 📊 **Catálogo Curado**: Produtos brasileiros organizados em categorias

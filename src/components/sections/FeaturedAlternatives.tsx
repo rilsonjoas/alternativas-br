@@ -106,6 +106,30 @@ const FeaturedAlternatives = () => {
                 </CardHeader>
                 <CardContent className="flex flex-col gap-3 pb-5">
                   <p className="text-sm text-gray-700 mb-1 min-h-[40px]">{product.description}</p>
+                  
+                  {/* Seção Alternativa a */}
+                  {product.alternativeTo && product.alternativeTo.length > 0 && (
+                    <div className="mb-2">
+                      <p className="text-xs font-medium text-gray-600 mb-1">Alternativa brasileira a:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {product.alternativeTo.slice(0, 3).map((alternative, index) => (
+                          <Badge 
+                            key={index} 
+                            variant="outline" 
+                            className="text-xs bg-blue-50 text-blue-700 border-blue-200 px-2 py-0.5"
+                          >
+                            {alternative}
+                          </Badge>
+                        ))}
+                        {product.alternativeTo.length > 3 && (
+                          <Badge variant="outline" className="text-xs bg-gray-50 text-gray-600 border-gray-200 px-2 py-0.5">
+                            +{product.alternativeTo.length - 3}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
                   <div className="flex flex-wrap gap-2 mb-1">
                     {product.features?.map((feature) => (
                       <Badge key={feature} className="bg-primary/10 text-primary border border-primary/20 px-3 py-1 text-xs font-semibold rounded-full shadow-sm">{feature}</Badge>

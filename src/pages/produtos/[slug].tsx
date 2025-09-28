@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ExternalLink, Star, Users, Calendar, MapPin, CreditCard } from "lucide-react";
+import { ExternalLink, Star, Users, Calendar, MapPin, CreditCard, ArrowRight } from "lucide-react";
 
 // Tipagem explícita para planos de preço
 interface PricingPlan {
@@ -155,6 +155,36 @@ const ProdutoPage = () => {
             </CardContent>
           </Card>
         </section>
+
+        {/* Seção Alternativa a */}
+        {product.alternativeTo && product.alternativeTo.length > 0 && (
+          <section className="mt-8">
+            <Card className="border-border/50 bg-gradient-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <ArrowRight className="w-5 h-5" />
+                  Alternativa Brasileira a
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {product.alternativeTo.map((alternative: string, index: number) => (
+                    <Badge 
+                      key={index} 
+                      variant="secondary" 
+                      className="text-sm py-1 px-3 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800"
+                    >
+                      {alternative}
+                    </Badge>
+                  ))}
+                </div>
+                <p className="text-sm text-muted-foreground mt-3">
+                  Este produto brasileiro oferece funcionalidades similares aos serviços internacionais listados acima.
+                </p>
+              </CardContent>
+            </Card>
+          </section>
+        )}
       </main>
       <Footer />
     </div>
