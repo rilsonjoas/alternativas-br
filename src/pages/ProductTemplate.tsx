@@ -8,12 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { 
   ExternalLink, 
-  Star, 
-  Users, 
   Calendar, 
   MapPin, 
   Shield, 
@@ -260,224 +257,212 @@ const ProductTemplate = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <Tabs defaultValue="sobre" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-3 bg-white shadow-md rounded-2xl p-2 border border-gray-200">
-            <TabsTrigger value="sobre" className="rounded-xl font-semibold data-[state=active]:bg-primary data-[state=active]:text-white">Sobre</TabsTrigger>
-            <TabsTrigger value="recursos" className="rounded-xl font-semibold data-[state=active]:bg-primary data-[state=active]:text-white">Recursos</TabsTrigger>
-            <TabsTrigger value="alternativas" className="rounded-xl font-semibold data-[state=active]:bg-primary data-[state=active]:text-white">Similares</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="sobre" className="space-y-8">
-            <Card className="border-gray-200 bg-white shadow-lg rounded-2xl overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-gray-100">
-                <CardTitle className="text-2xl">Sobre o {product.name}</CardTitle>
-              </CardHeader>
-              <CardContent className="p-8">
-                <div className="prose prose-lg prose-neutral dark:prose-invert max-w-none">
-                  <p className="text-gray-700 leading-relaxed text-lg mb-8">
-                    {product.description}
-                  </p>
-                  
-                  <Separator className="my-8 bg-gray-200" />
-                  
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div>
-                      <h3 className="font-bold text-xl mb-6 flex items-center gap-3 text-gray-900">
-                        <Shield className="w-6 h-6 text-primary" />
-                        Informações da Empresa
-                      </h3>
-                      <div className="space-y-4">
-                        <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                          <span className="text-gray-600 font-medium">Empresa:</span>
-                          <span className="font-semibold text-gray-900">{product.companyInfo?.name || product.name || '-'}</span>
-                        </div>
-                        <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                          <span className="text-gray-600 font-medium">Fundação:</span>
-                          <span className="font-semibold text-gray-900">{product.companyInfo?.foundedYear || product.foundedYear || '-'}</span>
-                        </div>
-                        <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                          <span className="text-gray-600 font-medium">Sede:</span>
-                          <span className="font-semibold text-gray-900">{product.companyInfo?.headquarters || `${product.location?.city ? product.location.city + ', ' : ''}${product.location?.country || '-'}`}</span>
-                        </div>
-                        <div className="flex justify-between items-center py-2">
-                          <span className="text-gray-600 font-medium">Site:</span>
-                          <span className="font-semibold text-gray-900">
-                            {product.website ? (
-                              <a href={product.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                {product.website}
-                              </a>
-                            ) : '-'}
-                          </span>
-                        </div>
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+        {/* Seção: Sobre o Produto */}
+        <section>
+          <Card className="border-border/50 bg-background/95 backdrop-blur-sm shadow-elegant rounded-2xl overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-border/20">
+              <CardTitle className="text-2xl font-bold flex items-center gap-3">
+                <Shield className="w-7 h-7 text-primary" />
+                Sobre o {product.name}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
+              <div className="prose prose-lg max-w-none">
+                <p className="text-foreground/90 leading-relaxed text-lg mb-8">
+                  {product.description}
+                </p>
+                
+                <Separator className="my-8 bg-border/50" />
+                
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div>
+                    <h3 className="font-bold text-xl mb-6 flex items-center gap-3 text-foreground">
+                      <Shield className="w-6 h-6 text-primary" />
+                      Informações da Empresa
+                    </h3>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center py-3 px-4 rounded-lg bg-muted/30 hover:bg-muted/40 transition-colors">
+                        <span className="text-muted-foreground font-medium">Empresa:</span>
+                        <span className="font-semibold text-foreground">{product.companyInfo?.name || product.name || '-'}</span>
+                      </div>
+                      <div className="flex justify-between items-center py-3 px-4 rounded-lg bg-muted/30 hover:bg-muted/40 transition-colors">
+                        <span className="text-muted-foreground font-medium">Fundação:</span>
+                        <span className="font-semibold text-foreground">{product.companyInfo?.foundedYear || product.foundedYear || '-'}</span>
+                      </div>
+                      <div className="flex justify-between items-center py-3 px-4 rounded-lg bg-muted/30 hover:bg-muted/40 transition-colors">
+                        <span className="text-muted-foreground font-medium">Sede:</span>
+                        <span className="font-semibold text-foreground">{product.companyInfo?.headquarters || `${product.location?.city ? product.location.city + ', ' : ''}${product.location?.country || '-'}`}</span>
+                      </div>
+                      <div className="flex justify-between items-center py-3 px-4 rounded-lg bg-muted/30 hover:bg-muted/40 transition-colors">
+                        <span className="text-muted-foreground font-medium">Site:</span>
+                        <span className="font-semibold text-foreground">
+                          {product.website ? (
+                            <a href={product.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline transition-colors">
+                              {product.website}
+                            </a>
+                          ) : '-'}
+                        </span>
                       </div>
                     </div>
-                    
-                    <div>
-                      <h3 className="font-bold text-xl mb-6 flex items-center gap-3 text-gray-900">
-                        <Zap className="w-6 h-6 text-primary" />
-                        Características
-                      </h3>
-                      <div className="space-y-3">
-                        {product.isUnicorn && (
-                          <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
-                            <CheckCircle className="w-5 h-5 text-purple-600" />
-                            <span className="font-medium text-purple-800">Empresa Unicórnio 🦄</span>
-                          </div>
-                        )}
-                        <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg border border-green-200">
-                          <CheckCircle className="w-5 h-5 text-green-600" />
-                          <span className="font-medium text-green-800">100% Brasileira</span>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-bold text-xl mb-6 flex items-center gap-3 text-foreground">
+                      <Zap className="w-6 h-6 text-primary" />
+                      Características
+                    </h3>
+                    <div className="space-y-3">
+                      {product.isUnicorn && (
+                        <div className="flex items-center gap-3 p-4 bg-purple-50 rounded-xl border border-purple-200 hover:shadow-sm transition-all">
+                          <CheckCircle className="w-5 h-5 text-purple-600" />
+                          <span className="font-medium text-purple-800">Empresa Unicórnio 🦄</span>
                         </div>
-                        <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                          <CheckCircle className="w-5 h-5 text-blue-600" />
-                          <span className="font-medium text-blue-800">Suporte em Português</span>
-                        </div>
-                        <div className="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                          <CheckCircle className="w-5 h-5 text-yellow-600" />
-                          <span className="font-medium text-yellow-800">Adequada à legislação brasileira</span>
-                        </div>
+                      )}
+                      <div className="flex items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-200 hover:shadow-sm transition-all">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <span className="font-medium text-green-800">100% Brasileira</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-xl border border-blue-200 hover:shadow-sm transition-all">
+                        <CheckCircle className="w-5 h-5 text-blue-600" />
+                        <span className="font-medium text-blue-800">Suporte em Português</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-4 bg-yellow-50 rounded-xl border border-yellow-200 hover:shadow-sm transition-all">
+                        <CheckCircle className="w-5 h-5 text-yellow-600" />
+                        <span className="font-medium text-yellow-800">Adequada à legislação brasileira</span>
                       </div>
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="recursos" className="space-y-8">
-            <Card className="border-gray-200 bg-white shadow-lg rounded-2xl overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-gray-100">
-                <CardTitle className="text-2xl">Principais Recursos</CardTitle>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Seção: Principais Recursos */}
+        {featuresArray.length > 0 && (
+          <section>
+            <Card className="border-border/50 bg-background/95 backdrop-blur-sm shadow-elegant rounded-2xl overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-border/20">
+                <CardTitle className="text-2xl font-bold flex items-center gap-3">
+                  <Zap className="w-7 h-7 text-primary" />
+                  Principais Recursos
+                </CardTitle>
               </CardHeader>
               <CardContent className="p-8">
                 <div className="grid md:grid-cols-2 gap-6">
                   {featuresArray.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200">
+                    <div key={index} className="flex items-start gap-4 p-5 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 hover:shadow-sm transition-all">
                       <CheckCircle className="w-6 h-6 text-green-600 mt-1 flex-shrink-0" />
-                      <span className="text-base font-medium text-gray-800">{feature}</span>
+                      <span className="text-base font-medium text-gray-800 leading-relaxed">{feature}</span>
                     </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-          
-          <TabsContent value="alternativas" className="space-y-8">
-            {product.alternativeTo && product.alternativeTo.length > 0 ? (
-              <Card className="border-gray-200 bg-white shadow-lg rounded-2xl overflow-hidden">
-                <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-gray-100">
-                  <CardTitle className="text-2xl flex items-center gap-3">
-                    <Globe className="w-6 h-6 text-primary" />
-                    Alternativa Brasileira a
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-8">
-                  <p className="text-gray-600 text-lg mb-6 leading-relaxed">
-                    Este produto brasileiro oferece funcionalidades similares aos seguintes serviços internacionais:
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-                    {product.alternativeTo.map((alternative, index) => (
-                      <Badge 
-                        key={index} 
-                        variant="secondary" 
-                        className="text-base py-2 px-4 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800 rounded-full font-semibold"
-                      >
-                        {alternative}
-                      </Badge>
-                    ))}
-                  </div>
-                  <div className="mt-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200">
-                    <div className="flex items-start gap-4">
-                      <Shield className="w-6 h-6 text-green-600 mt-1 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-bold text-green-800 text-lg mb-2">Por que escolher uma alternativa brasileira?</h4>
-                        <ul className="text-green-700 space-y-2">
-                          <li className="flex items-center gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-600" />
-                            <span>Suporte em português brasileiro</span>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-600" />
-                            <span>Adequação à legislação nacional</span>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-600" />
-                            <span>Proximidade cultural e temporal</span>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <CheckCircle className="w-4 h-4 text-green-600" />
-                            <span>Fortalecimento do ecossistema brasileiro</span>
-                          </li>
-                        </ul>
-                      </div>
+          </section>
+        )}
+
+        {/* Seção: Alternativa Brasileira */}
+        {product.alternativeTo && product.alternativeTo.length > 0 && (
+          <section>
+            <Card className="border-border/50 bg-background/95 backdrop-blur-sm shadow-elegant rounded-2xl overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-border/20">
+                <CardTitle className="text-2xl font-bold flex items-center gap-3">
+                  <Globe className="w-7 h-7 text-primary" />
+                  Alternativa Brasileira
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-8">
+                <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
+                  Este produto brasileiro oferece funcionalidades similares aos seguintes serviços internacionais:
+                </p>
+                <div className="flex flex-wrap gap-3 mb-8">
+                  {product.alternativeTo.map((alternative, index) => (
+                    <Badge 
+                      key={index} 
+                      variant="secondary" 
+                      className="text-base py-3 px-5 bg-blue-50 text-blue-700 border-blue-200 rounded-full font-semibold hover:bg-blue-100 transition-colors"
+                    >
+                      {alternative}
+                    </Badge>
+                  ))}
+                </div>
+                <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200">
+                  <div className="flex items-start gap-4">
+                    <Shield className="w-6 h-6 text-green-600 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-bold text-green-800 text-lg mb-3">Por que escolher uma alternativa brasileira?</h4>
+                      <ul className="text-green-700 space-y-3">
+                        <li className="flex items-center gap-3">
+                          <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                          <span>Suporte em português brasileiro</span>
+                        </li>
+                        <li className="flex items-center gap-3">
+                          <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                          <span>Adequação à legislação nacional</span>
+                        </li>
+                        <li className="flex items-center gap-3">
+                          <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                          <span>Proximidade cultural e temporal</span>
+                        </li>
+                        <li className="flex items-center gap-3">
+                          <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                          <span>Fortalecimento do ecossistema brasileiro</span>
+                        </li>
+                      </ul>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ) : (
-              <Card className="border-border/50 bg-gradient-card">
-                <CardContent className="text-center py-8">
-                  <Heart className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Informações sobre alternativas em breve</h3>
-                  <p className="text-muted-foreground">
-                    Estamos atualizando as informações sobre quais produtos internacionais este serviço substitui.
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
+                </div>
+              </CardContent>
+            </Card>
+          </section>
+        )}
 
-          <TabsContent value="avaliacoes" className="space-y-6">
-            {relatedProducts.length > 0 ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {relatedProducts.map((relatedProduct) => (
-                  <Card key={relatedProduct.id} className="border-border/50 bg-gradient-card hover:shadow-card transition-all duration-300">
-                    <CardHeader className="pb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-2xl">
-                          {relatedProduct.logo}
+        {/* Seção: Produtos Similares */}
+        {relatedProducts.length > 0 && (
+          <section>
+            <Card className="border-border/50 bg-background/95 backdrop-blur-sm shadow-elegant rounded-2xl overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-border/20">
+                <CardTitle className="text-2xl font-bold flex items-center gap-3">
+                  <Heart className="w-7 h-7 text-primary" />
+                  Produtos Similares
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {relatedProducts.slice(0, 6).map((relatedProduct) => (
+                    <Card key={relatedProduct.id} className="border-border/50 bg-background hover:shadow-elegant transition-all duration-300 rounded-xl">
+                      <CardHeader className="pb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-2xl shadow-sm">
+                            {relatedProduct.logo}
+                          </div>
+                          <div>
+                            <CardTitle className="text-lg font-semibold">{relatedProduct.name}</CardTitle>
+                            <Badge variant="secondary" className="mt-1 text-xs">
+                              {relatedProduct.category}
+                            </Badge>
+                          </div>
                         </div>
-                        <div>
-                          <CardTitle className="text-lg">{relatedProduct.name}</CardTitle>
-                          <Badge variant="secondary" className="mt-1">
-                            {relatedProduct.category}
-                          </Badge>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <p className="text-muted-foreground text-sm">
-                        {relatedProduct.shortDescription}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1 text-sm">
-                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                          {/* Removido: relatedProduct.averageRating */}
-                        </div>
-                        <Button size="sm" variant="outline" asChild>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <p className="text-muted-foreground text-sm leading-relaxed">
+                          {relatedProduct.shortDescription}
+                        </p>
+                        <Button size="sm" variant="outline" className="w-full" asChild>
                           <Link to={`/produto/${relatedProduct.slug}`}>
                             Ver detalhes
                           </Link>
                         </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            ) : (
-              <Card className="border-border/50 bg-gradient-card">
-                <CardContent className="text-center py-8">
-                  <Heart className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Nenhuma alternativa similar encontrada</h3>
-                  <p className="text-muted-foreground">
-                    Explore outras categorias para descobrir mais ferramentas brasileiras.
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-        </Tabs>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </section>
+        )}
       </main>
 
       <Footer />

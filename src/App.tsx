@@ -14,6 +14,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Privacidade from "./pages/Privacidade";
 import Termos from "./pages/Termos";
+import SearchResults from "./pages/SearchResults";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ManageUnifiedProducts from "./pages/ManageUnifiedProducts";
 
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/sobre" element={<Sobre />} />
             <Route path="/adicionar" element={<AdicionarProduto />} />
             <Route path="/contato" element={<Contato />} />
+            <Route path="/buscar" element={<SearchResults />} />
             <Route path="/produto/:slug" element={<ProductTemplate />} />
             <Route path="/login" element={<Login />} />
             <Route path="/privacidade" element={<Privacidade />} />

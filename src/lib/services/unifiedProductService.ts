@@ -270,11 +270,16 @@ class UnifiedProductService {
       // Buscar todos e filtrar client-side para evitar problemas de índices compostos
       let products = await this.getAllProducts();
       
+      console.log('🔍 Search Debug - Total produtos:', products.length);
+      console.log('🔍 Search Debug - Termo:', searchTerm);
+      console.log('🔍 Search Debug - Filtros:', filters);
+      
       // Filtrar por categoria se especificado
       if (filters?.categoryId) {
         products = products.filter(product => 
           product.categoryId === filters.categoryId
         );
+        console.log('🔍 Search Debug - Após filtro categoria:', products.length);
       }
       
       // Filtrar por país se especificado
@@ -282,17 +287,42 @@ class UnifiedProductService {
         products = products.filter(product => 
           getCountryCode(product.location?.country || '') === 'BR'
         );
+        console.log('🔍 Search Debug - Após filtro país:', products.length);
       }
       
       // Filtro por termo de busca (implementação client-side)
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
-        products = products.filter(product => 
-          product.name.toLowerCase().includes(term) ||
-          product.description.toLowerCase().includes(term) ||
-          product.tags?.some(tag => tag.toLowerCase().includes(term)) ||
-          product.features?.some(feature => feature.toLowerCase().includes(term))
-        );
+        
+        // Verificar alguns produtos antes do filtro
+        if (products.length > 0) {
+          console.log('🔍 Search Debug - Exemplo de produto:', {
+            name: products[0].name,
+            description: products[0].description?.substring(0, 100),
+            tags: products[0].tags,
+            features: products[0].features
+          });
+        }
+        
+        products = products.filter(product => {
+          const nameMatch = product.name.toLowerCase().includes(term);
+          const descMatch = product.description?.toLowerCase().includes(term);
+          const tagMatch = product.tags?.some(tag => tag.toLowerCase().includes(term));
+          const featureMatch = product.features?.some(feature => feature.toLowerCase().includes(term));
+          const categoryMatch = product.category?.toLowerCase().includes(term);
+          
+          const matches = nameMatch || descMatch || tagMatch || featureMatch || categoryMatch;
+          
+          if (matches) {
+            console.log('🔍 Match encontrado:', product.name, {
+              nameMatch, descMatch, tagMatch, featureMatch, categoryMatch
+            });
+          }
+          
+          return matches;
+        });
+        
+        console.log('🔍 Search Debug - Após filtro busca:', products.length);
       }
 
       return products;

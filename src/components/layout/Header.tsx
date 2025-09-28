@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// import SearchSystem from "@/components/SearchSystem";
+import SearchBar from "@/components/SearchBar";
 import { Product } from "@/types";
 import { LogOut, Shield } from "lucide-react";
 
@@ -56,8 +56,13 @@ const Header = () => {
           </Link>
           
           {/* Search System - Hidden on mobile, shown on tablet+ */}
-          <div className="hidden md:block flex-1 max-w-md mx-8">
-            {/* SearchSystem temporariamente removido */}
+          <div className="hidden md:block flex-1 max-w-lg mx-6">
+            <SearchBar 
+              size="sm" 
+              placeholder="Buscar produtos..."
+              showButton={false}
+              onResultClick={handleSearchResultClick}
+            />
           </div>
           
           <nav className="hidden lg:flex items-center space-x-6">
@@ -136,8 +141,13 @@ const Header = () => {
         </div>
         
         {/* Mobile Search - Full width on mobile */}
-        <div className="md:hidden pb-4">
-          {/* SearchSystem temporariamente removido */}
+        <div className="md:hidden pb-3 pt-3 px-1">
+          <SearchBar 
+            size="sm" 
+            placeholder="Buscar produtos..."
+            showButton={false}
+            onResultClick={handleSearchResultClick}
+          />
         </div>
       </div>
     </header>

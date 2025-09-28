@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import SearchBar from "@/components/SearchBar";
 import heroImage from "@/assets/hero-image.jpg";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
@@ -46,6 +47,19 @@ const Hero = () => {
               nacionais que rivalizam com as melhores ferramentas
               internacionais. Fortaleça o ecossistema tech brasileiro.
             </p>
+
+            {/* Search Bar - Destaque na página inicial */}
+            <div className="mb-8 sm:mb-10 w-full max-w-2xl mx-auto lg:mx-0">
+              <SearchBar 
+                variant="hero"
+                size="lg"
+                placeholder="Busque por produtos, categorias, alternativas..."
+                className="w-full"
+              />
+              <p className="text-xs text-muted-foreground mt-3 text-center lg:text-left px-2 lg:px-0">
+                💡 Experimente buscar por "banco", "e-commerce", "contabilidade"...
+              </p>
+            </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button variant="hero" size="lg">
