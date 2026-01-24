@@ -200,26 +200,12 @@ class UnifiedProductService {
       // Buscar todos e filtrar client-side para evitar problemas de índices compostos
       const allProducts = await this.getAllProducts();
       
-      console.log('🔍 getFeaturedProducts Debug:', {
-        totalProducts: allProducts.length,
-        limitCount,
-        onlyBrazilian
-      });
-      
       const featuredProducts = allProducts.filter(product => {
         const isFeatured = product.isFeatured === true;
         const isBrazilian = getCountryCode(product.location?.country || '') === 'BR';
         
-        console.log(`Produto ${product.name}:`, {
-          isFeatured,
-          isBrazilian,
-          passes: isFeatured && (onlyBrazilian ? isBrazilian : true)
-        });
-        
         return isFeatured && (onlyBrazilian ? isBrazilian : true);
       });
-      
-      console.log('🎯 Produtos em destaque encontrados:', featuredProducts.length);
       
       return featuredProducts.slice(0, limitCount);
     } catch (error) {
@@ -270,16 +256,11 @@ class UnifiedProductService {
       // Buscar todos e filtrar client-side para evitar problemas de índices compostos
       let products = await this.getAllProducts();
       
-      console.log('🔍 Search Debug - Total produtos:', products.length);
-      console.log('🔍 Search Debug - Termo:', searchTerm);
-      console.log('🔍 Search Debug - Filtros:', filters);
-      
       // Filtrar por categoria se especificado
       if (filters?.categoryId) {
         products = products.filter(product => 
           product.categoryId === filters.categoryId
         );
-        console.log('🔍 Search Debug - Após filtro categoria:', products.length);
       }
       
       // Filtrar por país se especificado
@@ -287,22 +268,11 @@ class UnifiedProductService {
         products = products.filter(product => 
           getCountryCode(product.location?.country || '') === 'BR'
         );
-        console.log('🔍 Search Debug - Após filtro país:', products.length);
       }
       
       // Filtro por termo de busca (implementação client-side)
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
-        
-        // Verificar alguns produtos antes do filtro
-        if (products.length > 0) {
-          console.log('🔍 Search Debug - Exemplo de produto:', {
-            name: products[0].name,
-            description: products[0].description?.substring(0, 100),
-            tags: products[0].tags,
-            features: products[0].features
-          });
-        }
         
         products = products.filter(product => {
           const nameMatch = product.name.toLowerCase().includes(term);
@@ -311,18 +281,8 @@ class UnifiedProductService {
           const featureMatch = product.features?.some(feature => feature.toLowerCase().includes(term));
           const categoryMatch = product.category?.toLowerCase().includes(term);
           
-          const matches = nameMatch || descMatch || tagMatch || featureMatch || categoryMatch;
-          
-          if (matches) {
-            console.log('🔍 Match encontrado:', product.name, {
-              nameMatch, descMatch, tagMatch, featureMatch, categoryMatch
-            });
-          }
-          
-          return matches;
+          return nameMatch || descMatch || tagMatch || featureMatch || categoryMatch;
         });
-        
-        console.log('🔍 Search Debug - Após filtro busca:', products.length);
       }
 
       return products;
@@ -389,24 +349,8 @@ class UnifiedProductService {
     try {
       const products = await this.getAllProducts();
       
-      // Debug: log dos produtos para verificar estrutura
-      console.log('🔍 Debug - Total de produtos encontrados:', products.length);
-      products.forEach((product, index) => {
-        if (index < 5) { // Log apenas os primeiros 5 para não spam
-          console.log(`Produto ${index + 1}:`, {
-            name: product.name,
-            location: product.location,
-            countryCode: getCountryCode(product.location?.country || ''),
-            isFeatured: product.isFeatured
-          });
-        }
-      });
-      
       const brazilianProducts = products.filter(p => getCountryCode(p.location?.country || '') === 'BR');
       const foreignProducts = products.filter(p => getCountryCode(p.location?.country || '') !== 'BR');
-      
-      console.log('🇧🇷 Produtos brasileiros encontrados:', brazilianProducts.length);
-      console.log('🌍 Produtos estrangeiros encontrados:', foreignProducts.length);
       
       const stats = {
         total: products.length,
@@ -423,8 +367,6 @@ class UnifiedProductService {
         stats.byCategory[category] = (stats.byCategory[category] || 0) + 1;
       });
       
-      console.log('📊 Estatísticas finais:', stats);
-
       return stats;
     } catch (error) {
       console.error('Erro ao obter estatísticas:', error);

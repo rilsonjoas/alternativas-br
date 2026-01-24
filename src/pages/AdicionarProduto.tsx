@@ -14,49 +14,55 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { PlusCircle, Upload, CheckCircle } from "lucide-react";
 import { FormEvent } from "react";
-import emailjs from 'emailjs-com';
+import { submitSuggestion } from "@/hooks/useFirebase";
 
 const AdicionarProduto = () => {
   const { toast } = useToast();
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-    const data = new FormData(form);
-    const payload = Object.fromEntries(data.entries());
+    const formData = new FormData(form);
+    
+    const payload = {
+      name: formData.get("nome") as string,
+      description: formData.get("descricao") as string,
+      category: formData.get("categoria") as string,
+      pricing: formData.get("preco") as string,
+      website: formData.get("site") as string,
+      alternativeTo: formData.get("substitui") as string,
+      contactEmail: formData.get("contato") as string,
+      observations: formData.get("observacoes") as string,
+    };
 
-    emailjs.send(
-      import.meta.env.VITE_EMAILJS_SERVICE_ID,
-      import.meta.env.VITE_EMAILJS_TEMPLATE_PRODUTO,
-      payload,
-      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-    ).then(() => {
+    try {
+      await submitSuggestion(payload);
       toast({
         title: "Sugestão enviada!",
         description: "Recebemos sua sugestão e vamos revisar em breve.",
         variant: "default"
       });
       form.reset();
-    }).catch(() => {
+    } catch (error) {
       toast({
         title: "Erro ao enviar sugestão",
         description: "Tente novamente ou envie para aalternativabr@gmail.com.",
         variant: "destructive"
       });
-    });
+    }
   };
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: "Adicionar Produto - Alternativas BR",
+    name: "Adicionar Produto - AlternativasBR",
     description: "Envie uma sugestão de software brasileiro para o nosso catálogo.",
   };
 
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Adicionar Produto | Alternativas BR"
+        title="Adicionar Produto | AlternativasBR"
         description="Sugira um software brasileiro para entrar no nosso ranking e catálogo."
         canonical="/adicionar"
         jsonLd={jsonLd}

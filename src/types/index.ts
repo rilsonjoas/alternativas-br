@@ -83,7 +83,11 @@ export interface Product {
   
   // Métricas
   views?: number;
+  upvotes?: number;
   userCount?: string;
+  
+  // Monetização
+  affiliateUrl?: string;
   
   // Social
   socialLinks?: SocialLinks;
@@ -110,4 +114,19 @@ export interface ProductFormData {
   metaDescription?: string;
   alternativeTo?: string[];
   socialLinks?: SocialLinks;
+  affiliateUrl?: string;
+}
+
+export interface ToolSuggestion {
+  id?: string;
+  name: string;
+  description: string;
+  website?: string;
+  category: string;
+  pricing: string;
+  alternativeTo?: string;
+  contactEmail?: string;
+  observations?: string;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: Timestamp;
 }

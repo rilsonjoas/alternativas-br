@@ -6,8 +6,8 @@ const Termos = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="Termos de Uso - Alternativas BR"
-        description="Termos de uso e condições de utilização do Alternativas BR"
+        title="Termos de Uso - AlternativasBR"
+        description="Termos de uso e condições de utilização do AlternativasBR"
       />
       
       <Header />
@@ -26,7 +26,7 @@ const Termos = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-foreground mb-4">1. Aceitação dos Termos</h2>
               <p className="text-muted-foreground mb-4">
-                Ao acessar e usar o Alternativas BR, você concorda em cumprir e estar vinculado a estes 
+                Ao acessar e usar o AlternativasBR, você concorda em cumprir e estar vinculado a estes 
                 Termos de Uso. Se você não concordar com qualquer parte destes termos, não deve usar nosso site.
               </p>
             </section>
@@ -34,7 +34,7 @@ const Termos = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-foreground mb-4">2. Descrição do Serviço</h2>
               <p className="text-muted-foreground mb-4">
-                O Alternativas BR é uma plataforma que lista e compara produtos e serviços brasileiros 
+                O AlternativasBR é uma plataforma que lista e compara produtos e serviços brasileiros 
                 como alternativas a soluções internacionais. Nosso objetivo é promover o ecossistema 
                 tecnológico nacional.
               </p>
@@ -76,7 +76,7 @@ const Termos = () => {
                 </p>
                 <ul className="list-disc list-inside space-y-2">
                   <li>Garante que possui os direitos necessários para compartilhar o conteúdo</li>
-                  <li>Concede ao Alternativas BR uma licença não exclusiva para usar o conteúdo</li>
+                  <li>Concede ao AlternativasBR uma licença não exclusiva para usar o conteúdo</li>
                   <li>É responsável pela veracidade e legalidade do conteúdo</li>
                 </ul>
               </div>
@@ -85,7 +85,7 @@ const Termos = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-foreground mb-4">6. Propriedade Intelectual</h2>
               <p className="text-muted-foreground mb-4">
-                Todo o conteúdo do Alternativas BR, incluindo textos, gráficos, logotipos, imagens e 
+                Todo o conteúdo do AlternativasBR, incluindo textos, gráficos, logotipos, imagens e 
                 software, é propriedade nossa ou de nossos licenciadores e está protegido por leis de 
                 direitos autorais e outras leis de propriedade intelectual.
               </p>
@@ -95,7 +95,7 @@ const Termos = () => {
               <h2 className="text-2xl font-semibold text-foreground mb-4">7. Isenção de Responsabilidade</h2>
               <div className="space-y-4 text-muted-foreground">
                 <p>
-                  O Alternativas BR é fornecido "como está" e "conforme disponível". Não garantimos:
+                  O AlternativasBR é fornecido "como está" e "conforme disponível". Não garantimos:
                 </p>
                 <ul className="list-disc list-inside space-y-2">
                   <li>A precisão ou completude das informações listadas</li>

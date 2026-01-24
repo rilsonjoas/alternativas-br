@@ -25,11 +25,11 @@ const Contato = () => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    name: "Contato - Alternativas BR",
+    name: "Contato - AlternativasBR",
     description: "Entre em contato conosco para sugestões, parcerias ou dúvidas sobre alternativas brasileiras de software",
     mainEntity: {
       "@type": "Organization",
-      name: "Alternativas BR",
+      name: "AlternativasBR",
       email: "aalternativabr@gmail.com",
       contactPoint: {
         "@type": "ContactPoint",
@@ -42,7 +42,7 @@ const Contato = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Contato | Alternativas BR"
+        title="Contato | AlternativasBR"
         description="Entre em contato conosco para sugestões, parcerias ou dúvidas sobre alternativas brasileiras de software."
         canonical="/contato"
         jsonLd={jsonLd}

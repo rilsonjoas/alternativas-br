@@ -34,7 +34,6 @@ const ManageForeignProducts: React.FC = () => {
   const [editProduct, setEditProduct] = useState<ForeignProduct | null>(null);
   const [addMode, setAddMode] = useState(false);
   const { data: categories } = useCategories();
-  console.log('Categorias retornadas pelo hook:', categories);
   const [showConfirm, setShowConfirm] = useState<string | null>(null);
 type ForeignProductForm = Omit<Partial<ForeignProduct>, "logo"> & { logo?: string };
 const [form, setForm] = useState<ForeignProductForm>({});

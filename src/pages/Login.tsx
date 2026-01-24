@@ -24,9 +24,7 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     setErro("");
     try {
-      console.log("Tentando login com Google...");
       await loginWithGoogle();
-      console.log("Login com Google bem-sucedido");
       window.location.href = "/dashboard";
     } catch (err) {
       console.error("Erro no login com Google:", err);

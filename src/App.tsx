@@ -17,6 +17,8 @@ import Termos from "./pages/Termos";
 import SearchResults from "./pages/SearchResults";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ManageUnifiedProducts from "./pages/ManageUnifiedProducts";
+import ManageSuggestions from "./pages/ManageSuggestions";
+import WidgetGenerator from "./pages/WidgetGenerator";
 
 // Templates dinâmicos
 import ProductTemplate from "./pages/ProductTemplate";
@@ -29,7 +31,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/alternativas" element={<Alternativas />} />
@@ -51,6 +53,12 @@ const App = () => (
                 <ManageUnifiedProducts />
               </ProtectedRoute>
             } />
+            <Route path="/dashboard/sugestoes" element={
+              <ProtectedRoute adminOnly>
+                <ManageSuggestions />
+              </ProtectedRoute>
+            } />
+            <Route path="/parceiros" element={<WidgetGenerator />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

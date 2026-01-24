@@ -1,22 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useFeaturedProducts } from "@/hooks/useFirebase";
+import ProductCard from "@/components/ProductCard";
 
 const FeaturedAlternatives = () => {
-  // Tentar usar dados do Firebase, com fallback para dados locais
   const { data: firebaseProducts, isLoading, error } = useFeaturedProducts(4);
-  
-  // Debug: log dos dados recebidos
-  console.log('🔍 FeaturedAlternatives Debug:', {
-    firebaseProducts,
-    isLoading,
-    error,
-    productsLength: firebaseProducts?.length
-  });
-  
-  // Se Firebase falhar, usar dados locais
   const featuredProducts = firebaseProducts || [];
 
   if (isLoading) {
@@ -77,75 +66,9 @@ const FeaturedAlternatives = () => {
           )}
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredProducts.map((product) => (
-              <Card
-                key={product.id}
-                className="flex flex-col justify-between h-full shadow-md border border-gray-100 bg-white rounded-2xl transition hover:shadow-xl hover:border-primary/40 cursor-pointer"
-                onClick={() => window.location.href = `/produto/${product.slug}`}
-                tabIndex={0}
-                role="button"
-                aria-label={`Ver detalhes de ${product.name}`}
-              >
-                <CardHeader className="flex flex-row items-center gap-4 pb-2">
-                  <div className="w-14 h-14 flex items-center justify-center rounded-full bg-gray-50 border border-gray-200 shadow-sm">
-                    {product.logo ? (
-                      <img src={product.logo} alt={product.name} className="w-12 h-12 object-contain rounded-full" />
-                    ) : (
-                      <span className="text-3xl font-bold text-gray-400">{product.name[0]}</span>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-xl font-bold text-gray-900 mb-2 leading-tight">{product.name}</CardTitle>
-                    <div className="flex flex-wrap gap-2">
-                      {product.tags?.map((tag) => (
-                        <Badge key={tag} className="bg-gray-100 text-gray-700 border border-gray-200 px-3 py-1 text-xs font-semibold rounded-full shadow-sm">{tag}</Badge>
-                      ))}
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-3 pb-5">
-                  <p className="text-sm text-gray-700 mb-1 min-h-[40px]">{product.description}</p>
-                  
-                  {/* Seção Alternativa a */}
-                  {product.alternativeTo && product.alternativeTo.length > 0 && (
-                    <div className="mb-2">
-                      <p className="text-xs font-medium text-gray-600 mb-1">Alternativa brasileira a:</p>
-                      <div className="flex flex-wrap gap-1">
-                        {product.alternativeTo.slice(0, 3).map((alternative, index) => (
-                          <Badge 
-                            key={index} 
-                            variant="outline" 
-                            className="text-xs bg-blue-50 text-blue-700 border-blue-200 px-2 py-0.5"
-                          >
-                            {alternative}
-                          </Badge>
-                        ))}
-                        {product.alternativeTo.length > 3 && (
-                          <Badge variant="outline" className="text-xs bg-gray-50 text-gray-600 border-gray-200 px-2 py-0.5">
-                            +{product.alternativeTo.length - 3}
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                  
-                  <div className="flex flex-wrap gap-2 mb-1">
-                    {product.features?.map((feature) => (
-                      <Badge key={feature} className="bg-primary/10 text-primary border border-primary/20 px-3 py-1 text-xs font-semibold rounded-full shadow-sm">{feature}</Badge>
-                    ))}
-                  </div>
-                  <Button
-                    variant="outline"
-                    className="mt-3 w-full bg-primary/5 text-primary border-primary hover:bg-primary/20 hover:text-primary-dark transition rounded-xl font-bold text-sm py-2 shadow"
-                    asChild
-                  >
-                    <a href={product.website} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}>
-                      Visitar site
-                    </a>
-                  </Button>
-                </CardContent>
-              </Card>
+              <ProductCard key={product.id} product={product} />
             ))}
         </div>
         

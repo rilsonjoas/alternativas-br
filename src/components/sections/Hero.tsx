@@ -5,6 +5,7 @@ import heroImage from "@/assets/hero-image.jpg";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { collection, getCountFromServer } from "firebase/firestore";
+import { Flag } from "lucide-react";
 
 
 const Hero = () => {
@@ -31,8 +32,8 @@ const Hero = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div className="text-center lg:text-left">
-            <Badge variant="tech" className="mb-6">
-              🇧🇷 Tecnologia Nacional
+            <Badge variant="tech" className="mb-6 gap-2">
+              <Flag className="w-4 h-4" /> Tecnologia Nacional
             </Badge>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
@@ -57,7 +58,7 @@ const Hero = () => {
                 className="w-full"
               />
               <p className="text-xs text-muted-foreground mt-3 text-center lg:text-left px-2 lg:px-0">
-                💡 Experimente buscar por "banco", "e-commerce", "contabilidade"...
+                Experimente buscar por "banco", "e-commerce", "contabilidade"...
               </p>
             </div>
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, X } from "lucide-react";
+import { Search, X, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
@@ -161,7 +161,7 @@ const SearchBar = ({
         {showButton && (
           <Button
             onClick={handleSearch}
-            size={size}
+            size={size === "md" ? "default" : size}
             className={cn(
               "absolute top-1/2 transform -translate-y-1/2 transition-all duration-200",
               variant === "hero" ? "right-2" : "right-1",
@@ -210,15 +210,15 @@ const SearchBar = ({
                 <div className="flex-1 min-w-0">
                   <h4 className="font-semibold text-sm truncate text-foreground">{product.name}</h4>
                   <p className="text-xs text-muted-foreground truncate leading-relaxed">
-                    {product.shortDescription || product.description}
+                    {product.description}
                   </p>
                   <div className="flex items-center gap-2 mt-2 flex-wrap">
                     <span className="text-xs bg-muted/60 px-2 py-1 rounded-md font-medium">
-                      {product.category}
+                      {product.tags?.[0] || 'Software'}
                     </span>
-                    {product.location.countryCode === "BR" && (
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-md font-medium">
-                        🇧🇷 Nacional
+                    {product.location?.country === "Brasil" && (
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-md font-medium flex items-center gap-1">
+                        <Flag className="w-3 h-3" /> Nacional
                       </span>
                     )}
                   </div>

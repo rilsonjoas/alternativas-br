@@ -12,13 +12,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import SearchBar from "@/components/SearchBar";
 import { Product } from "@/types";
-import { LogOut, Shield } from "lucide-react";
+import { LogOut, Shield, Search, Clock } from "lucide-react";
 
 const Header = () => {
   const navigate = useNavigate();
   const { user, logout, loading } = useAuth();
   
-  const handleSearchResultClick = (result: Product, type: 'product') => {
+  const handleSearchResultClick = (result: Product) => {
     navigate(`/produto/${result.slug}`);
   };
 
@@ -50,7 +50,7 @@ const Header = () => {
               <span className="text-primary-foreground font-bold text-sm">BR</span>
             </div>
             <div>
-              <span className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">AlternativaBR</span>
+              <span className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">AlternativasBR</span>
               <p className="text-xs text-muted-foreground -mt-1">Tecnologia Brasileira</p>
             </div>
           </Link>
@@ -61,7 +61,7 @@ const Header = () => {
               size="sm" 
               placeholder="Buscar produtos..."
               showButton={false}
-              onResultClick={handleSearchResultClick}
+              onResultClick={(product: Product) => handleSearchResultClick(product)}
             />
           </div>
           
@@ -110,6 +110,12 @@ const Header = () => {
                         Dashboard
                       </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/dashboard/sugestoes" className="cursor-pointer">
+                        <Clock className="mr-2 h-4 w-4" />
+                        Sugestões
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem 
                       className="cursor-pointer text-destructive focus:text-destructive"
@@ -127,7 +133,9 @@ const Header = () => {
           {/* Mobile menu button and search */}
           <div className="md:hidden flex items-center gap-2">
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/buscar">🔍</Link>
+              <Link to="/buscar" className="flex items-center justify-center">
+                <Search className="w-5 h-5" />
+              </Link>
             </Button>
             
             {/* Admin mobile avatar - only for admins */}
@@ -146,7 +154,7 @@ const Header = () => {
             size="sm" 
             placeholder="Buscar produtos..."
             showButton={false}
-            onResultClick={handleSearchResultClick}
+            onResultClick={(product: Product) => handleSearchResultClick(product)}
           />
         </div>
       </div>

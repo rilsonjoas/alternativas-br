@@ -6,8 +6,8 @@ const Privacidade = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="Política de Privacidade - Alternativas BR"
-        description="Política de privacidade e proteção de dados do Alternativas BR"
+        title="Política de Privacidade - AlternativasBR"
+        description="Política de privacidade e proteção de dados do AlternativasBR"
       />
       
       <Header />
@@ -26,7 +26,7 @@ const Privacidade = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-foreground mb-4">1. Introdução</h2>
               <p className="text-muted-foreground mb-4">
-                O Alternativas BR respeita sua privacidade e está comprometido em proteger suas informações pessoais. 
+                O AlternativasBR respeita sua privacidade e está comprometido em proteger suas informações pessoais. 
                 Esta Política de Privacidade explica como coletamos, usamos, armazenamos e protegemos suas informações 
                 quando você usa nosso site.
               </p>

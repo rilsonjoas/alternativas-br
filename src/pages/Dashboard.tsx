@@ -41,7 +41,7 @@ const Dashboard: React.FC = () => {
             Dashboard
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Gerencie todos os produtos da plataforma Alternativas BR de forma unificada
+            Gerencie todos os produtos da plataforma AlternativasBR de forma unificada
           </p>
         </div>
 

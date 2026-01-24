@@ -3,14 +3,7 @@ import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import firebaseConfig from './firebase-config';
 
-// Debug: Log da configuração (apenas para desenvolvimento)
-if (import.meta.env.DEV) {
-  console.log('Firebase Config:', {
-    apiKey: firebaseConfig.apiKey ? '***' : 'MISSING',
-    authDomain: firebaseConfig.authDomain,
-    projectId: firebaseConfig.projectId,
-  });
-}
+// Configuração do Firebase inicializada
 
 // Verificar se as configurações essenciais existem
 if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
