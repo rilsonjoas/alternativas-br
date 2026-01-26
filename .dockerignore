@@ -1,0 +1,22 @@
+# Dependências (serão instaladas dentro do container)
+node_modules
+dist
+build
+
+# Controle de versão
+.git
+.gitignore
+
+# Ambiente local
+.env.local
+.env
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Docs gerados
+coverage

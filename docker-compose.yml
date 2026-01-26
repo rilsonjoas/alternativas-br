@@ -1,0 +1,19 @@
+
+
+services:
+  # Nome do nosso serviço
+  web:
+    # Como construir? Use o Dockerfile na pasta atual
+    build: .
+    
+    # Mapeamento de Portas
+    # Porta do seu PC (3000) -> Porta do Container (80)
+    ports:
+      - "3000:80"
+    
+    # Reiniciar sempre se der erro (bom para produção)
+    restart: always
+    
+    # Variáveis de ambiente (opcional, mas boa prática)
+    environment:
+      - NODE_ENV=production

@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { collection, getDocs, query, where, orderBy, limit, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { Product, ToolSuggestion } from '@/types';
 import { db } from '@/lib/firebase';
+import { filterProducts } from '@/lib/product-filters';
 
 // Hook para buscar produtos em destaque
 export const useFeaturedProducts = (limitCount: number = 6) => {
@@ -88,16 +89,11 @@ export const useProductSearch = (searchQuery: string) => {
       
       if (!searchQuery) return allProducts;
       
-      const lowerQuery = searchQuery.toLowerCase();
-      return allProducts.filter(product => {
-        const searchableText = [
-          product.name,
-          product.description,
-          ...(product.features || []),
-          ...(product.tags || [])
-        ].join(' ').toLowerCase();
-        return searchableText.includes(lowerQuery);
-      });
+      return filterProducts(allProducts, searchQuery);
+      /* 
+       * Lógica antiga removida: refatorada para src/lib/product-filters.ts
+       * para permitir testes unitários isolados.
+       */
     },
     staleTime: 5 * 60 * 1000, // 5 minutos
     enabled: searchQuery.length >= 2,
