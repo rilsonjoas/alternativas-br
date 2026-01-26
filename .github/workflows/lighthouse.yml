@@ -34,5 +34,11 @@ jobs:
         uses: treosh/lighthouse-ci-action@v10
         with:
           configPath: './lighthouserc.json'
-          uploadArtifacts: true 
-          # temporaryPublicStorage: true # Desativado temporariamente devido a erro 400
+          uploadArtifacts: false
+          
+      - name: Upload Lighthouse Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-report
+          path: ./lhci_reports
