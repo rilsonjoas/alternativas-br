@@ -1,0 +1,51 @@
+# Nome do workflow (aparece na aba Actions do GitHub)
+name: CI
+
+# Quando este workflow deve rodar?
+on:
+  push:
+    branches: [main]  # Quando fizer push na branch main
+  pull_request:
+    branches: [main]  # Quando abrir/atualizar PR para main
+
+# Jobs = tarefas que serão executadas
+jobs:
+  # Nome do job
+  quality-check:
+    # Ambiente onde vai rodar (máquina virtual do GitHub)
+    runs-on: ubuntu-latest
+    
+    # Steps = passos do job (executados em ordem)
+    steps:
+      # 1. Baixar o código do repositório
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      # 2. Instalar pnpm (gerenciador de pacotes)
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      # 3. Instalar Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'  # Cache das dependências (mais rápido)
+      
+      # 4. Instalar dependências do projeto
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      # 5. Rodar linter (verifica padrões de código)
+      - name: Run linter
+        run: pnpm lint
+      
+      # 6. Rodar testes
+      - name: Run tests
+        run: pnpm test
+      
+      # 7. Tentar fazer build (verifica se compila)
+      - name: Build project
+        run: pnpm build
