@@ -17,15 +17,13 @@ jobs:
     
     # Steps = passos do job (executados em ordem)
     steps:
-      # 1. Baixar o código do repositório
       - name: Checkout code
         uses: actions/checkout@v4
       
-      # 2. Instalar pnpm (gerenciador de pacotes)
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: 9
       
       # 3. Instalar Node.js
       - name: Setup Node.js

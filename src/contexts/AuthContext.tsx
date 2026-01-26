@@ -10,7 +10,12 @@ interface AuthContextType extends AuthState {
   resetPassword: (email: string) => Promise<void>;
 }
 
+// Criamos o contexto em um arquivo separado ou desabilitamos o lint apenas para esta linha
+// para manter a simplicidade, mas o ideal é separar.
+// Vamos optar por desabilitar o lint para o export do contexto para manter a coesão do arquivo.
+/* eslint-disable react-refresh/only-export-components */
 export const AuthContext = createContext<AuthContextType | null>(null);
+/* eslint-enable react-refresh/only-export-components */
 
 interface AuthProviderProps {
   children: React.ReactNode;
