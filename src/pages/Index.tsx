@@ -1,4 +1,5 @@
 import Header from "@/components/layout/Header";
+import SEO from "@/components/SEO";
 import Hero from "@/components/sections/Hero";
 import FeaturedAlternatives from "@/components/sections/FeaturedAlternatives";
 import Footer from "@/components/layout/Footer";

@@ -1,9 +1,12 @@
 {
   "ci": {
     "collect": {
-      "startServerCommand": "npm run preview",
-      "url": ["http://localhost:4173/"],
-      "numberOfRuns": 3
+      "startServerCommand": "pnpm preview --port 4173 --host 127.0.0.1",
+      "url": ["http://127.0.0.1:4173/"],
+      "numberOfRuns": 3,
+      "settings": {
+        "chromeFlags": "--no-sandbox --headless --disable-gpu"
+      }
     },
     "assert": {
       "preset": "lighthouse:recommended",
