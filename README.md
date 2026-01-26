@@ -1,5 +1,7 @@
 # AlternativasBR 🇧🇷
 
+![CI](https://github.com/rilsonjoas/alternativas-br/actions/workflows/ci.yml/badge.svg)
+
 > **Descubra o melhor da tecnologia brasileira.** O AlternativasBR é uma plataforma dedicada a mapear, curar e promover soluções tecnológicas brasileiras de alta qualidade, oferecendo alternativas nacionais robustas para ferramentas internacionais consagradas.
 
 ---
