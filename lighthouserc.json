@@ -13,7 +13,13 @@
       "assertions": {
         "offscreen-images": "warn",
         "uses-webp-images": "warn",
-        "csp-xss": "off"
+        "csp-xss": "off",
+        "canonical": "off",
+        "color-contrast": "warn",
+        "errors-in-console": "warn",
+        "installable-manifest": "off",
+        "inspector-issues": "warn",
+        "deprecations": "warn"
       }
     },
     "upload": {

@@ -28,7 +28,7 @@ All colors MUST be HSL.
     --secondary-foreground: 155 25% 15%;
 
     --muted: 155 10% 96%;
-    --muted-foreground: 155 15% 45%;
+    --muted-foreground: 155 15% 35%; /* Escurecido para passar no contraste WCAG */
 
     /* Warm accent - inspired by Brazilian gold */
     --accent: 45 85% 88%;

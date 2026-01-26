@@ -25,7 +25,15 @@ const SEO: React.FC<SEOProps> = ({
   const getAbsoluteUrl = (path?: string) => {
     if (!path) return undefined;
     if (path.startsWith('http')) return path;
-    return `${window.location.origin}${path}`;
+    
+    // Preferência: Variável de ambiente -> Domínio de Produção -> Window Origin (localhost)
+    const baseUrl = import.meta.env.VITE_SITE_URL || 'https://www.alternativasbr.com.br';
+    
+    // Em desenvolvimento (localhost), usamos window.location.origin para testes passarem,
+    // mas na Vercel/Produção queremos o domínio real.
+    const origin = import.meta.env.DEV ? window.location.origin : baseUrl;
+
+    return `${origin}${path}`;
   };
 
   const absoluteCanonical = getAbsoluteUrl(canonical);
