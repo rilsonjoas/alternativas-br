@@ -16,7 +16,11 @@ describe('filterProducts', () => {
       website: '',
       slug: 'contaazul',
       upvotes: 0,
-      createdAt: null as any
+      createdAt: undefined,
+      location: { country: 'Brasil' },
+      companyInfo: {},
+      pricing: { type: 'paid', currency: 'BRL', description: 'Pago' },
+      foundedYear: 2011
     },
     {
       id: '2',
@@ -29,7 +33,11 @@ describe('filterProducts', () => {
       website: '',
       slug: 'nuvemshop',
       upvotes: 0,
-      createdAt: null as any
+      createdAt: undefined,
+      location: { country: 'Brasil' },
+      companyInfo: {},
+      pricing: { type: 'paid', currency: 'BRL', description: 'Pago' },
+      foundedYear: 2011
     },
     {
       id: '3',
@@ -42,7 +50,11 @@ describe('filterProducts', () => {
       website: '',
       slug: 'rd-station',
       upvotes: 0,
-      createdAt: null as any
+      createdAt: undefined,
+      location: { country: 'Brasil' },
+      companyInfo: {},
+      pricing: { type: 'paid', currency: 'BRL', description: 'Pago' },
+      foundedYear: 2012
     }
   ];
 

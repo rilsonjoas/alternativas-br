@@ -10,7 +10,7 @@ const mockToast = vi.fn();
 
 // Mock do hook useFirebase
 vi.mock('@/hooks/useFirebase', () => ({
-  voteProduct: (...args: any[]) => mockVoteProduct(...args),
+  voteProduct: (...args: unknown[]) => mockVoteProduct(...args),
   useHasVoted: (productId: string) => ({
     // Simula que para o produto "voted-id" o usuário já votou
     data: productId === 'voted-id',
@@ -48,11 +48,15 @@ describe('ProductCard', () => {
     description: 'Um software brasileiro incrível',
     website: 'https://softwarebr.com.br',
     tags: ['SaaS', 'B2B'],
+    features: ['Feature 1', 'Feature 2'],
     upvotes: 10,
-    createdAt: { toMillis: () => Date.now() } as any,
+    createdAt: { toMillis: () => Date.now() } as unknown as Product['createdAt'],
     isFeatured: false,
     logo: 'https://example.com/logo.png',
-    status: 'published'
+    location: { country: 'Brasil' },
+    companyInfo: {},
+    pricing: { type: 'free', currency: 'BRL', description: 'Free' },
+    foundedYear: 2020
   };
 
   beforeEach(() => {
