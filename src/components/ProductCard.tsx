@@ -29,10 +29,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
       queryClient.invalidateQueries({ queryKey: ["hasVoted", product.id] });
       queryClient.invalidateQueries({ queryKey: ["featuredProducts"] });
       queryClient.invalidateQueries({ queryKey: ["products"] });
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Tente novamente mais tarde.";
       toast({ 
         title: "Erro ao votar", 
-        description: err.message || "Tente novamente mais tarde.", 
+        description: errorMessage, 
         variant: "destructive" 
       });
     }

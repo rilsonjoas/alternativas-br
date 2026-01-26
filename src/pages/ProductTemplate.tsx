@@ -53,10 +53,11 @@ const ProductTemplate = () => {
       toast({ title: "Curtida registrada!", description: "Obrigado por apoiar a tecnologia nacional. ❤️" });
       queryClient.invalidateQueries({ queryKey: ["product", slug] });
       queryClient.invalidateQueries({ queryKey: ["hasVoted", productId] });
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Tente novamente mais tarde.";
       toast({ 
         title: "Erro ao votar", 
-        description: err.message || "Tente novamente mais tarde.", 
+        description: errorMessage, 
         variant: "destructive" 
       });
     }
