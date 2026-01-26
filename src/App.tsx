@@ -23,49 +23,59 @@ import WidgetGenerator from "./pages/WidgetGenerator";
 // Templates dinâmicos
 import ProductTemplate from "./pages/ProductTemplate";
 
+import { HelmetProvider } from "react-helmet-async";
+import { initGA } from "@/lib/analytics";
+import { RouteTracker } from "@/components/RouteTracker";
+
+// Inicializa GA4
+initGA();
+
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/alternativas" element={<Alternativas />} />
-            <Route path="/sobre" element={<Sobre />} />
-            <Route path="/adicionar" element={<AdicionarProduto />} />
-            <Route path="/contato" element={<Contato />} />
-            <Route path="/buscar" element={<SearchResults />} />
-            <Route path="/produto/:slug" element={<ProductTemplate />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/privacidade" element={<Privacidade />} />
-            <Route path="/termos" element={<Termos />} />
-            <Route path="/dashboard" element={
-              <ProtectedRoute adminOnly>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/dashboard/produtos" element={
-              <ProtectedRoute adminOnly>
-                <ManageUnifiedProducts />
-              </ProtectedRoute>
-            } />
-            <Route path="/dashboard/sugestoes" element={
-              <ProtectedRoute adminOnly>
-                <ManageSuggestions />
-              </ProtectedRoute>
-            } />
-            <Route path="/parceiros" element={<WidgetGenerator />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+  <HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <RouteTracker />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/alternativas" element={<Alternativas />} />
+              <Route path="/sobre" element={<Sobre />} />
+              <Route path="/adicionar" element={<AdicionarProduto />} />
+              <Route path="/contato" element={<Contato />} />
+              <Route path="/buscar" element={<SearchResults />} />
+              <Route path="/produto/:slug" element={<ProductTemplate />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/privacidade" element={<Privacidade />} />
+              <Route path="/termos" element={<Termos />} />
+              <Route path="/dashboard" element={
+                <ProtectedRoute adminOnly>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/produtos" element={
+                <ProtectedRoute adminOnly>
+                  <ManageUnifiedProducts />
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/sugestoes" element={
+                <ProtectedRoute adminOnly>
+                  <ManageSuggestions />
+                </ProtectedRoute>
+              } />
+              <Route path="/parceiros" element={<WidgetGenerator />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  </HelmetProvider>
 );
 
 export default App;
