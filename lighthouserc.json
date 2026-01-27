@@ -25,7 +25,12 @@
         "maskable-icon": "off",
         "themed-omnibox": "off",
         "link-name": "warn",
-        "tap-targets": "warn"
+        "tap-targets": "warn",
+        "unminified-javascript": "warn",
+        "unused-css-rules": "warn",
+        "unused-javascript": "warn",
+        "uses-optimized-images": "warn",
+        "unsized-images": "warn"
       }
     },
     "upload": {

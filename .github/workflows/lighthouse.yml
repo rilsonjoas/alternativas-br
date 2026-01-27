@@ -41,4 +41,4 @@ jobs:
         if: always()
         with:
           name: lighthouse-report
-          path: ./lhci_reports
+          path: lhci_reports
