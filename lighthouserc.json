@@ -19,7 +19,13 @@
         "errors-in-console": "warn",
         "installable-manifest": "off",
         "inspector-issues": "warn",
-        "deprecations": "warn"
+        "deprecations": "warn",
+        "service-worker": "off",
+        "splash-screen": "off",
+        "maskable-icon": "off",
+        "themed-omnibox": "off",
+        "link-name": "warn",
+        "tap-targets": "warn"
       }
     },
     "upload": {

@@ -302,12 +302,14 @@ const ProductTemplate = () => {
                     <Button 
                       variant="outline" size="icon" className="h-11 w-full rounded-xl border-gray-200 hover:bg-green-50 hover:text-green-600 hover:border-green-200"
                       onClick={() => window.open(`https://api.whatsapp.com/send?text=Confira o ${product.name} no AlternativasBR: ${window.location.href}`, '_blank')}
+                      aria-label="Compartilhar no WhatsApp"
                     >
                       <MessageCircle className="w-4 h-4" />
                     </Button>
                     <Button 
                       variant="outline" size="icon" className="h-11 w-full rounded-xl border-gray-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200"
                       onClick={() => window.open(`https://twitter.com/intent/tweet?url=${window.location.href}`, '_blank')}
+                      aria-label="Compartilhar no Twitter"
                     >
                       <Twitter className="w-4 h-4" />
                     </Button>
@@ -321,6 +323,7 @@ const ProductTemplate = () => {
                           toast({ title: "Link copiado!" });
                         }
                       }}
+                      aria-label="Compartilhar link"
                     >
                       <Share2 className="w-4 h-4" />
                     </Button>
