@@ -1,0 +1,21 @@
+{
+  "name": "AlternativasBR",
+  "short_name": "AlternativasBR",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d7042",
+  "description": "Descubra as melhores alternativas brasileiras às ferramentas internacionais.",
+  "icons": [
+    {
+      "src": "/Logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/Logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

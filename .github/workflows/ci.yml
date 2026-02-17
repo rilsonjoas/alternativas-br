@@ -34,16 +34,17 @@ jobs:
       
       # 4. Instalar dependências do projeto
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      
-      # 5. Rodar linter (verifica padrões de código)
-      - name: Run linter
-        run: pnpm lint
+        run: pnpm install
+
+      - name: Build Web
+        run: pnpm build:web
+
+      - name: Lint Web
+        run: cd apps/web && pnpm lint
+
+      - name: Test Web
+        run: pnpm test:web
       
       # 6. Rodar testes
-      - name: Run tests
-        run: pnpm test
-      
-      # 7. Tentar fazer build (verifica se compila)
-      - name: Build project
-        run: pnpm build
+      - name: Build All
+        run: pnpm -r build

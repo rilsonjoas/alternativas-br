@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://alternativas-br.com.br/sitemap.xml
-
-# Crawl-delay for respectful bots
-Crawl-delay: 1
