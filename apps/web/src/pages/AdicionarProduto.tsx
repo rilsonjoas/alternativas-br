@@ -83,20 +83,20 @@ const AdicionarProduto = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 grid gap-8 md:grid-cols-3">
             <form onSubmit={onSubmit} className="md:col-span-2 space-y-5">
               <div>
-                <label className="block text-sm font-medium mb-2">Nome do produto</label>
+                <label htmlFor="nome" className="block text-sm font-medium mb-2">Nome do produto</label>
                 <Input name="nome" id="nome" placeholder="Ex.: Pipefy" required />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Descrição</label>
+                <label htmlFor="descricao" className="block text-sm font-medium mb-2">Descrição</label>
                 <Textarea name="descricao" id="descricao" placeholder="O que esse produto faz?" required rows={5} />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Categoria</label>
+                  <label htmlFor="categoria" className="block text-sm font-medium mb-2">Categoria</label>
                   <Select name="categoria" required>
-                    <SelectTrigger>
+                    <SelectTrigger id="categoria">
                       <SelectValue placeholder="Selecione a categoria" />
                     </SelectTrigger>
                     <SelectContent>
@@ -110,24 +110,27 @@ const AdicionarProduto = () => {
                   </Select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Modelo de preço</label>
+                  <label htmlFor="preco" className="block text-sm font-medium mb-2">Modelo de preço</label>
                 <Input name="preco" id="preco" placeholder="Ex.: Gratuito, Freemium, Pago" required />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Site oficial</label>
+                  <label htmlFor="site" className="block text-sm font-medium mb-2">Site oficial</label>
                 <Input name="site" id="site" type="url" placeholder="URL oficial (opcional)" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Substitui (separar por vírgulas)</label>
+                  <label htmlFor="substitui" className="block text-sm font-medium mb-2">Substitui (separar por vírgulas)</label>
                   <Input name="substitui" id="substitui" placeholder="Ex.: Trello, Jira" />
                 </div>
               </div>
-                <Input name="contato" id="contato" placeholder="Seu email para contato (opcional)" />
               <div>
-                <label className="block text-sm font-medium mb-2">Logo (opcional)</label>
+                <label htmlFor="contato" className="block text-sm font-medium mb-2">Email para contato (opcional)</label>
+                <Input name="contato" id="contato" placeholder="Seu email para contato (opcional)" />
+              </div>
+              <div>
+                <label htmlFor="logo" className="block text-sm font-medium mb-2">Logo (opcional)</label>
                 <div className="flex items-center gap-3">
                 <Input name="logo" id="logo" type="file" accept="image/*" />
                   <Button type="button" variant="outline" onClick={() => alert("Upload real em breve")}> 
@@ -135,7 +138,10 @@ const AdicionarProduto = () => {
                   </Button>
                 </div>
               </div>
+              <div>
+                <label htmlFor="observacoes" className="block text-sm font-medium mb-2">Observações (opcional)</label>
                 <Textarea name="observacoes" id="observacoes" placeholder="Observações (opcional)" rows={3} />
+              </div>
               <div className="flex justify-end">
                 <Button type="submit" variant="accent">
                   <CheckCircle /> Enviar sugestão

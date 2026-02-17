@@ -200,8 +200,8 @@ const [form, setForm] = useState<ProductForm>({});
                 </select>
                 {/* Upload para logo */}
                 <div>
-                  <label className="block mb-1">Logo (URL ou upload)</label>
-                  <input type="text" placeholder="URL da logo ou emoji" value={form.logo || ""} onChange={e => setForm(f => ({ ...f, logo: e.target.value }))} className="w-full p-2 border border-border rounded-xl bg-muted/50 text-foreground mb-2" />
+                  <label htmlFor="logo-url" className="block mb-1">Logo (URL ou upload)</label>
+                  <input id="logo-url" type="text" placeholder="URL da logo ou emoji" value={form.logo || ""} onChange={e => setForm(f => ({ ...f, logo: e.target.value }))} className="w-full p-2 border border-border rounded-xl bg-muted/50 text-foreground mb-2" />
                   <input type="file" accept="image/*" onChange={async e => {
                     const file = e.target.files?.[0];
                     if (file) {
@@ -213,8 +213,8 @@ const [form, setForm] = useState<ProductForm>({});
                 </div>
                 {/* Upload para screenshots */}
                 <div>
-                  <label className="block mb-1">Screenshots (URLs ou upload múltiplo)</label>
-                  <input type="text" placeholder="URLs separadas por vírgula" value={form.screenshots ? form.screenshots.join(", ") : ""} onChange={e => setForm(f => ({ ...f, screenshots: e.target.value.split(",").map(s => s.trim()) }))} className="w-full p-2 border border-border rounded-xl bg-muted/50 text-foreground mb-2" />
+                  <label htmlFor="screenshots-url" className="block mb-1">Screenshots (URLs ou upload múltiplo)</label>
+                  <input id="screenshots-url" type="text" placeholder="URLs separadas por vírgula" value={form.screenshots ? form.screenshots.join(", ") : ""} onChange={e => setForm(f => ({ ...f, screenshots: e.target.value.split(",").map(s => s.trim()) }))} className="w-full p-2 border border-border rounded-xl bg-muted/50 text-foreground mb-2" />
                   <input type="file" accept="image/*" multiple onChange={async e => {
                     const files = Array.from(e.target.files || []);
                     if (files.length) {

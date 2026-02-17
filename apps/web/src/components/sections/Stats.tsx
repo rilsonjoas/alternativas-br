@@ -43,8 +43,8 @@ const Stats = () => {
     <section className="py-20 bg-gradient-card">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {stats.map((stat, index) => (
-            <Card key={index} className="text-center border-border/50 bg-background/50 backdrop-blur-sm">
+          {stats.map((stat) => (
+            <Card key={stat.label} className="text-center border-border/50 bg-background/50 backdrop-blur-sm">
               <CardContent className="pt-6">
                 <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
                   {stat.number}

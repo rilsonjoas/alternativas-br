@@ -120,8 +120,8 @@ const ProdutoPage = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {product.pricing?.map((plan: PricingPlan, index: number) => (
-                  <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                {product.pricing?.map((plan: PricingPlan) => (
+                  <div key={plan.name} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
                     <div>
                       <div className="font-semibold">{plan.name}</div>
                       <div className="text-sm text-muted-foreground">{plan.description}</div>
@@ -168,9 +168,9 @@ const ProdutoPage = () => {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {product.alternativeTo.map((alternative: string, index: number) => (
+                  {product.alternativeTo.map((alternative: string) => (
                     <Badge 
-                      key={index} 
+                      key={alternative} 
                       variant="secondary" 
                       className="text-sm py-1 px-3 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800"
                     >

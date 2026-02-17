@@ -30,10 +30,12 @@ interface AdvancedSearchProps {
   className?: string;
 }
 
+const EMPTY_FILTERS: AdvancedSearchFilters = {};
+
 const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
   onSearch,
   onSuggestionSelect,
-  initialFilters = {},
+  initialFilters = EMPTY_FILTERS,
   className
 }) => {
   const [filters, setFilters] = useState<AdvancedSearchFilters>(initialFilters);
@@ -274,7 +276,7 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {/* Categorias */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium flex items-center">
+                    <label htmlFor="category-filter" className="text-sm font-medium flex items-center">
                       <Grid3X3 className="w-4 h-4 mr-1" />
                       Categorias
                     </label>
@@ -303,7 +305,7 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
                   {/* Rating */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium flex items-center">
+                    <label htmlFor="rating-filter" className="text-sm font-medium flex items-center">
                       <Star className="w-4 h-4 mr-1" />
                       Avaliação Mínima
                     </label>
@@ -324,14 +326,14 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
                   {/* Preços */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">💰 Modelo de Preço</label>
+                    <label htmlFor="pricing-filter" className="text-sm font-medium">💰 Modelo de Preço</label>
                     <Select
                       value={filters.pricing || ''}
                       onValueChange={(value) => 
                         setFilters(prev => ({ ...prev, pricing: value as 'free' | 'freemium' | 'paid' | 'enterprise' }))
                       }
                     >
-                      <SelectTrigger>
+                      <SelectTrigger id="pricing-filter">
                         <SelectValue placeholder="Todos os preços" />
                       </SelectTrigger>
                       <SelectContent>
@@ -347,7 +349,7 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
                 {/* Tags */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium flex items-center">
+                  <label htmlFor="tags-filter" className="text-sm font-medium flex items-center">
                     <Tag className="w-4 h-4 mr-1" />
                     Tags
                   </label>
@@ -375,14 +377,14 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
                 {/* Ordenação */}
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">🔄 Ordenar por</label>
+                    <label htmlFor="sort-by" className="text-sm font-medium">🔄 Ordenar por</label>
                     <Select
                       value={filters.sortBy || 'relevance'}
                       onValueChange={(value) => 
                         setFilters(prev => ({ ...prev, sortBy: value as 'relevance' | 'rating' | 'name' | 'popularity' | 'newest' }))
                       }
                     >
-                      <SelectTrigger>
+                      <SelectTrigger id="sort-by">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -396,14 +398,14 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">⬆️ Ordem</label>
+                    <label htmlFor="sort-order" className="text-sm font-medium">⬆️ Ordem</label>
                     <Select
                       value={filters.sortOrder || 'desc'}
                       onValueChange={(value) => 
                         setFilters(prev => ({ ...prev, sortOrder: value as 'asc' | 'desc' }))
                       }
                     >
-                      <SelectTrigger>
+                      <SelectTrigger id="sort-order">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>

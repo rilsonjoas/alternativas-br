@@ -74,28 +74,22 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     return null
   }
 
-  return (
-    <style
-      dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
-          .map(
-            ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
-${colorConfig
-  .map(([key, itemConfig]) => {
-    const color =
-      itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
-      itemConfig.color
-    return color ? `  --color-${key}: ${color};` : null
-  })
-  .join("\n")}
-}
-`
-          )
-          .join("\n"),
-      }}
-    />
-  )
+  // Build CSS rules safely without dangerouslySetInnerHTML
+  const cssRules = Object.entries(THEMES).map(([theme, prefix]) => {
+    const variables = colorConfig
+      .map(([key, itemConfig]) => {
+        const color =
+          itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
+          itemConfig.color
+        return color ? `--color-${key}: ${color};` : null
+      })
+      .filter(Boolean)
+      .join(" ")
+    
+    return variables ? `${prefix} [data-chart="${id}"] { ${variables} }` : null
+  }).filter(Boolean).join(" ")
+
+  return <style>{cssRules}</style>
 }
 
 const ChartTooltip = RechartsPrimitive.Tooltip

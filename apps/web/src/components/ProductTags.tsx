@@ -119,10 +119,12 @@ const CertificationBadge: React.FC<{ certification: ProductCertification }> = ({
   );
 };
 
+const EMPTY_CERTIFICATIONS: ProductCertification[] = [];
+
 export const ProductTags: React.FC<ProductTagsProps> = ({ 
   tags, 
   location, 
-  certifications = [], 
+  certifications = EMPTY_CERTIFICATIONS, 
   className = "",
   maxVisible = 8,
   showTooltips = true 

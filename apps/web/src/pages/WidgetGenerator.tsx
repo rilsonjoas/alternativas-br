@@ -51,8 +51,9 @@ const WidgetGenerator = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <label className="text-sm font-medium mb-2 block">Slug do Produto</label>
+                <label htmlFor="product-slug" className="text-sm font-medium mb-2 block">Slug do Produto</label>
                 <Input 
+                  id="product-slug"
                   placeholder="ex: pipefy" 
                   value={slug} 
                   onChange={(e) => setSlug(e.target.value)}
@@ -78,7 +79,7 @@ const WidgetGenerator = () => {
             <div className="bg-primary/5 p-8 rounded-3xl border border-primary/10">
               <h2 className="text-xl font-bold mb-4">Pré-visualização</h2>
               <div className="bg-white p-8 rounded-2xl shadow-inner flex items-center justify-center min-h-[200px] border border-gray-100">
-                <a href="#" className="transition-transform hover:scale-105 duration-300">
+                <a href="/" className="transition-transform hover:scale-105 duration-300">
                   <img src="/badge-recomendado.png" alt="Preview" width="200" className="drop-shadow-xl" />
                 </a>
               </div>

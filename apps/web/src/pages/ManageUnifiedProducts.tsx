@@ -381,8 +381,8 @@ const ManageUnifiedProducts: React.FC = () => {
                     </td>
                     <td className="p-3">
                       <div className="flex flex-wrap gap-1">
-                        {product.tags?.slice(0, 3).map((tag, i) => (
-                          <span key={i} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+                        {product.tags?.slice(0, 3).map((tag) => (
+                          <span key={tag} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
                             {tag}
                           </span>
                         ))}
@@ -395,8 +395,8 @@ const ManageUnifiedProducts: React.FC = () => {
                     </td>
                     <td className="p-3">
                       <div className="flex flex-wrap gap-1">
-                        {product.alternativeTo?.slice(0, 2).map((alt, i) => (
-                          <span key={i} className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
+                        {product.alternativeTo?.slice(0, 2).map((alt) => (
+                          <span key={alt} className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
                             {alt}
                           </span>
                         ))}
@@ -455,8 +455,9 @@ const ManageUnifiedProducts: React.FC = () => {
                 {/* Informações básicas */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Nome *</label>
+                    <label htmlFor="product-name" className="block text-sm font-medium mb-1">Nome *</label>
                     <input 
+                      id="product-name"
                       type="text" 
                       value={form.name} 
                       onChange={e => setForm(f => ({ ...f, name: e.target.value }))} 
@@ -466,8 +467,9 @@ const ManageUnifiedProducts: React.FC = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-1">Website *</label>
+                    <label htmlFor="product-website" className="block text-sm font-medium mb-1">Website *</label>
                     <input 
+                      id="product-website"
                       type="url" 
                       value={form.website} 
                       onChange={e => setForm(f => ({ ...f, website: e.target.value }))} 
@@ -478,8 +480,9 @@ const ManageUnifiedProducts: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-1">Descrição *</label>
+                  <label htmlFor="product-description" className="block text-sm font-medium mb-1">Descrição *</label>
                   <textarea 
+                    id="product-description"
                     value={form.description} 
                     onChange={e => setForm(f => ({ ...f, description: e.target.value }))} 
                     className="w-full p-2 border border-border rounded-xl bg-muted/50 text-foreground" 
@@ -493,8 +496,9 @@ const ManageUnifiedProducts: React.FC = () => {
                 <div className="border p-4 rounded-xl bg-muted/20">
                   <h4 className="font-medium mb-3">Localização</h4>
                   <div>
-                    <label className="block text-sm font-medium mb-1">País *</label>
+                    <label htmlFor="product-country" className="block text-sm font-medium mb-1">País *</label>
                     <select
+                      id="product-country"
                       value={form.location.country} 
                       onChange={e => setForm(f => ({ 
                         ...f, 
@@ -517,8 +521,9 @@ const ManageUnifiedProducts: React.FC = () => {
                 <div className="border p-4 rounded-xl bg-muted/20">
                   <h4 className="font-medium mb-3">Informações da Empresa</h4>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Ano de Fundação</label>
+                    <label htmlFor="company-founded-year" className="block text-sm font-medium mb-1">Ano de Fundação</label>
                     <input 
+                      id="company-founded-year"
                       type="number" 
                       value={form.companyInfo.foundedYear || ''} 
                       onChange={e => setForm(f => ({ 
@@ -535,8 +540,9 @@ const ManageUnifiedProducts: React.FC = () => {
 
                 {/* Logo */}
                 <div>
-                  <label className="block text-sm font-medium mb-1">Logo (URL ou Emoji)</label>
+                  <label htmlFor="product-logo" className="block text-sm font-medium mb-1">Logo (URL ou Emoji)</label>
                   <input 
+                    id="product-logo"
                     type="text" 
                     value={form.logo} 
                     onChange={e => setForm(f => ({ ...f, logo: e.target.value }))} 
@@ -548,8 +554,9 @@ const ManageUnifiedProducts: React.FC = () => {
                 {/* Tags e Features */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Tags (separadas por vírgula)</label>
+                    <label htmlFor="product-tags" className="block text-sm font-medium mb-1">Tags (separadas por vírgula)</label>
                     <input 
+                      id="product-tags"
                       type="text" 
                       value={form.tags.join(', ')} 
                       onChange={e => setForm(f => ({ 
@@ -561,8 +568,9 @@ const ManageUnifiedProducts: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1">Features (separadas por vírgula) *</label>
+                    <label htmlFor="product-features" className="block text-sm font-medium mb-1">Features (separadas por vírgula) *</label>
                     <input 
+                      id="product-features"
                       type="text" 
                       value={form.features.join(', ')} 
                       onChange={e => setForm(f => ({ 
@@ -576,8 +584,9 @@ const ManageUnifiedProducts: React.FC = () => {
 
                 {/* Alternativa a */}
                 <div>
-                  <label className="block text-sm font-medium mb-1">Alternativa a (produtos internacionais, separados por vírgula) *</label>
+                  <label htmlFor="product-alternative" className="block text-sm font-medium mb-1">Alternativa a (produtos internacionais, separados por vírgula) *</label>
                   <input 
+                    id="product-alternative"
                     type="text" 
                     value={form.alternativeTo.join(', ')} 
                     onChange={e => setForm(f => ({ 
@@ -597,8 +606,9 @@ const ManageUnifiedProducts: React.FC = () => {
                   <h4 className="font-medium mb-3">Informações de Preço</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium mb-1">Tipo de Preço *</label>
+                      <label htmlFor="pricing-type" className="block text-sm font-medium mb-1">Tipo de Preço *</label>
                       <select
+                        id="pricing-type"
                         value={form.pricing.type}
                         onChange={e => setForm(f => ({
                           ...f,
@@ -614,8 +624,9 @@ const ManageUnifiedProducts: React.FC = () => {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium mb-1">Moeda</label>
+                      <label htmlFor="pricing-currency" className="block text-sm font-medium mb-1">Moeda</label>
                       <select
+                        id="pricing-currency"
                         value={form.pricing.currency}
                         onChange={e => setForm(f => ({
                           ...f,
@@ -631,8 +642,9 @@ const ManageUnifiedProducts: React.FC = () => {
                   </div>
                   
                   <div className="mt-4">
-                    <label className="block text-sm font-medium mb-1">Descrição dos Preços *</label>
+                    <label htmlFor="pricing-description" className="block text-sm font-medium mb-1">Descrição dos Preços *</label>
                     <textarea
+                      id="pricing-description"
                       value={form.pricing.description}
                       onChange={e => setForm(f => ({
                         ...f,

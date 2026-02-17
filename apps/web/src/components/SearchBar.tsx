@@ -197,6 +197,14 @@ const SearchBar = ({
               <div
                 key={product.id}
                 onClick={() => handleResultClick(product)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleResultClick(product);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
                 className="flex items-center gap-3 p-3 hover:bg-muted/30 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-sm"
               >
                 <img
@@ -229,6 +237,14 @@ const SearchBar = ({
             {searchTerm && (
               <div
                 onClick={handleSearch}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleSearch();
+                  }
+                }}
+                role="button"
+                tabIndex={0}
                 className="flex items-center gap-3 p-3 hover:bg-primary/5 rounded-lg cursor-pointer transition-all duration-200 border-t border-border/30 mt-2 pt-3"
               >
                 <Search className="h-4 w-4 text-primary" />

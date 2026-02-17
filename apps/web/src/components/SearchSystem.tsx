@@ -104,6 +104,14 @@ const SearchSystem = ({
                         key={product.id}
                         className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
                         onClick={() => handleResultClick(product, 'product')}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleResultClick(product, 'product');
+                          }
+                        }}
+                        role="button"
+                        tabIndex={0}
                       >
                         <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-sm overflow-hidden">
                           {product.logo && product.logo.startsWith('http') ? (

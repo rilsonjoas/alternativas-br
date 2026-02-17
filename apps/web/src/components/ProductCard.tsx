@@ -77,9 +77,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <div className="mb-2">
             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Alternativa nacional a:</p>
             <div className="flex flex-wrap gap-1">
-              {product.alternativeTo.slice(0, 2).map((alternative, index) => (
+              {product.alternativeTo.slice(0, 2).map((alternative) => (
                 <Badge 
-                  key={index} 
+                  key={alternative} 
                   variant="outline" 
                   className="text-xs bg-blue-50 text-blue-700 border-blue-200 px-2 py-0.5"
                 >

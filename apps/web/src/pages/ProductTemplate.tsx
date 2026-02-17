@@ -257,8 +257,8 @@ const ProductTemplate = () => {
                     </div>
                     {pricingArray.length > 0 && (
                       <div className="space-y-3">
-                        {pricingArray.map((plan, index) => (
-                          <div key={index} className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50 border border-gray-100">
+                        {pricingArray.map((plan) => (
+                          <div key={plan.name} className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50 border border-gray-100">
                             <div className="flex-1">
                               <div className="font-bold text-sm text-gray-900">{plan.name}</div>
                               <div className="text-[10px] text-gray-500">{plan.description}</div>
@@ -433,8 +433,8 @@ const ProductTemplate = () => {
               </CardHeader>
               <CardContent className="p-8">
                 <div className="grid md:grid-cols-2 gap-6">
-                  {featuresArray.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-5 p-6 rounded-2xl bg-gradient-to-br from-green-50/80 to-emerald-50/80 border border-green-200/60 hover:shadow-md transition-all duration-300">
+                  {featuresArray.map((feature) => (
+                    <div key={feature} className="flex items-start gap-5 p-6 rounded-2xl bg-gradient-to-br from-green-50/80 to-emerald-50/80 border border-green-200/60 hover:shadow-md transition-all duration-300">
                       <CheckCircle className="w-7 h-7 text-green-600 mt-0.5 flex-shrink-0" />
                       <span className="text-lg font-semibold text-gray-800 leading-relaxed">{feature}</span>
                     </div>
@@ -460,9 +460,9 @@ const ProductTemplate = () => {
                   Este produto brasileiro oferece funcionalidades similares aos seguintes serviços internacionais:
                 </p>
                 <div className="flex flex-wrap gap-3 mb-8">
-                  {product.alternativeTo.map((alternative, index) => (
+                  {product.alternativeTo.map((alternative) => (
                     <Badge 
-                      key={index} 
+                      key={alternative} 
                       variant="secondary" 
                       className="text-base py-3 px-5 bg-blue-50 text-blue-700 border-blue-200 rounded-full font-semibold hover:bg-blue-100 transition-colors"
                     >
