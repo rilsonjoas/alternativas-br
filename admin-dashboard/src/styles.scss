@@ -1,0 +1,149 @@
+// Custom Theming for Angular Material
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Paleta verde brasileira customizada (baseada no site AlternativasBR)
+// Primary: hsl(155, 75%, 25%) = #107047
+$brazilian-green-palette: (
+  50: #e8f5ef,
+  100: #c6e6d6,
+  200: #a0d6bc,
+  300: #79c6a1,
+  400: #5cb98c,
+  500: #3fad78,
+  600: #369e6a,
+  700: #2b8c58,
+  800: #217a48,
+  900: #107047,  // Nossa cor primary principal
+  A100: #a8ffc9,
+  A200: #75ffa8,
+  A400: #42ff87,
+  A700: #29ff77,
+  contrast: (
+    50: rgba(0, 0, 0, 0.87),
+    100: rgba(0, 0, 0, 0.87),
+    200: rgba(0, 0, 0, 0.87),
+    300: rgba(0, 0, 0, 0.87),
+    400: rgba(0, 0, 0, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(0, 0, 0, 0.87),
+    A200: rgba(0, 0, 0, 0.87),
+    A400: rgba(0, 0, 0, 0.87),
+    A700: rgba(0, 0, 0, 0.87),
+  )
+);
+
+// Paleta dourada/âmbar (accent - inspirada no ouro brasileiro)
+// Accent: hsl(45, 85%, 55%) = #E6B422
+$brazilian-gold-palette: (
+  50: #fff8e1,
+  100: #ffecb3,
+  200: #ffe082,
+  300: #ffd54f,
+  400: #ffca28,
+  500: #e6b422,  // Nossa cor accent principal
+  600: #d4a41d,
+  700: #c19218,
+  800: #af8013,
+  900: #8d6508,
+  A100: #ffe57f,
+  A200: #ffd740,
+  A400: #ffc400,
+  A700: #ffab00,
+  contrast: (
+    50: rgba(0, 0, 0, 0.87),
+    100: rgba(0, 0, 0, 0.87),
+    200: rgba(0, 0, 0, 0.87),
+    300: rgba(0, 0, 0, 0.87),
+    400: rgba(0, 0, 0, 0.87),
+    500: rgba(0, 0, 0, 0.87),
+    600: rgba(0, 0, 0, 0.87),
+    700: rgba(0, 0, 0, 0.87),
+    800: rgba(0, 0, 0, 0.87),
+    900: white,
+    A100: rgba(0, 0, 0, 0.87),
+    A200: rgba(0, 0, 0, 0.87),
+    A400: rgba(0, 0, 0, 0.87),
+    A700: rgba(0, 0, 0, 0.87),
+  )
+);
+
+// Definir o tema com as paletas brasileiras
+$admin-dashboard-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$green-palette,
+    tertiary: mat.$yellow-palette,
+  ),
+  density: (
+    scale: 0,
+  )
+));
+
+:root {
+  @include mat.all-component-themes($admin-dashboard-theme);
+
+  // CSS Variables para usar em componentes
+  --br-primary: #107047;
+  --br-primary-light: #3fad78;
+  --br-primary-dark: #0a5535;
+  --br-accent: #e6b422;
+  --br-accent-light: #ffd54f;
+  --br-background: #fafafa;
+  --br-foreground: #1d2e27;
+  --br-muted: #f5f5f5;
+  --br-border: #e0e0e0;
+
+  // Gradientes brasileiros
+  --br-gradient-primary: linear-gradient(135deg, #107047 0%, #3fad78 100%);
+  --br-gradient-hero: linear-gradient(135deg, #107047 0%, #2b8c58 50%, #e6b422 100%);
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Roboto', "Helvetica Neue", sans-serif;
+  background-color: var(--br-background);
+  color: var(--br-foreground);
+}
+
+// Override Material buttons para usar nossas cores
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary {
+  --mdc-protected-button-container-color: var(--br-primary) !important;
+  --mdc-protected-button-label-text-color: white !important;
+  --mdc-filled-button-container-color: var(--br-primary) !important;
+  --mdc-filled-button-label-text-color: white !important;
+}
+
+.mat-mdc-raised-button.mat-accent,
+.mat-mdc-unelevated-button.mat-accent {
+  --mdc-protected-button-container-color: var(--br-accent) !important;
+  --mdc-protected-button-label-text-color: #1d2e27 !important;
+  --mdc-filled-button-container-color: var(--br-accent) !important;
+  --mdc-filled-button-label-text-color: #1d2e27 !important;
+}
+
+.mat-mdc-fab.mat-primary {
+  --mdc-fab-container-color: var(--br-primary) !important;
+  color: white !important;
+}
+
+// Override chips
+.mat-mdc-chip {
+  --mdc-chip-elevated-container-color: #e8f5ef !important;
+  --mdc-chip-label-text-color: var(--br-primary) !important;
+}
+
+// Override progress spinner
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: var(--br-primary) !important;
+}

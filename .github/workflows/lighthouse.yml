@@ -42,4 +42,4 @@ jobs:
         if: always()
         with:
           name: lighthouse-report
-          path: .lighthouseci
+          path: .lighthouseci/**
