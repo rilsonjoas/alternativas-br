@@ -3,3 +3,9 @@ dist
 .idea
 .vscode
 *.log
+
+# Environment files
+src/environments/environment.ts
+src/environments/environment.*.ts
+apps/**/src/environments/environment.ts
+apps/**/src/environments/environment.*.ts
