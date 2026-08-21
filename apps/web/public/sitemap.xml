@@ -8,7 +8,7 @@
   </url>
 
   <url>
-    <loc>https://alternativasbr.com.br/explorar</loc>
+    <loc>https://alternativasbr.com.br/alternativas</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -17,6 +17,24 @@
     <loc>https://alternativasbr.com.br/sobre</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://alternativasbr.com.br/contato</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://alternativasbr.com.br/privacidade</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://alternativasbr.com.br/termos</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
 
   <url>

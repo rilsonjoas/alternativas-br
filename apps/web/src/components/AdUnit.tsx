@@ -25,35 +25,39 @@ const AdUnit = ({ slot, format = "auto", className }: AdUnitProps) => {
     }
   }, [isDev, slot]);
 
-  return (
-    <div 
-      className={cn(
-        "my-8 mx-auto w-full flex flex-col items-center justify-center overflow-hidden transition-all",
-        "bg-muted/30 border border-dashed border-border/50 rounded-2xl min-h-[100px] md:min-h-[250px]",
-        className
-      )}
-    >
-      <div className="text-center p-4">
-        <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground/50 mb-2 block">
-          Espaço Publicitário
-        </span>
-        {isDev && (
+  // Em dev, mostra placeholder informativo
+  if (isDev) {
+    return (
+      <div 
+        className={cn(
+          "my-8 mx-auto w-full flex flex-col items-center justify-center overflow-hidden transition-all",
+          "bg-muted/30 border border-dashed border-border/50 rounded-2xl min-h-[100px] md:min-h-[250px]",
+          className
+        )}
+      >
+        <div className="text-center p-4">
+          <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground/50 mb-2 block">
+            Espaço Publicitário
+          </span>
           <div className="text-xs text-muted-foreground italic">
             Slot AdSense: {slot} | Formato: {format}
           </div>
-        )}
+        </div>
       </div>
-      
-      {!isDev && (
-        <ins
-          className="adsbygoogle"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-5482566824255473"
-          data-ad-slot={slot}
-          data-ad-format={format}
-          data-full-width-responsive="true"
-        />
-      )}
+    );
+  }
+
+  // Em produção, renderiza só o <ins> do AdSense (ou nada se não aprovado)
+  return (
+    <div className={cn("my-8 mx-auto w-full", className)}>
+      <ins
+        className="adsbygoogle"
+        style={{ display: "block" }}
+        data-ad-client="ca-pub-5482566824255473"
+        data-ad-slot={slot}
+        data-ad-format={format}
+        data-full-width-responsive="true"
+      />
     </div>
   );
 };

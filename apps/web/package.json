@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npm run generate-sitemap",
+    "build": "vite build && npm run generate-sitemap && npm run prerender",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "npm run dev",
     "migrate": "tsx src/scripts/migrateToFirebase.ts",
     "generate-sitemap": "tsx scripts/generate-docs-sitemap.js",
+    "prerender": "tsx scripts/prerender.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui"
@@ -74,6 +75,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
+
     "@tailwindcss/typography": "^0.5.16",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",

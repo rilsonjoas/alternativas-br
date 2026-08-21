@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/explorar",
+      "destination": "/alternativas",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",

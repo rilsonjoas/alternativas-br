@@ -46,8 +46,11 @@ async function fetchProductSlugs() {
 async function generateSitemap() {
   const staticRoutes = [
     { path: '', priority: '1.0' },
-    { path: '/explorar', priority: '0.8' },
+    { path: '/alternativas', priority: '0.8' },
     { path: '/sobre', priority: '0.8' },
+    { path: '/contato', priority: '0.7' },
+    { path: '/privacidade', priority: '0.5' },
+    { path: '/termos', priority: '0.5' },
   ];
 
   let productSlugs = [];
