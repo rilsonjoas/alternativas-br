@@ -54,33 +54,40 @@ interface Product {
 async function fetchAllProducts(): Promise<Product[]> {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  const snapshot = await getDocs(collection(db, 'products'));
 
-  const products: Product[] = [];
-  snapshot.forEach((doc) => {
-    const d = doc.data();
-    if (d.slug) {
-      products.push({
-        slug: d.slug,
-        name: d.name || '',
-        description: d.description || '',
-        logo: d.logo || '',
-        website: d.website || '',
-        tags: d.tags || [],
-        features: d.features || [],
-        alternativeTo: d.alternativeTo || [],
-        metaTitle: d.metaTitle,
-        metaDescription: d.metaDescription,
-        pricing: d.pricing,
-        location: d.location,
-        companyInfo: d.companyInfo,
-        foundedYear: d.foundedYear,
+  // Timeout de 15s pra nao travar build no CI
+  const timeout = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error('Firestore timeout (15s)')), 15000)
+  );
+  const fetch = async (): Promise<Product[]> => {
+    const snapshot = await getDocs(collection(db, 'products'));
+    const products: Product[] = [];
+    snapshot.forEach((doc) => {
+      const d = doc.data();
+      if (d.slug) {
+        products.push({
+          slug: d.slug,
+          name: d.name || '',
+          description: d.description || '',
+          logo: d.logo || '',
+          website: d.website || '',
+          tags: d.tags || [],
+          features: d.features || [],
+          alternativeTo: d.alternativeTo || [],
+          metaTitle: d.metaTitle,
+          metaDescription: d.metaDescription,
+          pricing: d.pricing,
+          location: d.location,
+          companyInfo: d.companyInfo,
+          foundedYear: d.foundedYear,
         isUnicorn: d.isUnicorn,
         upvotes: d.upvotes,
       });
     }
   });
-  return products;
+    return products;
+  };
+  return Promise.race([fetch(), timeout]);
 }
 
 function esc(s: string): string {
@@ -318,6 +325,6 @@ async function prerender() {
 }
 
 prerender().then(() => process.exit(0)).catch((err) => {
-  console.error('Erro no prerender:', err);
-  process.exit(1);
+  console.error('Erro no prerender (build continua):', err);
+  process.exit(0);
 });
