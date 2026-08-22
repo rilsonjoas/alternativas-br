@@ -14,6 +14,10 @@ Este é também um dos projetos que fazem parte de uma prioridade concreta de 20
 
 Hoje é um catálogo curado no ar. A visão de futuro é crescer em cobertura de categoria e virar referência de primeira busca antes de "existe algo brasileiro que faz X?" virar pergunta.
 
+> [!NOTE]
+> Roadmap de engenharia (segurança, testes, CI/CD) em
+> [`ROADMAP.md`](ROADMAP.md).
+
 ## Estrutura (monorepo pnpm)
 
 - `apps/web` — site público (React + Vite)
