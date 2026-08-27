@@ -4,6 +4,17 @@
       "source": "/explorar",
       "destination": "/alternativas",
       "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.alternativasbr.com.br"
+        }
+      ],
+      "destination": "https://alternativasbr.com.br/$1",
+      "permanent": true
     }
   ],
   "rewrites": [
