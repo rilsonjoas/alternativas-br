@@ -26,6 +26,7 @@ import ProductTemplate from "./pages/ProductTemplate";
 import { HelmetProvider } from "react-helmet-async";
 import { initGA } from "@/lib/analytics";
 import { RouteTracker } from "@/components/RouteTracker";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 // Inicializa GA4
 initGA();
@@ -33,15 +34,16 @@ initGA();
 const queryClient = new QueryClient();
 
 const App = () => (
-  <HelmetProvider>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <RouteTracker />
-            <Routes>
+  <ErrorBoundary>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <RouteTracker />
+              <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/alternativas" element={<Alternativas />} />
               <Route path="/sobre" element={<Sobre />} />
@@ -76,6 +78,7 @@ const App = () => (
       </AuthProvider>
     </QueryClientProvider>
   </HelmetProvider>
+  </ErrorBoundary>
 );
 
 export default App;

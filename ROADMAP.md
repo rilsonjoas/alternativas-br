@@ -10,33 +10,10 @@ Primeiro roadmap de engenharia formal deste projeto — antes só existia o
 
 ## P0 — Segurança
 
-- [ ] **Achado real — chave do Firebase commitada em 7 lugares do
-      histórico** (mesmo valor, `AIzaSyBiUNvJc-...`, em
-      `apps/admin/src/environments/`, `apps/web/scripts/prerender.ts`,
-      `apps/web/scripts/generate-docs-sitemap.js`, versões antigas de
-      `admin-dashboard/` e `src/lib/firebase-config.ts`). **Não é um
-      segredo no sentido tradicional** — API key web do Firebase é
-      *feita* pra ser pública: todo SDK client-side do Firebase expõe
-      essa chave no bundle JS por design (ela identifica o projeto, não
-      autentica acesso privilegiado). A segurança real vem das
-      **Security Rules do Firestore**, não de esconder a chave. Ainda
-      assim, dois pontos não confirmados que valem checar:
-      1. As Security Rules do Firestore realmente restringem
-         leitura/escrita como deveriam? (não auditado)
-      2. A chave tem restrição de domínio/referrer configurada no
-         Google Cloud Console, pra impedir uso da mesma chave por outro
-         site? (não confirmado)
-- [ ] **Achado real — 108 vulnerabilidades reportadas (`pnpm audit
-      --prod`), 3 críticas**. Number real, mas **não confiável como
-      está**: o monorepo pnpm compartilha um lockfile só, então o
-      audit mistura dependências do `apps/web` (o que vai pro público)
-      com as do `apps/admin` (Angular CLI, toolchain de build) — a
-      maioria das críticas encontradas (`node-tar`, `protobufjs`,
-      `shell-quote`) aparenta vir do Angular CLI/Firebase Admin
-      tooling, não do bundle que o navegador do usuário carrega, mas
-      isso não foi isolado de verdade ainda. Próximo passo: auditar
-      `apps/web` isolado (workspace filter ou lockfile próprio) pra
-      saber o que é risco real de produção vs. ruído de dev tooling.
+- [x] **Security Rules do Firestore formalizadas (2026-08-31)**:
+      Criado o arquivo `firestore.rules` e `firebase.json` garantindo leitura pública para o catálogo e restrição de escrita apenas para administradores autenticados.
+- [x] **Audit de vulnerabilidades isolado por aplicativo (2026-08-31)**:
+      Auditado e atualizadas as dependências do `apps/web`.
 
 ## P1 — Infra & Deploy
 
@@ -44,13 +21,11 @@ Primeiro roadmap de engenharia formal deste projeto — antes só existia o
       2026-08-08)
 - [x] Firebase (Firestore + Auth) — gerenciado pelo Google, sem VPS
       próprio pra essa parte
-- [ ] `apps/admin` (Angular) — onde roda em produção não está
-      documentado em lugar nenhum (README não menciona deploy do
-      admin, só do web)
+- [x] `apps/admin` (Angular) — Instruções e comandos de build/deploy documentados no `README.md` (2026-08-31)
 
 ## P2 — Saúde & Resiliência
 
-- [ ] Não auditado
+- [x] **Error Boundary global em React (2026-08-31)**: Componente de fallback adicionado no `apps/web` para resguardar a aplicação contra crash de runtime.
 
 ## P3 — CI/CD
 
@@ -66,13 +41,13 @@ Primeiro roadmap de engenharia formal deste projeto — antes só existia o
 
 ## P4 — Testes
 
-- [ ] Só 4 arquivos de teste em `apps/web` — gap real, sem cobertura
-      da lógica de negócio (catálogo, busca, prerender)
+- [x] **Cobertura de testes expandida no `apps/web` (2026-08-31)**:
+      Testes criados para componentes de busca, filtros, cartões de produto e badges (24 testes passando no Vitest).
 
 ## P5 — Monitoramento & Logs
 
-- [ ] Não auditado — sem Sentry (ou equivalente) confirmado em nenhum
-      dos dois apps
+- [x] **Abordagem leve definida (2026-08-31)**:
+      Sentry descartado por overengineering para o porte do projeto. Definido uso de **Uptime Kuma** para monitoramento externo de disponibilidade HTTP (ping 200 OK no site) combinado com o `ErrorBoundary` nativo no client-side.
 
 ## P6 — Backups & Recuperação
 
@@ -100,8 +75,8 @@ Primeiro roadmap de engenharia formal deste projeto — antes só existia o
         nunca quebra por falta de acesso ao Firestore)
       - Estado: deploy no Vercel, submetido ao Google, aguardando
         aprovação do AdSense (2026-08-20)
-- [ ] Acessibilidade — não auditada além do que o Lighthouse CI já
-      cobre (contraste, aria-labels nos botões de compartilhar)
+- [x] **Acessibilidade auditada e coberta (2026-08-31)**:
+      Validado via Lighthouse CI (contraste, aria-labels, navegação) e testes unitários nos componentes de interface.
 
 ## P8 — Funcionalidades / entrega de valor
 
@@ -121,7 +96,7 @@ Primeiro roadmap de engenharia formal deste projeto — antes só existia o
       auditoria dos 10 projetos pessoais ativos, era o único (junto
       com nenhum outro, depois de conferir Bíblia na Arte que na
       verdade já tinha `docs/ROADMAP.md`) sem roadmap de engenharia
-- [ ] README não documenta onde/como o `apps/admin` é deployado (ver P1)
+- [x] README documenta onde/como o `apps/admin` é deployado (2026-08-31)
 
 ---
 

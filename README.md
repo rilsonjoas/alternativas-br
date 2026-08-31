@@ -33,8 +33,27 @@ pnpm dev:web     # site público
 pnpm dev:admin   # painel admin
 ```
 
-## Build
+## Build & Deploy
 
 ```bash
-pnpm build       # builda os dois apps
+pnpm build       # builda os dois apps (web + admin)
 ```
+
+### `apps/web` (Site Público)
+O `apps/web` possui deploy automático na **Vercel** acionado a cada push na branch principal.
+
+### `apps/admin` (Painel Administrativo)
+O `apps/admin` é uma aplicação Angular SPA. Para realizar o deploy:
+
+1. **Gerar artefato de produção:**
+   ```bash
+   pnpm --filter ./apps/admin build
+   ```
+   Os arquivos compilados estarão em `apps/admin/dist/admin-dashboard/browser`.
+
+2. **Deploy via Firebase Hosting:**
+   ```bash
+   npx firebase deploy --only hosting
+   ```
+   *(Ou apontando a pasta de saída `dist/admin-dashboard/browser` para seu provedor de preferência, como Vercel/Netlify)*.
+

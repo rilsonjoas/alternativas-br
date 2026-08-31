@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Produtos: leitura pública, escrita apenas para usuários autenticados (Admin)
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Categorias: leitura pública, escrita apenas para usuários autenticados (Admin)
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Sugestões de produtos enviadas pelo público: criação pública, leitura/gerenciamento apenas por Admin
+    match /suggestions/{suggestionId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    match /tool_suggestions/{suggestionId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    // Coleções legadas (se houver): leitura pública, escrita autenticada
+    match /foreign_products/{productId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Bloqueio padrão para qualquer outra coleção/documento não mapeado
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
