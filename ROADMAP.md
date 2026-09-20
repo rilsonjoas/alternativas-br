@@ -56,15 +56,16 @@ Primeiro roadmap de engenharia formal deste projeto — antes só existia o
 
 ## P7 — UI/UX, acessibilidade e SEO
 
-- [x] **Saga de SEO/AdSense, resolvida (2026-08-20)** — histórico bem
-      documentado, real trabalho de várias sessões:
+- [ ] **Saga de SEO/AdSense — 2ª rejeição (2026-09-07)**: reaberto,
+      histórico bem documentado, real trabalho de várias sessões:
       - **Diagnóstico inicial**: AdSense rejeitou por "conteúdo de
         baixo valor" — é SPA 100% client-side, Googlebot via
         `<div id="root"></div>` vazio em toda página
-      - **Solução**: `scripts/prerender.ts` busca dados do Firestore
-        no build e gera HTML estático com conteúdo real dentro do
-        `#root` — quando o JS carrega, React hidrata por cima. Sem
-        Puppeteer (abandonado — falhava no CI por acesso ao Firestore)
+      - **Solução técnica aplicada**: `scripts/prerender.ts` busca
+        dados do Firestore no build e gera HTML estático com conteúdo
+        real dentro do `#root` — quando o JS carrega, React hidrata
+        por cima. Sem Puppeteer (abandonado — falhava no CI por acesso
+        ao Firestore)
       - Sitemap corrigido: tinha só 4 URLs (incluindo, por engano,
         `/admin` público — painel interno não deveria estar num
         sitemap). Reescrito pra buscar os produtos reais do Firestore:
@@ -73,8 +74,27 @@ Primeiro roadmap de engenharia formal deste projeto — antes só existia o
         `/alternativas`, og/twitter tags duplicadas do Vite removidas
       - Prerender resiliente: timeout de 15s + `exit 0` em falha (CI
         nunca quebra por falta de acesso ao Firestore)
-      - Estado: deploy no Vercel, submetido ao Google, aguardando
-        aprovação do AdSense (2026-08-20)
+      - Submetido ao Google em 2026-08-20, **rejeitado novamente em
+        2026-09-07** — mesmo motivo, "Conteúdo de baixo valor",
+        segundo o e-mail do AdSense:
+        > "Seu site ainda não atende aos critérios de uso da rede de
+        > editores do Google."
+      - `ads.txt` (`google.com, pub-5482566824255473, DIRECT,
+        f08c47fec0942fa0`) aparece como **Autorizado** no painel do
+        AdSense e confirmado ao vivo (`curl` → `200 OK`,
+        `Content-Type: text/plain`, conteúdo correto) — não é o
+        problema aqui, só o Teste Político (ver `TestePolitico/ROADMAP.md`)
+      - **Leitura**: a rejeição repetir depois do prerender sugerir
+        que o problema não é (só) crawlability técnica — é o
+        AdSense considerando o conteúdo em si raso (catálogo
+        curado/agregador, pouco texto original por página). Os
+        recursos que o Google linkou de novo: requisitos mínimos de
+        conteúdo, conteúdo exclusivo + boa UX, diretrizes de
+        qualidade sobre conteúdo superficial
+      - **Próximo passo, ainda não decidido**: precisa de conteúdo
+        editorial original por alternativa/produto (não só
+        nome+descrição+link) antes de submeter de novo — ou aceitar
+        que o formato atual não é o que o AdSense quer aprovar
 - [x] **Acessibilidade auditada e coberta (2026-08-31)**:
       Validado via Lighthouse CI (contraste, aria-labels, navegação) e testes unitários nos componentes de interface.
 
@@ -104,9 +124,13 @@ Primeiro roadmap de engenharia formal deste projeto — antes só existia o
 
 Igual aos outros projetos: risco real primeiro. Nessa ordem:
 
-1. **P0** — confirmar Security Rules do Firestore (bloqueador real de
-   segurança, mesmo que a chave em si não seja o problema) e isolar o
-   audit de vulnerabilidades pra saber o que é real
+1. ~~**P0** — confirmar Security Rules do Firestore~~ **✅ reconfirmado 2026-09-09**
+   (balanço de portfólio): lido `firestore.rules` direto — leitura pública
+   só em `products`/`categories`, escrita exige `request.auth != null`,
+   `suggestions`/`tool_suggestions` aceitam criação pública mas só leitura/
+   gestão autenticada, e há bloqueio padrão (`{document=**} → allow read,
+   write: if false`) pra qualquer coleção não mapeada. Sem furo. Nenhuma
+   ação necessária.
 2. **P4** — testes, é o segundo gap mais concreto
 3. **P1/P8** — documentar onde o admin roda, decidir se separa do "Lab
    Angular"
